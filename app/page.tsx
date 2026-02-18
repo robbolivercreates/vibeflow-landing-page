@@ -285,11 +285,12 @@ const ComparisonRace = () => {
     const typingFinishTime = (targetText.length * typingSpeedPerChar) / 1000;
 
     return (
-        ref = { containerRef }
-            className = "relative bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 w-full max-w-2xl hover:border-purple-500/30 transition-all duration-500 group shadow-2xl cursor-default"
+        <div
+            ref={containerRef}
+            className="relative bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 w-full max-w-2xl hover:border-purple-500/30 transition-all duration-500 group shadow-2xl cursor-default"
         >
-        {/* Header */ }
-        < div className = "flex items-center justify-between mb-6" >
+            {/* Header */}
+            < div className="flex items-center justify-between mb-6" >
                 <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
                     <span className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">Live Race</span>
@@ -305,96 +306,96 @@ const ComparisonRace = () => {
                 </div>
             </div >
 
-    <div className="space-y-6">
-        {/* Manual Typing Lane */}
-        <div className="space-y-2">
-            <div className="flex justify-between items-end">
-                <span className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
-                    <Keyboard className="w-3 h-3" /> Digitação (40 PPM)
-                </span>
-                <span className="font-mono text-sm text-gray-400">
-                    {typingText.length >= targetText.length
-                        ? typingFinishTime.toFixed(1) + "s"
-                        : typingTime.toFixed(1) + "s"}
-                </span>
-            </div>
-            <div className="h-12 bg-black/40 rounded-xl border border-white/5 flex items-center px-4 relative overflow-hidden">
-                <span className="text-gray-400 font-mono text-sm truncate">{typingText}</span>
-                {typingText.length < targetText.length && (
-                    <motion.div
-                        className="w-0.5 h-5 bg-purple-500 ml-1 flex-shrink-0"
-                        animate={{ opacity: [1, 0] }}
-                        transition={{ repeat: Infinity, duration: 0.5 }}
-                    />
-                )}
-            </div>
-            <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
-                <motion.div
-                    className="h-full bg-gray-600 rounded-full"
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${(typingText.length / targetText.length) * 100}%` }}
-                    transition={{ duration: 0.05 }}
-                />
-                <motion.span
-                    className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
-                    style={{ transform: 'translateX(-50%) translateY(-50%) scaleX(-1)' }}
-                    initial={{ left: "0%" }}
-                    animate={{ left: `${(typingText.length / targetText.length) * 100}%` }}
-                    transition={{ duration: 0.05 }}
-                >
-                    🐢
-                </motion.span>
-            </div>
-        </div>
+            <div className="space-y-6">
+                {/* Manual Typing Lane */}
+                <div className="space-y-2">
+                    <div className="flex justify-between items-end">
+                        <span className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
+                            <Keyboard className="w-3 h-3" /> Digitação (40 PPM)
+                        </span>
+                        <span className="font-mono text-sm text-gray-400">
+                            {typingText.length >= targetText.length
+                                ? typingFinishTime.toFixed(1) + "s"
+                                : typingTime.toFixed(1) + "s"}
+                        </span>
+                    </div>
+                    <div className="h-12 bg-black/40 rounded-xl border border-white/5 flex items-center px-4 relative overflow-hidden">
+                        <span className="text-gray-400 font-mono text-sm truncate">{typingText}</span>
+                        {typingText.length < targetText.length && (
+                            <motion.div
+                                className="w-0.5 h-5 bg-purple-500 ml-1 flex-shrink-0"
+                                animate={{ opacity: [1, 0] }}
+                                transition={{ repeat: Infinity, duration: 0.5 }}
+                            />
+                        )}
+                    </div>
+                    <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
+                        <motion.div
+                            className="h-full bg-gray-600 rounded-full"
+                            initial={{ width: "0%" }}
+                            animate={{ width: `${(typingText.length / targetText.length) * 100}%` }}
+                            transition={{ duration: 0.05 }}
+                        />
+                        <motion.span
+                            className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
+                            style={{ transform: 'translateX(-50%) translateY(-50%) scaleX(-1)' }}
+                            initial={{ left: "0%" }}
+                            animate={{ left: `${(typingText.length / targetText.length) * 100}%` }}
+                            transition={{ duration: 0.05 }}
+                        >
+                            🐢
+                        </motion.span>
+                    </div>
+                </div>
 
-        {/* VoxAIgo Lane */}
-        <div className="space-y-2">
-            <div className="flex justify-between items-end">
-                <span className="text-xs font-bold text-green-400 uppercase flex items-center gap-2">
-                    <Mic className="w-3 h-3" /> VoxAIgo (Voz)
-                </span>
-                <span className="font-mono text-sm text-green-400">
-                    {voiceText.length >= targetText.length
-                        ? voiceFinishTime.toFixed(1) + "s ✓"
-                        : voiceTime > 0
-                            ? voiceTime.toFixed(1) + "s"
-                            : "0.0s"}
-                </span>
+                {/* VoxAIgo Lane */}
+                <div className="space-y-2">
+                    <div className="flex justify-between items-end">
+                        <span className="text-xs font-bold text-green-400 uppercase flex items-center gap-2">
+                            <Mic className="w-3 h-3" /> VoxAIgo (Voz)
+                        </span>
+                        <span className="font-mono text-sm text-green-400">
+                            {voiceText.length >= targetText.length
+                                ? voiceFinishTime.toFixed(1) + "s ✓"
+                                : voiceTime > 0
+                                    ? voiceTime.toFixed(1) + "s"
+                                    : "0.0s"}
+                        </span>
+                    </div>
+                    <div className="h-12 bg-green-500/5 rounded-xl border border-green-500/20 flex items-center px-4 relative overflow-hidden">
+                        {racePhase === "racing" && (
+                            <div className="absolute inset-0 bg-green-500/5 animate-pulse"></div>
+                        )}
+                        <span className="text-green-100 font-medium text-sm z-10 truncate">{voiceText}</span>
+                        {voiceText.length >= targetText.length && (
+                            <motion.span
+                                initial={{ opacity: 0, scale: 0.5 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="ml-auto flex-shrink-0 text-xs font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20"
+                            >
+                                {Math.round(typingFinishTime / voiceFinishTime)}x mais rápido
+                            </motion.span>
+                        )}
+                    </div>
+                    <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
+                        <motion.div
+                            className="h-full bg-green-500 rounded-full"
+                            initial={{ width: "0%" }}
+                            animate={{ width: `${(voiceText.length / targetText.length) * 100}%` }}
+                            transition={{ duration: 0.05 }}
+                        />
+                        <motion.span
+                            className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
+                            style={{ transform: 'translateX(-50%) translateY(-50%)' }}
+                            initial={{ left: "0%" }}
+                            animate={{ left: `${(voiceText.length / targetText.length) * 100}%` }}
+                            transition={{ duration: 0.05 }}
+                        >
+                            🚀
+                        </motion.span>
+                    </div>
+                </div>
             </div>
-            <div className="h-12 bg-green-500/5 rounded-xl border border-green-500/20 flex items-center px-4 relative overflow-hidden">
-                {racePhase === "racing" && (
-                    <div className="absolute inset-0 bg-green-500/5 animate-pulse"></div>
-                )}
-                <span className="text-green-100 font-medium text-sm z-10 truncate">{voiceText}</span>
-                {voiceText.length >= targetText.length && (
-                    <motion.span
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="ml-auto flex-shrink-0 text-xs font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20"
-                    >
-                        {Math.round(typingFinishTime / voiceFinishTime)}x mais rápido
-                    </motion.span>
-                )}
-            </div>
-            <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
-                <motion.div
-                    className="h-full bg-green-500 rounded-full"
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${(voiceText.length / targetText.length) * 100}%` }}
-                    transition={{ duration: 0.05 }}
-                />
-                <motion.span
-                    className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
-                    style={{ transform: 'translateX(-50%) translateY(-50%)' }}
-                    initial={{ left: "0%" }}
-                    animate={{ left: `${(voiceText.length / targetText.length) * 100}%` }}
-                    transition={{ duration: 0.05 }}
-                >
-                    🚀
-                </motion.span>
-            </div>
-        </div>
-    </div>
         </div >
     );
 };
