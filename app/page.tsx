@@ -80,7 +80,7 @@ def calculate_average_age(file_path):
             name: "Comandos de IA",
             icon: Zap,
             input: "Resuma este texto em tópicos curtos e objetivos.",
-            output: "• O VibeFlow elimina a necessidade de digitação manual.\n• Funciona nativamente em qualquer aplicativo do macOS.\n• Garante privacidade com processamento direto via Google.",
+            output: "• O VoxAIgo elimina a necessidade de digitação manual.\n• Funciona nativamente em qualquer aplicativo do macOS.\n• Garante privacidade com processamento direto via Google.",
             color: "text-amber-400",
             bg: "bg-amber-500"
         },
@@ -159,7 +159,7 @@ div:hover {
                     <div className="p-8 space-y-6 bg-white/[0.02] h-full flex flex-col justify-center">
                         <div className="flex items-center gap-3 mb-4">
                             <div className={`w-3 h-3 rounded-full ${tabs[activeTab].bg} shadow-[0_0_10px_rgba(255,255,255,0.5)]`}></div>
-                            <span className={`text-sm font-medium ${tabs[activeTab].color} uppercase tracking-wider`}>O que o VibeFlow digita</span>
+                            <span className={`text-sm font-medium ${tabs[activeTab].color} uppercase tracking-wider`}>O que o VoxAIgo digita</span>
                         </div>
                         <div className={`font-mono ${tabs[activeTab].color} text-lg leading-relaxed bg-black/50 p-6 rounded-xl border border-white/5 shadow-inner whitespace-pre-wrap`}>
                             {tabs[activeTab].output}
@@ -172,7 +172,7 @@ div:hover {
 };
 
 const persuasivePhrases = [
-    "O VibeFlow digita 5x mais rápido que você.",
+    "O VoxAIgo digita 5x mais rápido que você.",
     "Enquanto você digita, seu concorrente já respondeu.",
     "Uma hora por dia. É isso que você perde digitando.",
     "Sua voz produz 200 palavras por minuto. Seus dedos, 40.",
@@ -235,7 +235,7 @@ const ComparisonRace = () => {
                 } else {
                     setVoiceText(targetText);
                     clearInterval(voiceInterval);
-                    // VibeFlow finished → show result phase
+                    // VoxAIgo finished → show result phase
                     if (!cancelled) setRacePhase("result");
                 }
             }, voiceSpeedPerChar);
@@ -324,11 +324,11 @@ const ComparisonRace = () => {
                     </div>
                 </div>
 
-                {/* VibeFlow Lane */}
+                {/* VoxAIgo Lane */}
                 <div className="space-y-2">
                     <div className="flex justify-between items-end">
                         <span className="text-xs font-bold text-green-400 uppercase flex items-center gap-2">
-                            <Mic className="w-3 h-3" /> VibeFlow (Voz)
+                            <Mic className="w-3 h-3" /> VoxAIgo (Voz)
                         </span>
                         <span className="font-mono text-sm text-green-400">
                             {voiceText.length >= targetText.length
@@ -392,9 +392,9 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 relative">
-                            <img src="/logo.png" alt="VibeFlow Logo" className="w-full h-full object-contain" />
+                            <img src="/logo.png" alt="VoxAIgo Logo" className="w-full h-full object-contain" />
                         </div>
-                        <span className="font-bold text-xl tracking-tight">VibeFlow</span>
+                        <span className="font-bold text-xl tracking-tight">VoxAIgo</span>
                     </div>
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
                         <a href="#features" className="hover:text-white transition-colors">Recursos</a>
@@ -428,7 +428,7 @@ export default function Home() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
                             </span>
-                            VibeFlow 2.0 chegou. Veja as novidades &rarr;
+                            VoxAIgo 2.0 chegou. Veja as novidades &rarr;
                         </motion.div>
 
                         <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-gray-400">
@@ -442,7 +442,7 @@ export default function Home() {
                         </motion.h1>
 
                         <motion.p variants={fadeIn} className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
-                            O VibeFlow transforma sua fala em e-mails perfeitos, relatórios no Word e conversas no WhatsApp.
+                            O VoxAIgo transforma sua fala em e-mails perfeitos, relatórios no Word e conversas no WhatsApp.
                             Economize <span className="text-white font-medium">20+ horas por mês</span> e foque no que realmente importa.
                         </motion.p>
 
@@ -490,7 +490,7 @@ export default function Home() {
 
                         {/* Fake UI Overlay to make it look like app is running */}
                         <div className="absolute top-4 left-4 right-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white/70 border border-white/10">VibeFlow Demo</div>
+                            <div className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white/70 border border-white/10">VoxAIgo Demo</div>
                         </div>
                     </div>
                 </div>
@@ -605,7 +605,7 @@ export default function Home() {
                     <div className="text-center mb-12 space-y-4">
                         <h2 className="text-3xl md:text-5xl font-bold">Fale naturalmente. <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Aparece instantaneamente.</span></h2>
                         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                            O VibeFlow entende o contexto e se adapta ao que você precisa.
+                            O VoxAIgo entende o contexto e se adapta ao que você precisa.
                         </p>
                     </div>
 
@@ -632,7 +632,7 @@ export default function Home() {
                             </div>
                             <h3 className="text-xl font-bold mb-3 text-white">E-mails em segundos</h3>
                             <p className="text-gray-400 leading-relaxed">
-                                Aquele e-mail longo? Dite em 30 segundos. O VibeFlow corrige, formata e deixa profissional. Recupere sua caixa de entrada.
+                                Aquele e-mail longo? Dite em 30 segundos. O VoxAIgo corrige, formata e deixa profissional. Recupere sua caixa de entrada.
                             </p>
                         </div>
 
@@ -665,7 +665,7 @@ export default function Home() {
                             </div>
                             <h3 className="text-xl font-bold mb-3 text-white">Poliglota Instantâneo</h3>
                             <p className="text-gray-400 leading-relaxed max-w-lg">
-                                Fale em sua língua nativa, e o VibeFlow digita em Inglês, Espanhol, Francês ou Japonês.
+                                Fale em sua língua nativa, e o VoxAIgo digita em Inglês, Espanhol, Francês ou Japonês.
                                 Comunique-se globalmente sem pausar para traduzir mentalmente.
                             </p>
                         </div>
@@ -692,7 +692,7 @@ export default function Home() {
                                 role: "Product Manager"
                             },
                             {
-                                quote: "Gerenciar comunidades de dev significava digitar o dia todo. A velocidade do VibeFlow me devolveu horas toda semana.",
+                                quote: "Gerenciar comunidades de dev significava digitar o dia todo. A velocidade do VoxAIgo me devolveu horas toda semana.",
                                 author: "Ana Silva",
                                 role: "DevRel"
                             },
@@ -750,7 +750,7 @@ export default function Home() {
                     {/* Free Plan */}
                     <div className="relative bg-[#0F0F0F] rounded-2xl p-8 border border-white/10 flex flex-col hover:border-white/20 transition-all duration-300">
                         <h3 className="text-2xl font-bold text-white mb-2">Grátis</h3>
-                        <p className="text-gray-500 text-sm mb-6">Perfeito para experimentar o VibeFlow</p>
+                        <p className="text-gray-500 text-sm mb-6">Perfeito para experimentar o VoxAIgo</p>
                         <div className="flex items-baseline gap-2 mb-8">
                             <span className="text-5xl font-bold text-white">R$0</span>
                             <span className="text-gray-400 text-sm">/ para sempre</span>
@@ -839,14 +839,14 @@ export default function Home() {
                         {[
                             {
                                 q: "Quanto tempo eu vou realmente economizar?",
-                                a: "A pessoa média digita 40 palavras por minuto, mas fala 150. Usando o VibeFlow para e-mails, documentos e código, nossos usuários economizam em média 20 horas por mês."
+                                a: "A pessoa média digita 40 palavras por minuto, mas fala 150. Usando o VoxAIgo para e-mails, documentos e código, nossos usuários economizam em média 20 horas por mês."
                             },
                             {
                                 q: "Funciona com meus apps?",
-                                a: "Sim. O VibeFlow funciona como uma camada em cima do sistema. Se você pode clicar e digitar, o VibeFlow funciona lá. Slack, Discord, WhatsApp, Xcode, Word, Google Docs, etc."
+                                a: "Sim. O VoxAIgo funciona como uma camada em cima do sistema. Se você pode clicar e digitar, o VoxAIgo funciona lá. Slack, Discord, WhatsApp, Xcode, Word, Google Docs, etc."
                             },
                             {
-                                q: "Como o VibeFlow me ajuda a escrever código?",
+                                q: "Como o VoxAIgo me ajuda a escrever código?",
                                 a: "O 'Code Mode' é otimizado para entender terminologia técnica e sintaxe. Você diz 'função map array user', ele digita 'users.map((user) => ...)' corretamente."
                             },
                             {
@@ -855,7 +855,7 @@ export default function Home() {
                             },
                             {
                                 q: "Meus dados são privados?",
-                                a: "Sim, 100%. O VibeFlow processa sua fala usando tecnologia Google segura. A conexão é feita diretamente do seu Mac para o Google, sem passar por nossos servidores. Seus dados são seus."
+                                a: "Sim, 100%. O VoxAIgo processa sua fala usando tecnologia Google segura. A conexão é feita diretamente do seu Mac para o Google, sem passar por nossos servidores. Seus dados são seus."
                             }
                         ].map((faq, i) => (
                             <div key={i} className="border border-white/10 rounded-lg overflow-hidden bg-white/5">
@@ -882,16 +882,16 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
                         <div className="w-6 h-6 relative">
-                            <img src="/logo.png" alt="VibeFlow Logo" className="w-full h-full object-contain" />
+                            <img src="/logo.png" alt="VoxAIgo Logo" className="w-full h-full object-contain" />
                         </div>
-                        <span className="font-bold text-white">VibeFlow</span>
+                        <span className="font-bold text-white">VoxAIgo</span>
                     </div>
                     <div className="flex gap-6">
                         <a href="#" className="hover:text-white transition-colors">Termos</a>
                         <a href="#" className="hover:text-white transition-colors">Privacidade</a>
                         <a href="#" className="hover:text-white transition-colors">Twitter</a>
                     </div>
-                    <p>© 2026 VibeFlow. Feito com ❤️ por Robson Oliveira.</p>
+                    <p>© 2026 VoxAIgo. Feito com ❤️ por Robson Oliveira.</p>
                 </div>
             </footer>
         </div>
