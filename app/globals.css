@@ -19,3 +19,12 @@ body {
     text-wrap: balance;
   }
 }
+
+@keyframes audio-bar {
+  0%, 100% { height: 20%; }
+  50% { height: 80%; }
+}
+
+.animate-audio-bar {
+  animation: audio-bar 0.5s infinite ease-in-out;
+}

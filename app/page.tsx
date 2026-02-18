@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import {
     Mic,
     Terminal,
@@ -42,6 +42,25 @@ const staggerContainer = {
         transition: {
             staggerChildren: 0.1
         }
+    }
+};
+
+const strikethrough = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: {
+        pathLength: 1,
+        opacity: 1,
+        transition: { duration: 0.8, ease: "easeInOut", delay: 1.5 }
+    }
+};
+
+const highlightFadeIn = {
+    hidden: { opacity: 0, y: 10, filter: "blur(10px)" },
+    visible: {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        transition: { duration: 0.8, ease: "easeOut", delay: 2.2 }
     }
 };
 
@@ -145,12 +164,11 @@ div:hover {
                         </div>
                         <div className="h-12 bg-white/5 rounded-lg flex items-center justify-center gap-1 opacity-50 mt-auto">
                             {[...Array(20)].map((_, i) => (
-                                <motion.div
+                                <div
                                     key={i}
-                                    className="w-1 bg-red-500 rounded-full"
-                                    animate={{ height: ["20%", "80%", "20%"] }}
-                                    transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.05 }}
-                                ></motion.div>
+                                    className="w-1 bg-red-500 rounded-full animate-audio-bar"
+                                    style={{ animationDelay: `${i * 0.05}s` }}
+                                ></div>
                             ))}
                         </div>
                     </div>
@@ -192,7 +210,12 @@ const ComparisonRace = () => {
     const typingSpeedPerChar = 150; // ms per char — slow hunt-and-peck
     const voiceSpeedPerChar = 30;   // ms per char — fast burst
 
+    const containerRef = React.useRef(null);
+    const isInView = useInView(containerRef, { once: false, margin: "0px" });
+
     useEffect(() => {
+        if (!isInView) return;
+
         let typingInterval: NodeJS.Timeout;
         let voiceInterval: NodeJS.Timeout;
         let nextPhraseTimeout: NodeJS.Timeout;
@@ -255,18 +278,18 @@ const ComparisonRace = () => {
             clearTimeout(voiceStartTimeout);
             clearTimeout(nextPhraseTimeout);
         };
-    }, [phraseIndex]);
+    }, [phraseIndex, isInView]);
 
     // Calculate voice finish time for display
     const voiceFinishTime = ((targetText.length / 3) * voiceSpeedPerChar + 400) / 1000;
     const typingFinishTime = (targetText.length * typingSpeedPerChar) / 1000;
 
     return (
-        <div
-            className="relative bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 w-full max-w-2xl hover:border-purple-500/30 transition-all duration-500 group shadow-2xl cursor-default"
+        ref = { containerRef }
+            className = "relative bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 w-full max-w-2xl hover:border-purple-500/30 transition-all duration-500 group shadow-2xl cursor-default"
         >
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+        {/* Header */ }
+        < div className = "flex items-center justify-between mb-6" >
                 <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
                     <span className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">Live Race</span>
@@ -280,99 +303,99 @@ const ComparisonRace = () => {
                         />
                     ))}
                 </div>
+            </div >
+
+    <div className="space-y-6">
+        {/* Manual Typing Lane */}
+        <div className="space-y-2">
+            <div className="flex justify-between items-end">
+                <span className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
+                    <Keyboard className="w-3 h-3" /> Digitação (40 PPM)
+                </span>
+                <span className="font-mono text-sm text-gray-400">
+                    {typingText.length >= targetText.length
+                        ? typingFinishTime.toFixed(1) + "s"
+                        : typingTime.toFixed(1) + "s"}
+                </span>
             </div>
-
-            <div className="space-y-6">
-                {/* Manual Typing Lane */}
-                <div className="space-y-2">
-                    <div className="flex justify-between items-end">
-                        <span className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
-                            <Keyboard className="w-3 h-3" /> Digitação (40 PPM)
-                        </span>
-                        <span className="font-mono text-sm text-gray-400">
-                            {typingText.length >= targetText.length
-                                ? typingFinishTime.toFixed(1) + "s"
-                                : typingTime.toFixed(1) + "s"}
-                        </span>
-                    </div>
-                    <div className="h-12 bg-black/40 rounded-xl border border-white/5 flex items-center px-4 relative overflow-hidden">
-                        <span className="text-gray-400 font-mono text-sm truncate">{typingText}</span>
-                        {typingText.length < targetText.length && (
-                            <motion.div
-                                className="w-0.5 h-5 bg-purple-500 ml-1 flex-shrink-0"
-                                animate={{ opacity: [1, 0] }}
-                                transition={{ repeat: Infinity, duration: 0.5 }}
-                            />
-                        )}
-                    </div>
-                    <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
-                        <motion.div
-                            className="h-full bg-gray-600 rounded-full"
-                            initial={{ width: "0%" }}
-                            animate={{ width: `${(typingText.length / targetText.length) * 100}%` }}
-                            transition={{ duration: 0.05 }}
-                        />
-                        <motion.span
-                            className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
-                            style={{ transform: 'translateX(-50%) translateY(-50%) scaleX(-1)' }}
-                            initial={{ left: "0%" }}
-                            animate={{ left: `${(typingText.length / targetText.length) * 100}%` }}
-                            transition={{ duration: 0.05 }}
-                        >
-                            🐢
-                        </motion.span>
-                    </div>
-                </div>
-
-                {/* VoxAIgo Lane */}
-                <div className="space-y-2">
-                    <div className="flex justify-between items-end">
-                        <span className="text-xs font-bold text-green-400 uppercase flex items-center gap-2">
-                            <Mic className="w-3 h-3" /> VoxAIgo (Voz)
-                        </span>
-                        <span className="font-mono text-sm text-green-400">
-                            {voiceText.length >= targetText.length
-                                ? voiceFinishTime.toFixed(1) + "s ✓"
-                                : voiceTime > 0
-                                    ? voiceTime.toFixed(1) + "s"
-                                    : "0.0s"}
-                        </span>
-                    </div>
-                    <div className="h-12 bg-green-500/5 rounded-xl border border-green-500/20 flex items-center px-4 relative overflow-hidden">
-                        {racePhase === "racing" && (
-                            <div className="absolute inset-0 bg-green-500/5 animate-pulse"></div>
-                        )}
-                        <span className="text-green-100 font-medium text-sm z-10 truncate">{voiceText}</span>
-                        {voiceText.length >= targetText.length && (
-                            <motion.span
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="ml-auto flex-shrink-0 text-xs font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20"
-                            >
-                                {Math.round(typingFinishTime / voiceFinishTime)}x mais rápido
-                            </motion.span>
-                        )}
-                    </div>
-                    <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
-                        <motion.div
-                            className="h-full bg-green-500 rounded-full"
-                            initial={{ width: "0%" }}
-                            animate={{ width: `${(voiceText.length / targetText.length) * 100}%` }}
-                            transition={{ duration: 0.05 }}
-                        />
-                        <motion.span
-                            className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
-                            style={{ transform: 'translateX(-50%) translateY(-50%)' }}
-                            initial={{ left: "0%" }}
-                            animate={{ left: `${(voiceText.length / targetText.length) * 100}%` }}
-                            transition={{ duration: 0.05 }}
-                        >
-                            🚀
-                        </motion.span>
-                    </div>
-                </div>
+            <div className="h-12 bg-black/40 rounded-xl border border-white/5 flex items-center px-4 relative overflow-hidden">
+                <span className="text-gray-400 font-mono text-sm truncate">{typingText}</span>
+                {typingText.length < targetText.length && (
+                    <motion.div
+                        className="w-0.5 h-5 bg-purple-500 ml-1 flex-shrink-0"
+                        animate={{ opacity: [1, 0] }}
+                        transition={{ repeat: Infinity, duration: 0.5 }}
+                    />
+                )}
+            </div>
+            <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
+                <motion.div
+                    className="h-full bg-gray-600 rounded-full"
+                    initial={{ width: "0%" }}
+                    animate={{ width: `${(typingText.length / targetText.length) * 100}%` }}
+                    transition={{ duration: 0.05 }}
+                />
+                <motion.span
+                    className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
+                    style={{ transform: 'translateX(-50%) translateY(-50%) scaleX(-1)' }}
+                    initial={{ left: "0%" }}
+                    animate={{ left: `${(typingText.length / targetText.length) * 100}%` }}
+                    transition={{ duration: 0.05 }}
+                >
+                    🐢
+                </motion.span>
             </div>
         </div>
+
+        {/* VoxAIgo Lane */}
+        <div className="space-y-2">
+            <div className="flex justify-between items-end">
+                <span className="text-xs font-bold text-green-400 uppercase flex items-center gap-2">
+                    <Mic className="w-3 h-3" /> VoxAIgo (Voz)
+                </span>
+                <span className="font-mono text-sm text-green-400">
+                    {voiceText.length >= targetText.length
+                        ? voiceFinishTime.toFixed(1) + "s ✓"
+                        : voiceTime > 0
+                            ? voiceTime.toFixed(1) + "s"
+                            : "0.0s"}
+                </span>
+            </div>
+            <div className="h-12 bg-green-500/5 rounded-xl border border-green-500/20 flex items-center px-4 relative overflow-hidden">
+                {racePhase === "racing" && (
+                    <div className="absolute inset-0 bg-green-500/5 animate-pulse"></div>
+                )}
+                <span className="text-green-100 font-medium text-sm z-10 truncate">{voiceText}</span>
+                {voiceText.length >= targetText.length && (
+                    <motion.span
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="ml-auto flex-shrink-0 text-xs font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20"
+                    >
+                        {Math.round(typingFinishTime / voiceFinishTime)}x mais rápido
+                    </motion.span>
+                )}
+            </div>
+            <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
+                <motion.div
+                    className="h-full bg-green-500 rounded-full"
+                    initial={{ width: "0%" }}
+                    animate={{ width: `${(voiceText.length / targetText.length) * 100}%` }}
+                    transition={{ duration: 0.05 }}
+                />
+                <motion.span
+                    className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
+                    style={{ transform: 'translateX(-50%) translateY(-50%)' }}
+                    initial={{ left: "0%" }}
+                    animate={{ left: `${(voiceText.length / targetText.length) * 100}%` }}
+                    transition={{ duration: 0.05 }}
+                >
+                    🚀
+                </motion.span>
+            </div>
+        </div>
+    </div>
+        </div >
     );
 };
 
@@ -414,7 +437,7 @@ export default function Home() {
             {/* Hero Section */}
             <section className="relative pt-32 pb-20 px-6 overflow-hidden">
                 {/* Background Gradients */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-purple-600/10 rounded-full blur-[120px] -z-10 animate-pulse" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-purple-600/10 rounded-full blur-[80px] -z-10" />
 
                 <div className="max-w-5xl mx-auto text-center relative z-10">
                     <motion.div
@@ -431,15 +454,38 @@ export default function Home() {
                             VoxAIgo 2.0 chegou. Veja as novidades &rarr;
                         </motion.div>
 
-                        <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-gray-400">
-                            Tempo é dinheiro. <br className="hidden md:block" />
-                            <span className="text-white relative">
-                                Pare de digitar.
-                                <svg className="absolute -bottom-2 md:-bottom-4 left-0 w-full h-3 md:h-6 text-purple-600/50 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                    <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="transparent" />
-                                </svg>
-                            </span>
-                        </motion.h1>
+                        <div className="relative mb-8 min-h-[160px] md:min-h-[200px] flex flex-col items-center justify-center">
+                            <motion.h1
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                                className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] relative z-10 text-gray-400"
+                            >
+                                <span className="relative inline-block">
+                                    Pare de digitar.
+                                    <svg className="absolute top-1/2 left-0 w-full h-4 md:h-8 -translate-y-1/2 pointer-events-none overflow-visible" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                        <motion.path
+                                            d="M0 5 Q 50 10 100 5"
+                                            stroke="#ef4444"
+                                            strokeWidth="6"
+                                            fill="transparent"
+                                            variants={strikethrough}
+                                            initial="hidden"
+                                            animate="visible"
+                                        />
+                                    </svg>
+                                </span>
+                            </motion.h1>
+
+                            <motion.h1
+                                variants={highlightFadeIn}
+                                initial="hidden"
+                                animate="visible"
+                                className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 mt-2 md:mt-4 drop-shadow-2xl"
+                            >
+                                Tempo é dinheiro.
+                            </motion.h1>
+                        </div>
 
                         <motion.p variants={fadeIn} className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
                             O VoxAIgo transforma sua fala em e-mails perfeitos, relatórios no Word e conversas no WhatsApp.
