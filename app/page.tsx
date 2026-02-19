@@ -468,7 +468,7 @@ export default function Home() {
                                         <motion.path
                                             d="M0 5 Q 50 10 100 5"
                                             stroke="#ef4444"
-                                            strokeWidth="6"
+                                            strokeWidth="2"
                                             fill="transparent"
                                             variants={strikethrough}
                                             initial="hidden"
