@@ -96,12 +96,20 @@ def calculate_average_age(file_path):
             bg: "bg-orange-500"
         },
         {
-            name: "Comandos de IA",
-            icon: Zap,
-            input: "Resuma este texto em tópicos curtos e objetivos.",
-            output: "• O VoxAIgo elimina a necessidade de digitação manual.\n• Funciona nativamente em qualquer aplicativo do macOS.\n• Garante privacidade com processamento direto via Google.",
+            name: "Agente Vox",
+            icon: Mic,
+            input: "Agente, muda pro modo de código e prepara pra traduzir pra inglês.",
+            output: "✨ Modo alterado para: Código\n🌍 Idioma de saída: Inglês",
             color: "text-amber-400",
             bg: "bg-amber-500"
+        },
+        {
+            name: "Live Coding",
+            icon: Terminal,
+            input: "Cria um botão do tailwind que fica verde quando passa o mouse e tem uma sombra suave.",
+            output: `<button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded shadow-sm hover:shadow-md transition-all duration-200">\n  Clique Aqui\n</button>`,
+            color: "text-cyan-400",
+            bg: "bg-cyan-500"
         },
         {
             name: "UX Design",
@@ -190,12 +198,12 @@ div:hover {
 };
 
 const persuasivePhrases = [
-    "O VoxAIgo digita 5x mais rápido que você.",
-    "Enquanto você digita, seu concorrente já respondeu.",
-    "Uma hora por dia. É isso que você perde digitando.",
-    "Sua voz produz 200 palavras por minuto. Seus dedos, 40.",
-    "Tempo é dinheiro. Pare de desperdiçar os dois.",
-    "E-mails, relatórios, código. Tudo 5x mais rápido.",
+    "O VoxAIgo digita muito mais rápido que você.",
+    "A IA digita, pontua e formata suas ideias.",
+    "Uma hora por dia. É isso que você economiza.",
+    "Fale de forma natural, sem pensar no teclado.",
+    "E-mails e relatórios prontos antes mesmo de você sentar.",
+    "Troque de idioma e dê comandos apenas com a voz."
 ];
 
 const ComparisonRace = () => {
@@ -447,12 +455,12 @@ export default function Home() {
                         variants={staggerContainer}
                         className="space-y-8"
                     >
-                        <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-purple-300 mb-6">
+                        <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs md:text-sm font-medium text-gray-300 mb-8 md:mb-12">
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
                             </span>
-                            App para Mac — você fala, ele digita
+                            Não digite. Apenas fale.
                         </motion.div>
 
                         <div className="relative mb-8 min-h-[160px] md:min-h-[200px] flex flex-col items-center justify-center">
@@ -460,26 +468,35 @@ export default function Home() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 drop-shadow-2xl"
+                                className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]"
                             >
-                                Você fala. A IA digita.
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-amber-300">Não digite.</span><br />
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">Apenas fale.</span>
                             </motion.h1>
 
                             <motion.h2
                                 variants={highlightFadeIn}
                                 initial="hidden"
                                 animate="visible"
-                                className="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-[1.2] text-gray-300 mt-4 md:mt-6"
+                                className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-snug text-white mt-6 md:mt-8 max-w-3xl mx-auto"
                             >
-                                Em qualquer app. Em qualquer idioma.
+                                Vox é o agente de inteligência artificial que transforma a sua voz<br className="hidden md:block" /> em textos perfeitos.
                             </motion.h2>
+
+                            <motion.div
+                                variants={highlightFadeIn}
+                                initial="hidden"
+                                animate="visible"
+                                className="mt-8 mb-4 md:mb-8"
+                            >
+                                <span className="inline-block px-5 py-2.5 rounded-full bg-[#0A0A0A] border border-white/10 text-purple-300 font-medium text-sm md:text-base shadow-lg">
+                                    Cinco vezes mais rápido que digitar
+                                </span>
+                            </motion.div>
                         </div>
 
                         <motion.p variants={fadeIn} className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
-                            O <span className="text-white font-medium">VoxAIgo</span> é um app para Mac que transforma sua voz em texto pronto
-                            — com pontuação, formatação e gramática perfeitas. Abra qualquer programa
-                            (WhatsApp, Gmail, VS Code, Word), aperte um atalho, fale, e o texto aparece digitado.
-                            <span className="text-white font-medium"> Simples assim.</span>
+                            Funciona em qualquer aplicativo do seu computador: WhatsApp, e-mail, Slack, Discord e muito mais no Windows ou Mac. Pressione o atalho, fale e deixe o <span className="text-purple-400 font-medium">Agente Vox</span> fazer o resto.
                         </motion.p>
 
                         {/* Use case cards */}
@@ -678,56 +695,74 @@ export default function Home() {
             <section id="features" className="py-24 px-6 bg-black">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16 space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-bold">Produtividade real. <span className="text-purple-500">Dinheiro no bolso.</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-bold">Mais tempo livre. <span className="text-purple-500">Menos stress.</span></h2>
                         <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                            Seu tempo vale muito. Pare de desperdiçá-lo com digitação lenta e formatação manual.
+                            Pare de lutar com o teclado. O VoxAIgo se adapta ao seu estilo e faz o trabalho pesado para você.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Email Card */}
-                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Mail className="text-green-400" />
+                        {/* Email Card */}
+                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div className="relative z-10">
+                                <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(34,197,94,0.2)]">
+                                    <Mail className="text-green-400" />
+                                </div>
+                                <h3 className="text-xl font-bold mb-3 text-white">E-mails perfeitos, rápido</h3>
+                                <p className="text-gray-400 leading-relaxed">
+                                    Responda mensagens complexas enquanto caminha pela sala. O VoxAIgo transforma pensamentos soltos em e-mails profissionais bem estruturados.
+                                </p>
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-white">E-mails em segundos</h3>
-                            <p className="text-gray-400 leading-relaxed">
-                                Aquele e-mail longo? Dite em 30 segundos. O VoxAIgo corrige, formata e deixa profissional. Recupere sua caixa de entrada.
-                            </p>
                         </div>
 
                         {/* Universal Card */}
-                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Clock className="text-blue-400" />
+                        {/* Agente Vox Card */}
+                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div className="relative z-10">
+                                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                                    <Mic className="text-blue-400" />
+                                </div>
+                                <h3 className="text-xl font-bold mb-3 text-white">O Poder do Agente Vox</h3>
+                                <p className="text-gray-400 leading-relaxed">
+                                    Controle seu computador sem usar as mãos. Diga "Ei Vox, traduza isso para Inglês" ou "Ei Vox, modo programação" e deixe a mágica acontecer.
+                                </p>
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-white">Reuniões mais curtas</h3>
-                            <p className="text-gray-400 leading-relaxed">
-                                Em vez de uma reunião de 30 mins, envie uma mensagem detalhada no Slack ou Teams ditada em 1 minuto. Clareza total, zero esforço.
-                            </p>
                         </div>
 
                         {/* Voice Commands / Code Card */}
-                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Zap className="text-purple-400" />
+                        {/* Voice Commands / Code Card */}
+                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:shadow-[0_0_30px_rgba(245,158,11,0.15)] relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div className="relative z-10">
+                                <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                                    <Zap className="text-amber-400" />
+                                </div>
+                                <h3 className="text-xl font-bold mb-3 text-white">Comandos e Correções</h3>
+                                <p className="text-gray-400 leading-relaxed">
+                                    Selecione um texto e diga "Deixe mais amigável" ou "Resuma isso". O VoxAIgo edita tudo instantaneamente, direto no app que você está usando.
+                                </p>
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-white">Comandos Mágicos</h3>
-                            <p className="text-gray-400 leading-relaxed">
-                                "Resuma isso", "Melhore o tom", "Traduza para Inglês". Use comandos de voz para editar textos instantaneamente em qualquer lugar.
-                            </p>
                         </div>
 
                         {/* Translation Card */}
-                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 md:col-span-2">
-                            <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Languages className="text-yellow-400" />
+                        {/* Live Coding Context (Spans 2 columns) */}
+                        <div className="group bg-[#0A0A0A] border border-cyan-500/20 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 md:col-span-2 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-blue-900/10 opacity-50"></div>
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.3)] border border-cyan-500/30">
+                                        <Terminal className="text-cyan-400" />
+                                    </div>
+                                    <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">Modo Dev</span>
+                                </div>
+                                <h3 className="text-2xl font-bold mb-3 text-white">Live Coding Sem Gastar Tokens</h3>
+                                <p className="text-gray-300 leading-relaxed max-w-lg text-lg">
+                                    Desenvolvedores: Poupem os tokens preciosos das suas IDEs (Cursor, Copilot). Dite a lógica complexa em linguagem natural e o Agente Vox cospe o bloco de código perfeitamente formatado, sem consumir sua franquia mensal do LLM.
+                                </p>
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-white">Poliglota Instantâneo</h3>
-                            <p className="text-gray-400 leading-relaxed max-w-lg">
-                                Fale em sua língua nativa, e o VoxAIgo digita em Inglês, Espanhol, Francês ou Japonês.
-                                Comunique-se globalmente sem pausar para traduzir mentalmente.
-                            </p>
                         </div>
 
                         {/* Stats Card */}
@@ -810,7 +845,7 @@ export default function Home() {
                     {/* Free Plan */}
                     <div className="relative bg-[#0F0F0F] rounded-2xl p-8 border border-white/10 flex flex-col hover:border-white/20 transition-all duration-300">
                         <h3 className="text-2xl font-bold text-white mb-2">Grátis</h3>
-                        <p className="text-gray-500 text-sm mb-6">Perfeito para experimentar o VoxAIgo</p>
+                        <p className="text-gray-500 text-sm mb-6">Perfeito para experimentar o Agente Vox</p>
                         <div className="flex items-baseline gap-2 mb-8">
                             <span className="text-5xl font-bold text-white">R$0</span>
                             <span className="text-gray-400 text-sm">/ para sempre</span>
@@ -820,8 +855,8 @@ export default function Home() {
                             {[
                                 "100 transcrições por mês",
                                 "Todos os modos (Texto, Código, Tradução)",
-                                "Funciona em qualquer app",
-                                "Processamento seguro via Google",
+                                "Funciona com qualquer app (Windows & Mac)",
+                                "Processamento seguro e privado",
                                 "Comandos de IA básicos",
                             ].map((item, i) => (
                                 <li key={i} className="flex items-start gap-3 text-gray-300 list-none">
@@ -868,10 +903,10 @@ export default function Home() {
                                 {[
                                     "Transcrições ilimitadas",
                                     "Todos os modos (Texto, Código, Tradução)",
-                                    "Funciona em qualquer app",
-                                    "Processamento seguro via Google",
-                                    "Comandos de IA avançados (Resumir, Corrigir, Formatar)",
-                                    "Modo Tradução Instantânea",
+                                    "Funciona com qualquer app (Windows & Mac)",
+                                    "Processamento ultrarrápido",
+                                    "Comandos avançados (Resumir, Corrigir, Formatar)",
+                                    "Zero consumo de tokens em suas IDEs",
                                     "Suporte prioritário",
                                     "Atualizações incluídas",
                                 ].map((item, i) => (
@@ -903,7 +938,7 @@ export default function Home() {
                             },
                             {
                                 q: "Funciona com meus apps?",
-                                a: "Sim. O VoxAIgo funciona como uma camada em cima do sistema. Se você pode clicar e digitar, o VoxAIgo funciona lá. Slack, Discord, WhatsApp, Xcode, Word, Google Docs, etc."
+                                a: "Sim. O VoxAIgo funciona como uma camada em cima do seu sistema (Windows ou Mac). Se você pode clicar e digitar, o Agente Vox funciona lá. VS Code, Slack, Word, Google Docs, etc."
                             },
                             {
                                 q: "Como o VoxAIgo me ajuda a escrever código?",
@@ -915,7 +950,7 @@ export default function Home() {
                             },
                             {
                                 q: "Meus dados são privados?",
-                                a: "Sim, 100%. O VoxAIgo processa sua fala usando tecnologia Google segura. A conexão é feita diretamente do seu Mac para o Google, sem passar por nossos servidores. Seus dados são seus."
+                                a: "Sim, 100%. O VoxAIgo processa sua fala de forma extremamente segura. A conexão é feita diretamente da sua máquina, sem armazenar seus áudios em nossos servidores. Seus dados são seus."
                             }
                         ].map((faq, i) => (
                             <div key={i} className="border border-white/10 rounded-lg overflow-hidden bg-white/5">
@@ -944,14 +979,14 @@ export default function Home() {
                         <div className="w-6 h-6 relative">
                             <img src="/logo.png" alt="VoxAIgo Logo" className="w-full h-full object-contain" />
                         </div>
-                        <span className="font-bold text-white">VoxAIgo</span>
+                        <span className="font-bold text-white">VibeFlow | Agente Vox</span>
                     </div>
                     <div className="flex gap-6">
                         <a href="#" className="hover:text-white transition-colors">Termos</a>
                         <a href="#" className="hover:text-white transition-colors">Privacidade</a>
                         <a href="#" className="hover:text-white transition-colors">Twitter</a>
                     </div>
-                    <p>© 2026 VoxAIgo. Feito com ❤️ por Robson Oliveira.</p>
+                    <p>© 2026 VibeFlow. Desenvolvido para agilizar o seu dia a dia.</p>
                 </div>
             </footer>
         </div>

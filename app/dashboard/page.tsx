@@ -90,18 +90,27 @@ export default function DashboardPage() {
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)
 
-    // Fetch all usage_log rows for rich stats (select only needed columns)
-    const { data: allLogs } = await supabase
-      .from('usage_log')
-      .select('mode, language, output_length, audio_duration_seconds, created_at')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: true })
+    // Fetch all usage_log rows for rich stats (paginate since Supabase caps at 1000)
+    let logs: Array<{ mode: string; language: string; output_length: number; audio_duration_seconds: number; created_at: string }> = []
+    let offset = 0
+    const PAGE_SIZE = 1000
+    while (true) {
+      const { data: page } = await supabase
+        .from('usage_log')
+        .select('mode, language, output_length, audio_duration_seconds, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true })
+        .range(offset, offset + PAGE_SIZE - 1)
+      if (!page || page.length === 0) break
+      logs = logs.concat(page)
+      if (page.length < PAGE_SIZE) break
+      offset += PAGE_SIZE
+    }
 
-    const logs = allLogs || []
-
-    // Daily usage for last 7 days
+    // Daily usage for last 30 days
+    const CHART_DAYS = 30
     const dailyUsage: number[] = []
-    for (let i = 6; i >= 0; i--) {
+    for (let i = CHART_DAYS - 1; i >= 0; i--) {
       const day = new Date()
       day.setDate(day.getDate() - i)
       const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate()).getTime()
@@ -176,6 +185,7 @@ export default function DashboardPage() {
   const maxDaily = Math.max(...stats.dailyUsage, 1)
 
   // Calculate streak (consecutive days with usage, counting from today backwards)
+  // Uses the full dailyUsage array (30 days) for accurate long streaks
   const streak = (() => {
     let count = 0
     const usage = [...stats.dailyUsage].reverse() // most recent first
@@ -186,13 +196,14 @@ export default function DashboardPage() {
     return count
   })()
 
+  const CHART_DAYS = 30
+
   const dayLabels = (() => {
     const labels: string[] = []
-    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
-    for (let i = 6; i >= 0; i--) {
+    for (let i = CHART_DAYS - 1; i >= 0; i--) {
       const d = new Date()
       d.setDate(d.getDate() - i)
-      labels.push(days[d.getDay()])
+      labels.push(`${d.getDate()}/${d.getMonth() + 1}`)
     }
     return labels
   })()
@@ -231,7 +242,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Time Projection — FIRST, biggest number focus */}
         {(() => {
-          const min = Math.round(stats.totalTranscriptions * 0.5)
+          const min = Math.round(stats.totalTranscriptions * 1.5)
           const daysActive = stats.dailyUsage.filter(d => d > 0).length || 1
           const avgPerDay = min / daysActive
           const monthMinutes = Math.round(avgPerDay * 30)
@@ -341,38 +352,47 @@ export default function DashboardPage() {
             <span className="text-lg text-zinc-400">{streak === 1 ? 'dia' : 'dias'}</span>
           </div>
           <p className="text-xs text-zinc-500 mt-2">
-            {streak >= 7
-              ? 'Incrível! Você está no ritmo!'
-              : streak >= 3
-                ? 'Boa sequência! Continue assim!'
-                : streak > 0
-                  ? 'Use todo dia para manter a sequência'
-                  : 'Use o VoxAIgo hoje para começar'}
+            {streak >= 30
+              ? 'Impressionante! Você é um mestre!'
+              : streak >= 14
+                ? 'Incrível! Você está no ritmo!'
+                : streak >= 7
+                  ? 'Boa sequência! Continue assim!'
+                  : streak > 0
+                    ? 'Use todo dia para manter a sequência'
+                    : 'Use o VoxAIgo hoje para começar'}
           </p>
 
-          {/* Week dots */}
+          {/* Last 7 days dots */}
           <div className="flex gap-2 mt-4">
-            {dayLabels.map((label, i) => {
-              const hasUsage = stats.dailyUsage[i] > 0
-              return (
-                <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.3 + i * 0.05, type: 'spring', stiffness: 300 }}
-                    className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${hasUsage
-                      ? 'bg-orange-500/20 text-orange-400 ring-1 ring-orange-500/30'
-                      : 'bg-zinc-800/60 text-zinc-600'
-                      }`}
-                  >
-                    {hasUsage ? '✓' : '·'}
-                  </motion.div>
-                  <span className={`text-[9px] ${hasUsage ? 'text-zinc-400' : 'text-zinc-700'}`}>
-                    {label}
-                  </span>
-                </div>
-              )
-            })}
+            {(() => {
+              const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+              const last7 = stats.dailyUsage.slice(-7)
+              return last7.map((usage, i) => {
+                const d = new Date()
+                d.setDate(d.getDate() - (6 - i))
+                const label = weekDays[d.getDay()]
+                const hasUsage = usage > 0
+                return (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.3 + i * 0.05, type: 'spring', stiffness: 300 }}
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${hasUsage
+                        ? 'bg-orange-500/20 text-orange-400 ring-1 ring-orange-500/30'
+                        : 'bg-zinc-800/60 text-zinc-600'
+                        }`}
+                    >
+                      {hasUsage ? '✓' : '·'}
+                    </motion.div>
+                    <span className={`text-[9px] ${hasUsage ? 'text-zinc-400' : 'text-zinc-700'}`}>
+                      {label}
+                    </span>
+                  </div>
+                )
+              })
+            })()}
           </div>
         </motion.div>
 
@@ -464,12 +484,12 @@ export default function DashboardPage() {
             </div>
             <span className="text-xs text-zinc-500">Tempo economizado</span>
           </div>
-          <CountUp value={Math.round(stats.totalTranscriptions * 0.5)} suffix="min" className="text-2xl font-bold text-white" />
+          <CountUp value={Math.round(stats.totalTranscriptions * 1.5)} suffix="min" className="text-2xl font-bold text-white" />
           <p className="text-xs text-zinc-500 mt-1">estimativa</p>
         </motion.div>
       </div>
 
-      {/* Usage chart (last 7 days) — Cumulative line chart */}
+      {/* Usage chart (last 30 days) — Cumulative line chart */}
       {(() => {
         // Build cumulative data (grows upward)
         const cumulative = stats.dailyUsage.reduce<number[]>((acc, val) => {
@@ -477,18 +497,19 @@ export default function DashboardPage() {
           return acc
         }, [])
         const cMax = Math.max(...cumulative, 1)
-        const totalWeek = stats.dailyUsage.reduce((a, b) => a + b, 0)
+        const totalPeriod = stats.dailyUsage.reduce((a, b) => a + b, 0)
+        const numDays = stats.dailyUsage.length
 
         // SVG dimensions
-        const W = 600
-        const H = 160
+        const W = 700
+        const H = 180
         const padX = 0
         const padTop = 10
         const padBottom = 4
 
         // Build points for smooth curve
         const points = cumulative.map((val, i) => ({
-          x: padX + (i / 6) * (W - padX * 2),
+          x: padX + (i / (numDays - 1)) * (W - padX * 2),
           y: padTop + (1 - val / cMax) * (H - padTop - padBottom),
         }))
 
@@ -513,12 +534,15 @@ export default function DashboardPage() {
         const linePath = smoothPath(points)
         const areaPath = `${linePath} L ${points[points.length - 1].x} ${H} L ${points[0].x} ${H} Z`
 
+        // Show labels every 5 days for readability
+        const labelInterval = 5
+
         return (
           <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium text-zinc-400">Crescimento — últimos 7 dias</h3>
+              <h3 className="text-sm font-medium text-zinc-400">Crescimento — últimos 30 dias</h3>
               <span className="text-xs text-zinc-600">
-                +{totalWeek} transcrições
+                +{totalPeriod} transcrições
               </span>
             </div>
 
@@ -572,66 +596,74 @@ export default function DashboardPage() {
                     strokeLinejoin="round"
                     initial={{ pathLength: 0, opacity: 0 }}
                     animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{ delay: 0.2, duration: 1.2, ease: 'easeOut' }}
+                    transition={{ delay: 0.2, duration: 1.5, ease: 'easeOut' }}
                     style={{ vectorEffect: 'non-scaling-stroke' }}
                   />
 
-                  {/* Data points + value labels */}
-                  {points.map((pt, i) => (
-                    <g key={i}>
-                      {/* Glow */}
-                      <motion.circle
-                        cx={pt.x}
-                        cy={pt.y}
-                        r="8"
-                        fill="rgb(147 51 234 / 0.2)"
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.4 + i * 0.1, duration: 0.4 }}
-                      />
-                      {/* Dot */}
-                      <motion.circle
-                        cx={pt.x}
-                        cy={pt.y}
-                        r="4"
-                        fill="#a855f7"
-                        stroke="#18181b"
-                        strokeWidth="2"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.4 + i * 0.1, type: 'spring', stiffness: 300 }}
-                      />
-                      {/* Value label */}
-                      {stats.dailyUsage[i] > 0 && (
-                        <motion.text
-                          x={pt.x}
-                          y={pt.y - 14}
-                          textAnchor="middle"
-                          className="text-[11px] font-medium"
-                          fill="#a1a1aa"
-                          initial={{ opacity: 0, y: pt.y - 8 }}
-                          animate={{ opacity: 1, y: pt.y - 14 }}
-                          transition={{ delay: 0.5 + i * 0.1, duration: 0.3 }}
-                        >
-                          +{stats.dailyUsage[i]}
-                        </motion.text>
-                      )}
-                    </g>
-                  ))}
+                  {/* Data points — show dots at key intervals and on last point */}
+                  {points.map((pt, i) => {
+                    const isLabelPoint = i === 0 || i === numDays - 1 || i % labelInterval === 0
+                    if (!isLabelPoint) return null
+                    return (
+                      <g key={i}>
+                        <motion.circle
+                          cx={pt.x}
+                          cy={pt.y}
+                          r="6"
+                          fill="rgb(147 51 234 / 0.2)"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.4 + i * 0.03, duration: 0.4 }}
+                        />
+                        <motion.circle
+                          cx={pt.x}
+                          cy={pt.y}
+                          r="3"
+                          fill="#a855f7"
+                          stroke="#18181b"
+                          strokeWidth="2"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.4 + i * 0.03, type: 'spring', stiffness: 300 }}
+                        />
+                        {/* Cumulative total label on last point */}
+                        {i === numDays - 1 && (
+                          <motion.text
+                            x={pt.x}
+                            y={pt.y - 12}
+                            textAnchor="end"
+                            className="text-[11px] font-bold"
+                            fill="#a855f7"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1.5, duration: 0.5 }}
+                          >
+                            {cumulative[i]}
+                          </motion.text>
+                        )}
+                      </g>
+                    )
+                  })}
                 </svg>
 
-                {/* Day labels */}
+                {/* Day labels — show every 5 days + first + last */}
                 <div className="flex justify-between mt-2">
-                  {dayLabels.map((label, i) => (
-                    <span
-                      key={i}
-                      className={`text-[11px] ${stats.dailyUsage[i] > 0 ? 'text-zinc-400 font-medium' : 'text-zinc-600'
-                        }`}
-                      style={{ width: `${100 / 7}%`, textAlign: 'center' }}
-                    >
-                      {label}
-                    </span>
-                  ))}
+                  {dayLabels.map((label, i) => {
+                    const show = i === 0 || i === numDays - 1 || i % labelInterval === 0
+                    return (
+                      <span
+                        key={i}
+                        className="text-[10px] text-zinc-600"
+                        style={{
+                          width: `${100 / numDays}%`,
+                          textAlign: 'center',
+                          visibility: show ? 'visible' : 'hidden',
+                        }}
+                      >
+                        {label}
+                      </span>
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -658,23 +690,23 @@ export default function DashboardPage() {
             <div className="space-y-3">
               {Object.entries(stats.modeDistribution)
                 .sort((a, b) => b[1] - a[1])
-                .slice(0, 5)
+                .slice(0, 6)
                 .map(([mode, count]) => {
                   const maxCount = Math.max(...Object.values(stats.modeDistribution))
                   const pct = (count / maxCount) * 100
                   const modeConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-                    text: { label: 'Texto', color: 'bg-blue-500', icon: <FileText size={12} className="text-blue-400" /> },
-                    chat: { label: 'Chat', color: 'bg-green-500', icon: <MessageSquare size={12} className="text-green-400" /> },
-                    code: { label: 'Código', color: 'bg-purple-500', icon: <Terminal size={12} className="text-purple-400" /> },
                     vibe_coder: { label: 'Vibe Coder', color: 'bg-fuchsia-500', icon: <Zap size={12} className="text-fuchsia-400" /> },
+                    text: { label: 'Texto', color: 'bg-blue-500', icon: <FileText size={12} className="text-blue-400" /> },
                     email: { label: 'Email', color: 'bg-amber-500', icon: <Mail size={12} className="text-amber-400" /> },
+                    code: { label: 'Código', color: 'bg-purple-500', icon: <Terminal size={12} className="text-purple-400" /> },
+                    chat: { label: 'Chat', color: 'bg-green-500', icon: <MessageSquare size={12} className="text-green-400" /> },
+                    ux_design: { label: 'UX Design', color: 'bg-rose-500', icon: <Palette size={12} className="text-rose-400" /> },
                     formal: { label: 'Formal', color: 'bg-indigo-500', icon: <FileText size={12} className="text-indigo-400" /> },
                     social: { label: 'Social', color: 'bg-pink-500', icon: <MessageSquare size={12} className="text-pink-400" /> },
                     x: { label: 'X / Tweet', color: 'bg-zinc-400', icon: <Terminal size={12} className="text-zinc-300" /> },
                     summary: { label: 'Resumo', color: 'bg-cyan-500', icon: <FileText size={12} className="text-cyan-400" /> },
                     topics: { label: 'Tópicos', color: 'bg-teal-500', icon: <BarChart3 size={12} className="text-teal-400" /> },
                     meeting: { label: 'Reunião', color: 'bg-orange-500', icon: <Globe size={12} className="text-orange-400" /> },
-                    ux_design: { label: 'UX Design', color: 'bg-rose-500', icon: <Palette size={12} className="text-rose-400" /> },
                     translation: { label: 'Tradução', color: 'bg-sky-500', icon: <Globe size={12} className="text-sky-400" /> },
                     creative: { label: 'Criativo', color: 'bg-violet-500', icon: <Zap size={12} className="text-violet-400" /> },
                     custom: { label: 'Meu Modo', color: 'bg-lime-500', icon: <Mic size={12} className="text-lime-400" /> },
@@ -710,20 +742,25 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.4 }}
-          className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5"
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5 flex flex-col h-full max-h-[360px]"
         >
-          <div className="flex items-center gap-2 mb-4">
-            <Globe size={16} className="text-blue-400" />
-            <h3 className="text-sm font-medium text-zinc-400">Idiomas utilizados</h3>
+          <div className="flex items-center gap-2 mb-4 shrink-0">
+            <div className="w-8 h-8 bg-blue-600/15 rounded-lg flex items-center justify-center">
+              <Globe size={16} className="text-blue-400" />
+            </div>
+            <h3 className="text-sm font-medium text-zinc-300">Idiomas utilizados</h3>
           </div>
           {Object.keys(stats.languageDistribution).length === 0 ? (
-            <p className="text-sm text-zinc-600">Nenhum dado ainda</p>
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-sm text-zinc-600">Nenhum dado ainda</p>
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="flex-1 overflow-y-auto pr-2 -mr-2 space-y-4 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
               {(() => {
                 // Keys = SpeechLanguage.rawValue ('pt', 'en', etc.). Values = display name with flag.
                 const langNames: Record<string, string> = {
                   'pt': '🇧🇷 Português',
+                  'pt-BR': '🇧🇷 Português (BR)',
                   'en': '🇺🇸 Inglês',
                   'es': '🇪🇸 Espanhol',
                   'fr': '🇫🇷 Francês',
@@ -755,25 +792,46 @@ export default function DashboardPage() {
                   'ca': '🏴 Catalão'
                 }
                 const maxCount = Math.max(...Object.values(stats.languageDistribution))
+                const colors = [
+                  { bg: 'bg-blue-500/10', border: 'border-blue-500/20', bar: 'bg-blue-500' },
+                  { bg: 'bg-purple-500/10', border: 'border-purple-500/20', bar: 'bg-purple-500' },
+                  { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', bar: 'bg-emerald-500' },
+                  { bg: 'bg-amber-500/10', border: 'border-amber-500/20', bar: 'bg-amber-500' },
+                  { bg: 'bg-rose-500/10', border: 'border-rose-500/20', bar: 'bg-rose-500' },
+                ]
+
                 return Object.entries(stats.languageDistribution)
                   .sort((a, b) => b[1] - a[1])
-                  .slice(0, 5)
-                  .map(([lang, count]) => {
+                  .map(([lang, count], index) => {
                     const pct = (count / maxCount) * 100
+                    const rawName = langNames[lang] || `🌐 ${lang.toUpperCase()}`
+                    const parts = rawName.split(' ')
+                    const displayFlag = parts[0]
+                    const displayName = parts.slice(1).join(' ') || lang.toUpperCase()
+                    const c = colors[index % colors.length]
+
                     return (
-                      <div key={lang}>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-zinc-300">{langNames[lang] || lang.toUpperCase()}</span>
-                          <span className="text-xs text-zinc-500">{count}</span>
-                        </div>
-                        <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${pct}%` }}
-                            transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
-                            className="h-full rounded-full bg-blue-500"
-                            style={{ opacity: 0.7 }}
-                          />
+                      <div key={lang} className="group">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 ${c.bg} ${c.border} border rounded-xl flex items-center justify-center shrink-0 transition-colors group-hover:bg-zinc-800`}>
+                            <span className="text-xl leading-none">{displayFlag}</span>
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-sm font-medium text-zinc-200 truncate">{displayName}</span>
+                              <span className="text-xs font-semibold text-zinc-400 bg-zinc-800/80 px-2 py-0.5 rounded-md border border-zinc-700/50">{count}</span>
+                            </div>
+                            <div className="h-1.5 bg-zinc-800/80 rounded-full overflow-hidden">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${pct}%` }}
+                                transition={{ delay: 0.6 + index * 0.05, duration: 0.8, ease: 'easeOut' }}
+                                className={`h-full rounded-full ${c.bar}`}
+                                style={{ opacity: 0.9 }}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )
