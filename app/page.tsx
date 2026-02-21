@@ -541,10 +541,13 @@ export default function Home() {
 
                         <motion.div variants={fadeIn} className="flex items-center justify-center gap-6 flex-wrap opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                             <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <Shield className="w-4 h-4" /> Powered by Google Gemini
+                                <span className="text-base">🍎</span> Verificado pela Apple
                             </div>
                             <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <Mic className="w-4 h-4" /> Comando de voz &ldquo;Hey Vox&rdquo;
+                                <Mic className="w-4 h-4" /> Comando de voz "Hey Vox"
+                            </div>
+                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                                <Shield className="w-4 h-4" /> Totalmente anônimo
                             </div>
                             <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
                                 <Unlock className="w-4 h-4" /> Funciona em qualquer app
@@ -857,7 +860,7 @@ export default function Home() {
                                 "100 transcrições por mês",
                                 "Todos os modos (Texto, Código, Tradução)",
                                 "Funciona com qualquer app (Windows & Mac)",
-                                "Processamento seguro e privado",
+                                "Seus dados nunca são armazenados",
                                 "Comandos de IA básicos",
                             ].map((item, i) => (
                                 <li key={i} className="flex items-start gap-3 text-gray-300 list-none">
