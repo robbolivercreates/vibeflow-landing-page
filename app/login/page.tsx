@@ -1,0 +1,483 @@
+'use client'
+
+import { Suspense, useState } from 'react'
+import { createClient } from '@/lib/supabase'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import { ArrowRight, Mail, CheckCircle } from 'lucide-react'
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
+  )
+}
+
+type AuthView = 'signin' | 'signup' | 'reset'
+
+function LoginContent() {
+  const supabase = createClient()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const authError = searchParams.get('error')
+
+  const [view, setView] = useState<AuthView>('signin')
+  const [authMethod, setAuthMethod] = useState<'password' | 'magiclink'>('password')
+
+  // Form fields
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+
+  // State
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(
+    authError === 'auth' ? 'Erro na autenticação. Tente novamente.' : null
+  )
+  const [message, setMessage] = useState<string | null>(null)
+
+  function switchView(newView: AuthView) {
+    setView(newView)
+    setError(null)
+    setMessage(null)
+  }
+
+  // ── Google OAuth ──
+  async function handleGoogleAuth() {
+    setError(null)
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+    if (error) setError(error.message)
+  }
+
+  // ── Sign In (password) ──
+  async function handleSignIn(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    setMessage(null)
+    setLoading(true)
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      setError(error.message === 'Invalid login credentials'
+        ? 'Email ou senha incorretos.'
+        : error.message)
+    } else {
+      router.push('/dashboard')
+    }
+    setLoading(false)
+  }
+
+  // ── Magic Link ──
+  async function handleMagicLink(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    setMessage(null)
+    setLoading(true)
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+    if (error) {
+      setError(error.message)
+    } else {
+      setMessage('Link mágico enviado! Verifique seu email.')
+    }
+    setLoading(false)
+  }
+
+  // ── Sign Up ──
+  async function handleSignUp(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    setMessage(null)
+    setLoading(true)
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        data: {
+          full_name: `${firstName} ${lastName}`.trim(),
+          first_name: firstName,
+          last_name: lastName,
+        },
+      },
+    })
+    if (error) {
+      setError(error.message)
+    } else {
+      setMessage('Verifique seu email para confirmar a conta.')
+    }
+    setLoading(false)
+  }
+
+  // ── Reset Password ──
+  async function handleReset(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    setMessage(null)
+    setLoading(true)
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback?next=/dashboard/settings`,
+    })
+    if (error) {
+      setError(error.message)
+    } else {
+      setMessage('Link de redefinição enviado! Verifique seu email.')
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      {/* Background glow */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-purple-600/8 rounded-full blur-[150px]" />
+      </div>
+
+      <div className="relative w-full max-w-md">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">V</span>
+            </div>
+            <span className="text-white font-bold text-xl">VoxAIgo</span>
+          </Link>
+        </div>
+
+        {/* Card */}
+        <div className="bg-zinc-950/80 border border-white/[0.08] rounded-2xl p-8 backdrop-blur-sm shadow-2xl">
+
+          {/* ═══════════════ SIGN IN ═══════════════ */}
+          {view === 'signin' && (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-bold text-white">Welcome back</h1>
+                <p className="text-zinc-400 text-sm mt-1">Sign in to your account to continue</p>
+              </div>
+
+              {/* Google */}
+              <button
+                onClick={handleGoogleAuth}
+                className="w-full flex items-center justify-center gap-3 bg-zinc-800/80 hover:bg-zinc-700/80 border border-white/[0.08] text-white font-medium py-3 px-4 rounded-xl transition-colors"
+              >
+                <GoogleIcon />
+                Sign in with Google
+              </button>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3 my-5">
+                <div className="flex-1 h-px bg-white/[0.08]" />
+                <span className="text-zinc-500 text-xs">or continue with email</span>
+                <div className="flex-1 h-px bg-white/[0.08]" />
+              </div>
+
+              {/* Password / Magic Link tabs */}
+              <div className="flex bg-zinc-800/50 rounded-lg p-1 mb-5">
+                <button
+                  onClick={() => setAuthMethod('password')}
+                  className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${
+                    authMethod === 'password'
+                      ? 'bg-purple-600 text-white shadow-sm'
+                      : 'text-zinc-400 hover:text-zinc-300'
+                  }`}
+                >
+                  Password
+                </button>
+                <button
+                  onClick={() => setAuthMethod('magiclink')}
+                  className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${
+                    authMethod === 'magiclink'
+                      ? 'bg-purple-600 text-white shadow-sm'
+                      : 'text-zinc-400 hover:text-zinc-300'
+                  }`}
+                >
+                  Magic Link
+                </button>
+              </div>
+
+              {authMethod === 'password' ? (
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <div>
+                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">Email</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      required
+                      placeholder="you@example.com"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-zinc-300 text-sm font-medium">Password</label>
+                      <button
+                        type="button"
+                        onClick={() => switchView('reset')}
+                        className="text-purple-400 hover:text-purple-300 text-sm transition-colors"
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      placeholder="Enter your password"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    />
+                  </div>
+
+                  <StatusMessages error={error} message={message} />
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                  >
+                    {loading ? 'Signing in...' : 'Sign In'}
+                    {!loading && <ArrowRight className="w-4 h-4" />}
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleMagicLink} className="space-y-4">
+                  <div>
+                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">Email</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      required
+                      placeholder="you@example.com"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    />
+                  </div>
+
+                  <StatusMessages error={error} message={message} />
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                  >
+                    {loading ? 'Sending...' : (
+                      <>
+                        <Mail className="w-4 h-4" />
+                        Send Magic Link
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+
+              {/* Switch to Sign Up */}
+              <p className="text-center text-zinc-400 text-sm mt-5">
+                Don&apos;t have an account?{' '}
+                <button onClick={() => switchView('signup')} className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                  Sign up
+                </button>
+              </p>
+            </>
+          )}
+
+          {/* ═══════════════ SIGN UP ═══════════════ */}
+          {view === 'signup' && (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-bold text-white">Create your account</h1>
+                <p className="text-zinc-400 text-sm mt-1">Start dictating 5x faster</p>
+              </div>
+
+              {/* Google */}
+              <button
+                onClick={handleGoogleAuth}
+                className="w-full flex items-center justify-center gap-3 bg-zinc-800/80 hover:bg-zinc-700/80 border border-white/[0.08] text-white font-medium py-3 px-4 rounded-xl transition-colors"
+              >
+                <GoogleIcon />
+                Sign up with Google
+              </button>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3 my-5">
+                <div className="flex-1 h-px bg-white/[0.08]" />
+                <span className="text-zinc-500 text-xs">or continue with email</span>
+                <div className="flex-1 h-px bg-white/[0.08]" />
+              </div>
+
+              <form onSubmit={handleSignUp} className="space-y-4">
+                {/* Name row */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">First name</label>
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={e => setFirstName(e.target.value)}
+                      placeholder="John"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">Last name</label>
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={e => setLastName(e.target.value)}
+                      placeholder="Doe"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    placeholder="you@example.com"
+                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">Password</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    placeholder="At least 6 characters"
+                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                  />
+                </div>
+
+                <StatusMessages error={error} message={message} />
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                >
+                  {loading ? 'Creating...' : 'Create Account'}
+                  {!loading && <ArrowRight className="w-4 h-4" />}
+                </button>
+              </form>
+
+              {/* Switch to Sign In */}
+              <p className="text-center text-zinc-400 text-sm mt-5">
+                Already have an account?{' '}
+                <button onClick={() => switchView('signin')} className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                  Sign in
+                </button>
+              </p>
+            </>
+          )}
+
+          {/* ═══════════════ RESET PASSWORD ═══════════════ */}
+          {view === 'reset' && (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-bold text-white">Reset your password</h1>
+                <p className="text-zinc-400 text-sm mt-1">Enter your email and we&apos;ll send you a reset link</p>
+              </div>
+
+              <form onSubmit={handleReset} className="space-y-4">
+                <div>
+                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    placeholder="you@example.com"
+                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                  />
+                </div>
+
+                <StatusMessages error={error} message={message} />
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                >
+                  {loading ? 'Sending...' : 'Send Reset Link'}
+                </button>
+              </form>
+
+              {/* Switch to Sign In */}
+              <p className="text-center text-zinc-400 text-sm mt-5">
+                Remember your password?{' '}
+                <button onClick={() => switchView('signin')} className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                  Sign in
+                </button>
+              </p>
+            </>
+          )}
+        </div>
+
+        {/* Back to home */}
+        <p className="text-center mt-6">
+          <Link href="/" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">
+            ← Back to site
+          </Link>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// ── Shared Components ──
+
+function StatusMessages({ error, message }: { error: string | null; message: string | null }) {
+  return (
+    <>
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm">
+          {error}
+        </div>
+      )}
+      {message && (
+        <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 text-green-400 text-sm">
+          <CheckCircle className="w-4 h-4 flex-shrink-0" />
+          {message}
+        </div>
+      )}
+    </>
+  )
+}
+
+function GoogleIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+    </svg>
+  )
+}

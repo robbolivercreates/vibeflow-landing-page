@@ -427,10 +427,10 @@ export default function Home() {
                         <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
                     </div>
                     <div className="flex items-center gap-4">
-                        <button className="text-sm font-medium text-gray-300 hover:text-white transition-colors hidden sm:block">Entrar</button>
-                        <button className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:bg-gray-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+                        <a href="/login" className="text-sm font-medium text-gray-300 hover:text-white transition-colors hidden sm:block">Entrar</a>
+                        <a href="/login" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:bg-gray-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
                             Começar Agora
-                        </button>
+                        </a>
                     </div>
                 </div>
             </nav>
@@ -447,12 +447,12 @@ export default function Home() {
                         variants={staggerContainer}
                         className="space-y-8"
                     >
-                        <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-purple-300 mb-6 hover:bg-white/10 transition-colors cursor-pointer">
+                        <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-purple-300 mb-6">
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
                             </span>
-                            VoxAIgo 2.0 chegou. Veja as novidades &rarr;
+                            App para Mac — você fala, ele digita
                         </motion.div>
 
                         <div className="relative mb-8 min-h-[160px] md:min-h-[200px] flex flex-col items-center justify-center">
@@ -460,63 +460,76 @@ export default function Home() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                                className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] relative z-10 text-gray-400"
+                                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 drop-shadow-2xl"
                             >
-                                <span className="relative inline-block">
-                                    Pare de digitar.
-                                    <svg className="absolute top-1/2 left-0 w-full h-4 md:h-8 -translate-y-1/2 pointer-events-none overflow-visible" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                        <motion.path
-                                            d="M0 5 Q 50 10 100 5"
-                                            stroke="#ef4444"
-                                            strokeWidth="2"
-                                            fill="transparent"
-                                            variants={strikethrough}
-                                            initial="hidden"
-                                            animate="visible"
-                                        />
-                                    </svg>
-                                </span>
+                                Você fala. A IA digita.
                             </motion.h1>
 
-                            <motion.h1
+                            <motion.h2
                                 variants={highlightFadeIn}
                                 initial="hidden"
                                 animate="visible"
-                                className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 mt-2 md:mt-4 drop-shadow-2xl"
+                                className="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-[1.2] text-gray-300 mt-4 md:mt-6"
                             >
-                                Tempo é dinheiro.
-                            </motion.h1>
+                                Em qualquer app. Em qualquer idioma.
+                            </motion.h2>
                         </div>
 
-                        <motion.p variants={fadeIn} className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
-                            O VoxAIgo transforma sua fala em e-mails perfeitos, relatórios no Word e conversas no WhatsApp.
-                            Economize <span className="text-white font-medium">20+ horas por mês</span> e foque no que realmente importa.
+                        <motion.p variants={fadeIn} className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
+                            O <span className="text-white font-medium">VoxAIgo</span> é um app para Mac que transforma sua voz em texto pronto
+                            — com pontuação, formatação e gramática perfeitas. Abra qualquer programa
+                            (WhatsApp, Gmail, VS Code, Word), aperte um atalho, fale, e o texto aparece digitado.
+                            <span className="text-white font-medium"> Simples assim.</span>
                         </motion.p>
 
+                        {/* Use case cards */}
+                        <motion.div variants={fadeIn} className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8 max-w-3xl mx-auto">
+                            <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <Zap className="w-6 h-6 text-amber-400" />
+                                <span className="text-sm font-semibold text-white">Produtividade</span>
+                                <span className="text-xs text-gray-400 text-center">Falar é 5x mais rápido que digitar</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <Clock className="w-6 h-6 text-green-400" />
+                                <span className="text-sm font-semibold text-white">Economize tempo</span>
+                                <span className="text-xs text-gray-400 text-center">E-mails, mensagens e textos em segundos</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <Globe className="w-6 h-6 text-blue-400" />
+                                <span className="text-sm font-semibold text-white">28 idiomas</span>
+                                <span className="text-xs text-gray-400 text-center">Fale em português, inglês, espanhol e mais</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <Code2 className="w-6 h-6 text-purple-400" />
+                                <span className="text-sm font-semibold text-white">Coding por voz</span>
+                                <span className="text-xs text-gray-400 text-center">Dite código, funções e comandos no VS Code</span>
+                            </div>
+                        </motion.div>
+
                         <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-                            <button className="w-full sm:w-auto px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-100 transition-all flex items-center justify-center gap-2 group shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.5)]">
-                                Baixar para Mac
+                            <a href="/compra" className="w-full sm:w-auto px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-100 transition-all flex items-center justify-center gap-2 group shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.5)]">
+                                Começar Grátis
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </button>
-                            <button className="w-full sm:w-auto px-8 py-4 bg-white/5 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md border border-white/10 flex items-center justify-center gap-2">
+                            </a>
+                            <a href="#demo" className="w-full sm:w-auto px-8 py-4 bg-white/5 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md border border-white/10 flex items-center justify-center gap-2">
                                 <Play className="w-5 h-5 fill-current" />
                                 Ver como funciona
-                            </button>
+                            </a>
                         </motion.div>
 
                         <motion.div variants={fadeIn} className="pt-12 pb-8 flex justify-center w-full">
                             <ComparisonRace />
                         </motion.div>
 
-                        <motion.div variants={fadeIn} className="flex items-center justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                        <motion.div variants={fadeIn} className="flex items-center justify-center gap-6 flex-wrap opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                             <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <Clock className="w-4 h-4" /> Economize 1h/dia
+                                <Shield className="w-4 h-4" /> Powered by Google Gemini
                             </div>
                             <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <Shield className="w-4 h-4" /> Processamento Google Seguro
+                                <Mic className="w-4 h-4" /> Comando de voz &ldquo;Hey Vox&rdquo;
                             </div>
                             <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <Unlock className="w-4 h-4" /> Pague uma vez
+                                <Unlock className="w-4 h-4" /> Funciona em qualquer app
                             </div>
                         </motion.div>
                     </motion.div>
@@ -787,7 +800,7 @@ export default function Home() {
                         >
                             Anual
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full transition-all duration-300 ${billingPeriod === "annual" ? "bg-green-500 text-white" : "bg-green-500/20 text-green-400"}`}>
-                                -20%
+                                -25%
                             </span>
                         </button>
                     </div>
@@ -818,9 +831,9 @@ export default function Home() {
                             ))}
                         </div>
 
-                        <button className="w-full py-4 bg-white/5 text-white border border-white/10 rounded-xl font-bold text-lg hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                        <a href="/login" className="block w-full py-4 bg-white/5 text-white border border-white/10 rounded-xl font-bold text-lg hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98] transition-all text-center">
                             Começar Grátis
-                        </button>
+                        </a>
                     </div>
 
                     {/* Pro Plan */}
@@ -837,15 +850,15 @@ export default function Home() {
                             <p className="text-gray-500 text-sm mb-6">Para quem vive de produtividade</p>
                             <div className="flex items-baseline gap-2 mb-2">
                                 <span className="text-5xl font-bold text-white">
-                                    R${billingPeriod === "annual" ? "15,99" : "19,99"}
+                                    R${billingPeriod === "annual" ? "14,90" : "19,90"}
                                 </span>
                                 {billingPeriod === "annual" && (
-                                    <span className="text-lg text-gray-500 line-through">R$19,99</span>
+                                    <span className="text-lg text-gray-500 line-through">R$19,90</span>
                                 )}
                                 <span className="text-gray-400 text-sm">/ mês</span>
                             </div>
                             {billingPeriod === "annual" && (
-                                <p className="text-green-400 text-xs font-medium mb-6">Cobrado R$191,88/ano — economize R$48</p>
+                                <p className="text-green-400 text-xs font-medium mb-6">Cobrado R$178,80/ano — economize R$60</p>
                             )}
                             {billingPeriod === "monthly" && (
                                 <p className="text-gray-500 text-xs mb-6">Cobrado mensalmente</p>
@@ -869,9 +882,9 @@ export default function Home() {
                                 ))}
                             </div>
 
-                            <button className="w-full py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-white/10">
-                                Assinar Pro
-                            </button>
+                            <a href="/login" className="block w-full py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-white/10 text-center">
+                                Começar Agora
+                            </a>
                             <p className="text-xs text-center text-gray-500 mt-4">Cancele quando quiser. Sem multas.</p>
                         </div>
                     </div>
