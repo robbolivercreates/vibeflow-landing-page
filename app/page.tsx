@@ -461,7 +461,7 @@ export default function Home() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4AF37]"></span>
                             </span>
-                            Não digite. Apenas fale.
+                            Não digite, fale.
                         </motion.div>
 
                         <div className="relative mb-8 min-h-[160px] md:min-h-[200px] flex flex-col items-center justify-center">
@@ -471,8 +471,8 @@ export default function Home() {
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                                 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]"
                             >
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-amber-300">Não digite.</span><br />
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">Apenas fale.</span>
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">Não digite, fale.</span>
+                                
                             </motion.h1>
 
                             <motion.h2
