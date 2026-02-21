@@ -461,7 +461,7 @@ export default function Home() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4AF37]"></span>
                             </span>
-                            Não digite, fale.
+                            Novo: Agente Vox com comando de voz 🎙️
                         </motion.div>
 
                         <div className="relative mb-8 min-h-[160px] md:min-h-[200px] flex flex-col items-center justify-center">
