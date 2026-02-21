@@ -84,8 +84,8 @@ const Tabs = () => {
 def calculate_average_age(file_path):
     df = pd.read_csv(file_path)
     return df['age'].mean()`,
-            color: "text-purple-400",
-            bg: "bg-purple-500"
+            color: "text-[#D4AF37]",
+            bg: "bg-[#D4AF37]"
         },
         {
             name: "Tradução (EN)",
@@ -132,7 +132,7 @@ div:hover {
     const getGradient = (index: number) => {
         switch (index) {
             case 0: return "from-blue-400 to-cyan-400";    // Texto & E-mail
-            case 1: return "from-purple-400 to-indigo-400"; // Código & Lógica
+            case 1: return "from-[#D4AF37] to-[#E8D48B]"; // Código & Lógica
             case 2: return "from-orange-400 to-amber-400";  // Tradução
             case 3: return "from-amber-400 to-yellow-400";  // Agente Vox
             case 4: return "from-cyan-400 to-blue-400";     // Live Coding
@@ -296,7 +296,7 @@ const ComparisonRace = () => {
     return (
         <div
             ref={containerRef}
-            className="relative bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 w-full max-w-2xl hover:border-purple-500/30 transition-all duration-500 group shadow-2xl cursor-default"
+            className="relative bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 w-full max-w-2xl hover:border-[#D4AF37]/30 transition-all duration-500 group shadow-2xl cursor-default"
         >
             {/* Header */}
             < div className="flex items-center justify-between mb-6" >
@@ -308,7 +308,7 @@ const ComparisonRace = () => {
                     {persuasivePhrases.map((_, i) => (
                         <div
                             key={i}
-                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === phraseIndex ? "bg-purple-500 scale-125" : "bg-white/10"
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === phraseIndex ? "bg-[#D4AF37] scale-125" : "bg-white/10"
                                 }`}
                         />
                     ))}
@@ -332,7 +332,7 @@ const ComparisonRace = () => {
                         <span className="text-gray-400 font-mono text-sm truncate">{typingText}</span>
                         {typingText.length < targetText.length && (
                             <motion.div
-                                className="w-0.5 h-5 bg-purple-500 ml-1 flex-shrink-0"
+                                className="w-0.5 h-5 bg-[#D4AF37] ml-1 flex-shrink-0"
                                 animate={{ opacity: [1, 0] }}
                                 transition={{ repeat: Infinity, duration: 0.5 }}
                             />
@@ -418,7 +418,7 @@ export default function Home() {
     };
 
     return (
-        <div className="min-h-screen bg-black text-white selection:bg-purple-500/30 font-sans">
+        <div className="min-h-screen bg-black text-white selection:bg-[#D4AF37]/30 font-sans">
 
             {/* Navbar */}
             <nav className="fixed w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/5">
@@ -447,7 +447,7 @@ export default function Home() {
             {/* Hero Section */}
             <section className="relative pt-32 pb-20 px-6 overflow-hidden">
                 {/* Background Gradients */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-purple-600/10 rounded-full blur-[80px] -z-10" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-[#D4AF37]/8 rounded-full blur-[80px] -z-10" />
 
                 <div className="max-w-5xl mx-auto text-center relative z-10">
                     <motion.div
@@ -458,8 +458,8 @@ export default function Home() {
                     >
                         <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs md:text-sm font-medium text-gray-300 mb-8 md:mb-12">
                             <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4AF37]"></span>
                             </span>
                             Não digite. Apenas fale.
                         </motion.div>
@@ -472,7 +472,7 @@ export default function Home() {
                                 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]"
                             >
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-amber-300">Não digite.</span><br />
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">Apenas fale.</span>
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">Apenas fale.</span>
                             </motion.h1>
 
                             <motion.h2
@@ -490,14 +490,14 @@ export default function Home() {
                                 animate="visible"
                                 className="mt-8 mb-4 md:mb-8"
                             >
-                                <span className="inline-block px-5 py-2.5 rounded-full bg-[#0A0A0A] border border-white/10 text-purple-300 font-medium text-sm md:text-base shadow-lg">
+                                <span className="inline-block px-5 py-2.5 rounded-full bg-[#0A0A0A] border border-white/10 text-[#E8D48B] font-medium text-sm md:text-base shadow-lg">
                                     Cinco vezes mais rápido que digitar
                                 </span>
                             </motion.div>
                         </div>
 
                         <motion.p variants={fadeIn} className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
-                            Funciona em qualquer aplicativo do seu computador: WhatsApp, e-mail, Slack, Discord e muito mais no Windows ou Mac. Pressione o atalho, fale e deixe o <span className="text-purple-400 font-medium">Agente Vox</span> fazer o resto.
+                            Funciona em qualquer aplicativo do seu computador: WhatsApp, e-mail, Slack, Discord e muito mais no Windows ou Mac. Pressione o atalho, fale e deixe o <span className="text-[#D4AF37] font-medium">Agente Vox</span> fazer o resto.
                         </motion.p>
 
                         {/* Use case cards */}
@@ -518,7 +518,7 @@ export default function Home() {
                                 <span className="text-xs text-gray-400 text-center">Fale em português, inglês, espanhol e mais</span>
                             </div>
                             <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
-                                <Code2 className="w-6 h-6 text-purple-400" />
+                                <Code2 className="w-6 h-6 text-[#D4AF37]" />
                                 <span className="text-sm font-semibold text-white">Coding por voz</span>
                                 <span className="text-xs text-gray-400 text-center">Dite código, funções e comandos no VS Code</span>
                             </div>
@@ -564,7 +564,7 @@ export default function Home() {
                                 <Play className="w-8 h-8 fill-white text-white ml-1" />
                             </div>
                         </div>
-                        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-green-500"></div>
+                        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37]"></div>
 
                         {/* Fake UI Overlay to make it look like app is running */}
                         <div className="absolute top-4 left-4 right-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -678,7 +678,7 @@ export default function Home() {
 
             {/* Transformation Section (Carousel) */}
             <section id="demo" className="py-20 px-6 bg-black relative">
-                <div className="absolute inset-0 bg-gradient-to-b from-purple-900/5 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-[#D4AF37]/5 to-transparent pointer-events-none"></div>
                 <div className="max-w-5xl mx-auto">
                     <div className="text-center mb-12 space-y-4">
                         <h2 className="text-3xl md:text-5xl font-bold">Fale naturalmente. <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Aparece instantaneamente.</span></h2>
@@ -696,7 +696,7 @@ export default function Home() {
             <section id="features" className="py-24 px-6 bg-black">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16 space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-bold">Mais tempo livre. <span className="text-purple-500">Menos stress.</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-bold">Mais tempo livre. <span className="text-[#D4AF37]">Menos stress.</span></h2>
                         <p className="text-gray-400 max-w-2xl mx-auto text-lg">
                             Pare de lutar com o teclado. O VoxAIgo se adapta ao seu estilo e faz o trabalho pesado para você.
                         </p>
@@ -705,8 +705,8 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Email Card */}
                         {/* Email Card */}
-                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/30 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div className="relative z-10">
                                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(34,197,94,0.2)]">
                                     <Mail className="text-green-400" />
@@ -767,9 +767,9 @@ export default function Home() {
                         </div>
 
                         {/* Stats Card */}
-                        <div className="group bg-gradient-to-br from-purple-900/20 to-black border border-white/10 rounded-3xl p-8 flex flex-col justify-center items-center text-center hover:border-purple-500/30 transition-all">
+                        <div className="group bg-gradient-to-br from-[#D4AF37]/10 to-black border border-white/10 rounded-3xl p-8 flex flex-col justify-center items-center text-center hover:border-[#D4AF37]/30 transition-all">
                             <div className="text-5xl font-bold text-white mb-2">20h+</div>
-                            <p className="text-purple-300 font-medium">Economizadas por mês</p>
+                            <p className="text-[#E8D48B] font-medium">Economizadas por mês</p>
                             <p className="text-gray-500 text-sm mt-4">Média baseada em usuários ativos</p>
                         </div>
                     </div>
@@ -799,7 +799,7 @@ export default function Home() {
                             }
                         ].map((t, i) => (
                             <div key={i} className="bg-black/50 p-8 rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
-                                <div className="text-purple-500 mb-4">
+                                <div className="text-[#D4AF37] mb-4">
                                     <MessageSquare className="fill-current w-8 h-8 opacity-50" />
                                 </div>
                                 <p className="text-gray-300 mb-6 text-lg leading-relaxed">"{t.quote}"</p>
@@ -815,7 +815,7 @@ export default function Home() {
 
             {/* Pricing - Two Tiers */}
             <section id="pricing" className="py-24 px-6 bg-black relative overflow-hidden">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[120px] -z-10"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#D4AF37]/8 rounded-full blur-[120px] -z-10"></div>
                 <div className="max-w-4xl mx-auto text-center mb-10">
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">Comece grátis. Evolua quando quiser.</h2>
                     <p className="text-gray-400 text-lg max-w-2xl mx-auto">Sem compromisso. Sem cartão de crédito. Comece a economizar tempo agora.</p>
@@ -874,10 +874,10 @@ export default function Home() {
 
                     {/* Pro Plan */}
                     <div className="relative group">
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl opacity-75 blur group-hover:opacity-100 transition duration-1000"></div>
+                        <div className="absolute -inset-0.5 bg-gradient-to-r from-[#D4AF37] to-[#E8D48B] rounded-2xl opacity-75 blur group-hover:opacity-100 transition duration-1000"></div>
                         <div className="relative bg-[#0F0F0F] rounded-2xl p-8 border border-white/10 h-full flex flex-col">
                             <div className="absolute top-0 right-0 p-4">
-                                <div className="bg-purple-500/20 text-purple-300 text-xs font-bold px-3 py-1 rounded-full border border-purple-500/20">
+                                <div className="bg-[#D4AF37]/20 text-[#E8D48B] text-xs font-bold px-3 py-1 rounded-full border border-[#D4AF37]/20">
                                     RECOMENDADO
                                 </div>
                             </div>
@@ -912,7 +912,7 @@ export default function Home() {
                                     "Atualizações incluídas",
                                 ].map((item, i) => (
                                     <li key={i} className="flex items-start gap-3 text-gray-300 list-none">
-                                        <CheckCircle2 className="w-5 h-5 text-purple-500 shrink-0 mt-0.5" />
+                                        <CheckCircle2 className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
                                         {item}
                                     </li>
                                 ))}
