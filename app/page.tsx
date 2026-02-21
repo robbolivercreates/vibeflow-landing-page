@@ -131,11 +131,12 @@ div:hover {
 
     const getGradient = (index: number) => {
         switch (index) {
-            case 0: return "from-blue-400 to-cyan-400"; // Texto
-            case 1: return "from-purple-400 to-indigo-400"; // Código
-            case 2: return "from-orange-400 to-amber-400"; // Tradução
-            case 3: return "from-amber-400 to-yellow-400"; // Comandos
-            case 4: return "from-pink-400 to-rose-400"; // UX
+            case 0: return "from-blue-400 to-cyan-400";    // Texto & E-mail
+            case 1: return "from-purple-400 to-indigo-400"; // Código & Lógica
+            case 2: return "from-orange-400 to-amber-400";  // Tradução
+            case 3: return "from-amber-400 to-yellow-400";  // Agente Vox
+            case 4: return "from-cyan-400 to-blue-400";     // Live Coding
+            case 5: return "from-pink-400 to-rose-400";     // UX Design
             default: return "from-gray-400 to-gray-600";
         }
     };
