@@ -360,11 +360,10 @@ export default function DashboardPage() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3 + i * 0.05, type: 'spring', stiffness: 300 }}
-                    className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                      hasUsage
-                        ? 'bg-orange-500/20 text-orange-400 ring-1 ring-orange-500/30'
-                        : 'bg-zinc-800/60 text-zinc-600'
-                    }`}
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${hasUsage
+                      ? 'bg-orange-500/20 text-orange-400 ring-1 ring-orange-500/30'
+                      : 'bg-zinc-800/60 text-zinc-600'
+                      }`}
                   >
                     {hasUsage ? '✓' : '·'}
                   </motion.div>
@@ -626,9 +625,8 @@ export default function DashboardPage() {
                   {dayLabels.map((label, i) => (
                     <span
                       key={i}
-                      className={`text-[11px] ${
-                        stats.dailyUsage[i] > 0 ? 'text-zinc-400 font-medium' : 'text-zinc-600'
-                      }`}
+                      className={`text-[11px] ${stats.dailyUsage[i] > 0 ? 'text-zinc-400 font-medium' : 'text-zinc-600'
+                        }`}
                       style={{ width: `${100 / 7}%`, textAlign: 'center' }}
                     >
                       {label}
@@ -666,10 +664,20 @@ export default function DashboardPage() {
                   const pct = (count / maxCount) * 100
                   const modeConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
                     text: { label: 'Texto', color: 'bg-blue-500', icon: <FileText size={12} className="text-blue-400" /> },
-                    code: { label: 'Código', color: 'bg-purple-500', icon: <Terminal size={12} className="text-purple-400" /> },
-                    email: { label: 'Email', color: 'bg-amber-500', icon: <Mail size={12} className="text-amber-400" /> },
                     chat: { label: 'Chat', color: 'bg-green-500', icon: <MessageSquare size={12} className="text-green-400" /> },
-                    'ux-design': { label: 'UX Design', color: 'bg-pink-500', icon: <Palette size={12} className="text-pink-400" /> },
+                    code: { label: 'Código', color: 'bg-purple-500', icon: <Terminal size={12} className="text-purple-400" /> },
+                    vibe_coder: { label: 'Vibe Coder', color: 'bg-fuchsia-500', icon: <Zap size={12} className="text-fuchsia-400" /> },
+                    email: { label: 'Email', color: 'bg-amber-500', icon: <Mail size={12} className="text-amber-400" /> },
+                    formal: { label: 'Formal', color: 'bg-indigo-500', icon: <FileText size={12} className="text-indigo-400" /> },
+                    social: { label: 'Social', color: 'bg-pink-500', icon: <MessageSquare size={12} className="text-pink-400" /> },
+                    x: { label: 'X / Tweet', color: 'bg-zinc-400', icon: <Terminal size={12} className="text-zinc-300" /> },
+                    summary: { label: 'Resumo', color: 'bg-cyan-500', icon: <FileText size={12} className="text-cyan-400" /> },
+                    topics: { label: 'Tópicos', color: 'bg-teal-500', icon: <BarChart3 size={12} className="text-teal-400" /> },
+                    meeting: { label: 'Reunião', color: 'bg-orange-500', icon: <Globe size={12} className="text-orange-400" /> },
+                    ux_design: { label: 'UX Design', color: 'bg-rose-500', icon: <Palette size={12} className="text-rose-400" /> },
+                    translation: { label: 'Tradução', color: 'bg-sky-500', icon: <Globe size={12} className="text-sky-400" /> },
+                    creative: { label: 'Criativo', color: 'bg-violet-500', icon: <Zap size={12} className="text-violet-400" /> },
+                    custom: { label: 'Meu Modo', color: 'bg-lime-500', icon: <Mic size={12} className="text-lime-400" /> },
                   }
                   const cfg = modeConfig[mode] || { label: mode, color: 'bg-zinc-500', icon: <Mic size={12} className="text-zinc-400" /> }
                   return (
@@ -713,14 +721,38 @@ export default function DashboardPage() {
           ) : (
             <div className="space-y-3">
               {(() => {
+                // Keys = SpeechLanguage.rawValue ('pt', 'en', etc.). Values = display name with flag.
                 const langNames: Record<string, string> = {
-                  pt: 'Português', en: 'English', es: 'Español', fr: 'Français',
-                  de: 'Deutsch', it: 'Italiano', ja: '日本語', ko: '한국어',
-                  zh: '中文', ru: 'Русский', ar: 'العربية', hi: 'हिन्दी',
-                  nl: 'Nederlands', pl: 'Polski', tr: 'Türkçe', sv: 'Svenska',
-                  da: 'Dansk', no: 'Norsk', fi: 'Suomi', cs: 'Čeština',
-                  ro: 'Română', hu: 'Magyar', el: 'Ελληνικά', he: 'עברית',
-                  th: 'ไทย', vi: 'Tiếng Việt', id: 'Bahasa', uk: 'Українська',
+                  'pt': '🇧🇷 Português',
+                  'en': '🇺🇸 Inglês',
+                  'es': '🇪🇸 Espanhol',
+                  'fr': '🇫🇷 Francês',
+                  'de': '🇩🇪 Alemão',
+                  'it': '🇮🇹 Italiano',
+                  'nl': '🇳🇱 Holandês',
+                  'ru': '🇷🇺 Russo',
+                  'ja': '🇯🇵 Japonês',
+                  'ko': '🇰🇷 Coreano',
+                  'zh': '🇨🇳 Chinês',
+                  'ar': '🇸🇦 Árabe',
+                  'hi': '🇮🇳 Hindi',
+                  'tr': '🇹🇷 Turco',
+                  'pl': '🇵🇱 Polonês',
+                  'sv': '🇸🇪 Sueco',
+                  'no': '🇳🇴 Norueguês',
+                  'da': '🇩🇰 Dinamarquês',
+                  'fi': '🇫🇮 Finlandês',
+                  'cs': '🇨🇿 Tcheco',
+                  'el': '🇬🇷 Grego',
+                  'he': '🇮🇱 Hebraico',
+                  'th': '🇹🇭 Tailandês',
+                  'vi': '🇻🇳 Vietnamita',
+                  'id': '🇮🇩 Indonésio',
+                  'ms': '🇲🇾 Malaio',
+                  'uk': '🇺🇦 Ucraniano',
+                  'ro': '🇷🇴 Romeno',
+                  'hu': '🇭🇺 Húngaro',
+                  'ca': '🏴 Catalão'
                 }
                 const maxCount = Math.max(...Object.values(stats.languageDistribution))
                 return Object.entries(stats.languageDistribution)
