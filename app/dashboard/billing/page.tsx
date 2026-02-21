@@ -79,7 +79,7 @@ export default function BillingPage() {
       )
       const data = await res.json()
 
-      if (data.plan === 'pro' || data.plan === 'pro_annual') {
+      if (data.plan === 'pro_monthly' || data.plan === 'pro_annual') {
         setVerifyResult('success')
         setSub(prev => prev ? { ...prev, plan: data.plan, status: 'active' } : null)
       } else {
@@ -92,7 +92,7 @@ export default function BillingPage() {
     setVerifying(false)
   }
 
-  const isPro = sub?.plan === 'pro' || sub?.plan === 'pro_annual'
+  const isPro = sub?.plan === 'pro_monthly' || sub?.plan === 'pro_annual'
   const checkoutUrl = billingCycle === 'monthly' ? EDUZZ_MENSAL : EDUZZ_ANUAL
   const checkoutUrlWithEmail = `${checkoutUrl}?email=${encodeURIComponent(email)}&skip=1`
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { Mic, Clock, TrendingUp, Download, Crown, ArrowRight, RefreshCw } from 'lucide-react'
+import { Mic, Clock, TrendingUp, Download, Crown, ArrowRight, RefreshCw, Globe, Terminal, Mail, MessageSquare, Palette, FileText, Trophy, Zap, BarChart3 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -11,6 +11,13 @@ interface UsageStats {
   monthlyUsage: number
   monthlyLimit: number
   dailyUsage: number[]
+  modeDistribution: Record<string, number>
+  languageDistribution: Record<string, number>
+  totalWords: number
+  totalOutputChars: number
+  avgAudioSeconds: number
+  peakHour: number
+  dailyRecord: number
 }
 
 interface Subscription {
@@ -26,6 +33,13 @@ export default function DashboardPage() {
     monthlyUsage: 0,
     monthlyLimit: 100,
     dailyUsage: [],
+    modeDistribution: {},
+    languageDistribution: {},
+    totalWords: 0,
+    totalOutputChars: 0,
+    avgAudioSeconds: 0,
+    peakHour: -1,
+    dailyRecord: 0,
   })
   const [subscription, setSubscription] = useState<Subscription>({ plan: 'free', status: 'active' })
   const [loading, setLoading] = useState(true)
@@ -56,7 +70,7 @@ export default function DashboardPage() {
 
     if (sub) {
       setSubscription({ plan: sub.plan, status: sub.status })
-      if (sub.plan === 'pro' || sub.plan === 'pro_annual') {
+      if (sub.plan === 'pro_monthly' || sub.plan === 'pro_annual') {
         setStats(prev => ({ ...prev, monthlyLimit: Infinity }))
       }
     }
@@ -76,35 +90,89 @@ export default function DashboardPage() {
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)
 
+    // Fetch all usage_log rows for rich stats (select only needed columns)
+    const { data: allLogs } = await supabase
+      .from('usage_log')
+      .select('mode, language, output_length, audio_duration_seconds, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: true })
+
+    const logs = allLogs || []
+
     // Daily usage for last 7 days
     const dailyUsage: number[] = []
     for (let i = 6; i >= 0; i--) {
       const day = new Date()
       day.setDate(day.getDate() - i)
-      const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate()).toISOString()
-      const dayEnd = new Date(day.getFullYear(), day.getMonth(), day.getDate() + 1).toISOString()
-
-      const { count } = await supabase
-        .from('usage_log')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .gte('created_at', dayStart)
-        .lt('created_at', dayEnd)
-
-      dailyUsage.push(count || 0)
+      const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate()).getTime()
+      const dayEnd = new Date(day.getFullYear(), day.getMonth(), day.getDate() + 1).getTime()
+      const count = logs.filter(l => {
+        const t = new Date(l.created_at).getTime()
+        return t >= dayStart && t < dayEnd
+      }).length
+      dailyUsage.push(count)
     }
+
+    // Mode distribution
+    const modeDistribution: Record<string, number> = {}
+    logs.forEach(l => {
+      if (l.mode) modeDistribution[l.mode] = (modeDistribution[l.mode] || 0) + 1
+    })
+
+    // Language distribution
+    const languageDistribution: Record<string, number> = {}
+    logs.forEach(l => {
+      if (l.language) languageDistribution[l.language] = (languageDistribution[l.language] || 0) + 1
+    })
+
+    // Total output chars + estimated words
+    const totalOutputChars = logs.reduce((sum, l) => sum + (l.output_length || 0), 0)
+    const totalWords = Math.round(totalOutputChars / 5)
+
+    // Average audio duration
+    const audioLogs = logs.filter(l => l.audio_duration_seconds && l.audio_duration_seconds > 0)
+    const avgAudioSeconds = audioLogs.length > 0
+      ? audioLogs.reduce((sum, l) => sum + l.audio_duration_seconds, 0) / audioLogs.length
+      : 0
+
+    // Peak hour (most active hour of day)
+    const hourCounts: Record<number, number> = {}
+    logs.forEach(l => {
+      const h = new Date(l.created_at).getHours()
+      hourCounts[h] = (hourCounts[h] || 0) + 1
+    })
+    const peakHour = Object.keys(hourCounts).length > 0
+      ? Number(Object.entries(hourCounts).sort((a, b) => b[1] - a[1])[0][0])
+      : -1
+
+    // Daily record (max transcriptions in a single day)
+    const dayCounts: Record<string, number> = {}
+    logs.forEach(l => {
+      const d = new Date(l.created_at).toISOString().slice(0, 10)
+      dayCounts[d] = (dayCounts[d] || 0) + 1
+    })
+    const dailyRecord = Object.values(dayCounts).length > 0
+      ? Math.max(...Object.values(dayCounts))
+      : 0
 
     setStats({
       totalTranscriptions: totalCount || 0,
       monthlyUsage: monthlyCount || 0,
-      monthlyLimit: (sub?.plan === 'pro' || sub?.plan === 'pro_annual') ? Infinity : 100,
+      monthlyLimit: (sub?.plan === 'pro_monthly' || sub?.plan === 'pro_annual') ? Infinity : 100,
       dailyUsage,
+      modeDistribution,
+      languageDistribution,
+      totalWords,
+      totalOutputChars,
+      avgAudioSeconds,
+      peakHour,
+      dailyRecord,
     })
 
     setLoading(false)
   }
 
-  const isPro = subscription.plan === 'pro' || subscription.plan === 'pro_annual'
+  const isPro = subscription.plan === 'pro_monthly' || subscription.plan === 'pro_annual'
   const maxDaily = Math.max(...stats.dailyUsage, 1)
 
   // Calculate streak (consecutive days with usage, counting from today backwards)
@@ -402,99 +470,365 @@ export default function DashboardPage() {
         </motion.div>
       </div>
 
-      {/* Usage chart (last 7 days) */}
-      <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5">
-        <div className="flex items-center justify-between mb-5">
-          <h3 className="text-sm font-medium text-zinc-400">Uso nos últimos 7 dias</h3>
-          <span className="text-xs text-zinc-600">
-            {stats.dailyUsage.reduce((a, b) => a + b, 0)} transcrições
-          </span>
-        </div>
+      {/* Usage chart (last 7 days) — Cumulative line chart */}
+      {(() => {
+        // Build cumulative data (grows upward)
+        const cumulative = stats.dailyUsage.reduce<number[]>((acc, val) => {
+          acc.push((acc.length > 0 ? acc[acc.length - 1] : 0) + val)
+          return acc
+        }, [])
+        const cMax = Math.max(...cumulative, 1)
+        const totalWeek = stats.dailyUsage.reduce((a, b) => a + b, 0)
 
-        {/* Y-axis labels + bars */}
-        <div className="flex gap-3">
-          {/* Y-axis */}
-          <div className="flex flex-col justify-between h-40 text-[10px] text-zinc-600 py-1">
-            <span>{maxDaily}</span>
-            <span>{Math.round(maxDaily / 2)}</span>
-            <span>0</span>
-          </div>
+        // SVG dimensions
+        const W = 600
+        const H = 160
+        const padX = 0
+        const padTop = 10
+        const padBottom = 4
 
-          {/* Bars */}
-          <div className="flex-1 flex items-end gap-3 h-40 border-b border-zinc-800/60 relative">
-            {/* Horizontal grid lines */}
-            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
-              <div className="border-t border-zinc-800/40 border-dashed" />
-              <div className="border-t border-zinc-800/40 border-dashed" />
-              <div />
+        // Build points for smooth curve
+        const points = cumulative.map((val, i) => ({
+          x: padX + (i / 6) * (W - padX * 2),
+          y: padTop + (1 - val / cMax) * (H - padTop - padBottom),
+        }))
+
+        // Catmull-Rom to cubic bezier for smooth wave
+        function smoothPath(pts: { x: number; y: number }[]) {
+          if (pts.length < 2) return ''
+          let d = `M ${pts[0].x} ${pts[0].y}`
+          for (let i = 0; i < pts.length - 1; i++) {
+            const p0 = pts[Math.max(i - 1, 0)]
+            const p1 = pts[i]
+            const p2 = pts[i + 1]
+            const p3 = pts[Math.min(i + 2, pts.length - 1)]
+            const cp1x = p1.x + (p2.x - p0.x) / 6
+            const cp1y = p1.y + (p2.y - p0.y) / 6
+            const cp2x = p2.x - (p3.x - p1.x) / 6
+            const cp2y = p2.y - (p3.y - p1.y) / 6
+            d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`
+          }
+          return d
+        }
+
+        const linePath = smoothPath(points)
+        const areaPath = `${linePath} L ${points[points.length - 1].x} ${H} L ${points[0].x} ${H} Z`
+
+        return (
+          <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-medium text-zinc-400">Crescimento — últimos 7 dias</h3>
+              <span className="text-xs text-zinc-600">
+                +{totalWeek} transcrições
+              </span>
             </div>
 
-            {stats.dailyUsage.map((count, i) => {
-              const barHeight = count > 0 ? Math.max((count / maxDaily) * 100, 6) : 3
-              return (
-                <div key={i} className="flex-1 flex flex-col items-center gap-1.5 relative z-10">
-                  {/* Count label */}
-                  <motion.span
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + i * 0.08, duration: 0.3 }}
-                    className="text-[11px] font-medium text-zinc-400"
-                  >
-                    {count > 0 ? count : ''}
-                  </motion.span>
-
-                  {/* Animated bar */}
-                  <div className="w-full flex justify-center" style={{ height: '100%', display: 'flex', alignItems: 'flex-end' }}>
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: `${barHeight}%`, opacity: 1 }}
-                      transition={{
-                        delay: 0.1 + i * 0.08,
-                        duration: 0.6,
-                        ease: [0.34, 1.56, 0.64, 1],
-                      }}
-                      className="w-full max-w-[40px] rounded-t-lg relative overflow-hidden"
-                      style={{
-                        background: count > 0
-                          ? 'linear-gradient(to top, rgb(147 51 234 / 0.7), rgb(139 92 246 / 0.35))'
-                          : 'rgb(63 63 70 / 0.2)',
-                      }}
-                    >
-                      {/* Shine effect */}
-                      {count > 0 && (
-                        <motion.div
-                          initial={{ x: '-100%' }}
-                          animate={{ x: '200%' }}
-                          transition={{ delay: 0.8 + i * 0.08, duration: 0.6 }}
-                          className="absolute inset-0 w-1/2"
-                          style={{
-                            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)',
-                          }}
-                        />
-                      )}
-                    </motion.div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Day labels */}
-        <div className="flex gap-3 mt-2">
-          <div className="w-6" /> {/* Spacer for y-axis */}
-          <div className="flex-1 flex gap-3">
-            {dayLabels.map((label, i) => (
-              <div key={i} className="flex-1 text-center">
-                <span className={`text-[11px] ${
-                  stats.dailyUsage[i] > 0 ? 'text-zinc-400 font-medium' : 'text-zinc-600'
-                }`}>
-                  {label}
-                </span>
+            <div className="relative">
+              {/* Y-axis labels */}
+              <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] text-zinc-600 pointer-events-none" style={{ height: H }}>
+                <span>{cMax}</span>
+                <span>{Math.round(cMax / 2)}</span>
+                <span>0</span>
               </div>
-            ))}
+
+              <div className="ml-8">
+                <svg
+                  viewBox={`0 0 ${W} ${H}`}
+                  className="w-full overflow-visible"
+                  style={{ height: H }}
+                  preserveAspectRatio="none"
+                >
+                  {/* Horizontal grid lines */}
+                  <line x1="0" y1={padTop} x2={W} y2={padTop} stroke="rgb(63 63 70 / 0.3)" strokeDasharray="4 4" />
+                  <line x1="0" y1={padTop + (H - padTop - padBottom) / 2} x2={W} y2={padTop + (H - padTop - padBottom) / 2} stroke="rgb(63 63 70 / 0.3)" strokeDasharray="4 4" />
+
+                  {/* Gradient fill under curve */}
+                  <defs>
+                    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="rgb(147 51 234)" stopOpacity="0.35" />
+                      <stop offset="100%" stopColor="rgb(147 51 234)" stopOpacity="0.02" />
+                    </linearGradient>
+                    <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="rgb(168 85 247)" />
+                      <stop offset="100%" stopColor="rgb(217 70 239)" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Area fill */}
+                  <motion.path
+                    d={areaPath}
+                    fill="url(#areaGrad)"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.8 }}
+                  />
+
+                  {/* Line */}
+                  <motion.path
+                    d={linePath}
+                    fill="none"
+                    stroke="url(#lineGrad)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ delay: 0.2, duration: 1.2, ease: 'easeOut' }}
+                    style={{ vectorEffect: 'non-scaling-stroke' }}
+                  />
+
+                  {/* Data points + value labels */}
+                  {points.map((pt, i) => (
+                    <g key={i}>
+                      {/* Glow */}
+                      <motion.circle
+                        cx={pt.x}
+                        cy={pt.y}
+                        r="8"
+                        fill="rgb(147 51 234 / 0.2)"
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.4 + i * 0.1, duration: 0.4 }}
+                      />
+                      {/* Dot */}
+                      <motion.circle
+                        cx={pt.x}
+                        cy={pt.y}
+                        r="4"
+                        fill="#a855f7"
+                        stroke="#18181b"
+                        strokeWidth="2"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.4 + i * 0.1, type: 'spring', stiffness: 300 }}
+                      />
+                      {/* Value label */}
+                      {stats.dailyUsage[i] > 0 && (
+                        <motion.text
+                          x={pt.x}
+                          y={pt.y - 14}
+                          textAnchor="middle"
+                          className="text-[11px] font-medium"
+                          fill="#a1a1aa"
+                          initial={{ opacity: 0, y: pt.y - 8 }}
+                          animate={{ opacity: 1, y: pt.y - 14 }}
+                          transition={{ delay: 0.5 + i * 0.1, duration: 0.3 }}
+                        >
+                          +{stats.dailyUsage[i]}
+                        </motion.text>
+                      )}
+                    </g>
+                  ))}
+                </svg>
+
+                {/* Day labels */}
+                <div className="flex justify-between mt-2">
+                  {dayLabels.map((label, i) => (
+                    <span
+                      key={i}
+                      className={`text-[11px] ${
+                        stats.dailyUsage[i] > 0 ? 'text-zinc-400 font-medium' : 'text-zinc-600'
+                      }`}
+                      style={{ width: `${100 / 7}%`, textAlign: 'center' }}
+                    >
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        )
+      })()}
+
+      {/* Mode distribution + Language distribution */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Mode distribution */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <BarChart3 size={16} className="text-purple-400" />
+            <h3 className="text-sm font-medium text-zinc-400">Modos mais usados</h3>
+          </div>
+          {Object.keys(stats.modeDistribution).length === 0 ? (
+            <p className="text-sm text-zinc-600">Nenhum dado ainda</p>
+          ) : (
+            <div className="space-y-3">
+              {Object.entries(stats.modeDistribution)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(([mode, count]) => {
+                  const maxCount = Math.max(...Object.values(stats.modeDistribution))
+                  const pct = (count / maxCount) * 100
+                  const modeConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+                    text: { label: 'Texto', color: 'bg-blue-500', icon: <FileText size={12} className="text-blue-400" /> },
+                    code: { label: 'Código', color: 'bg-purple-500', icon: <Terminal size={12} className="text-purple-400" /> },
+                    email: { label: 'Email', color: 'bg-amber-500', icon: <Mail size={12} className="text-amber-400" /> },
+                    chat: { label: 'Chat', color: 'bg-green-500', icon: <MessageSquare size={12} className="text-green-400" /> },
+                    'ux-design': { label: 'UX Design', color: 'bg-pink-500', icon: <Palette size={12} className="text-pink-400" /> },
+                  }
+                  const cfg = modeConfig[mode] || { label: mode, color: 'bg-zinc-500', icon: <Mic size={12} className="text-zinc-400" /> }
+                  return (
+                    <div key={mode}>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          {cfg.icon}
+                          <span className="text-xs text-zinc-300">{cfg.label}</span>
+                        </div>
+                        <span className="text-xs text-zinc-500">{count}</span>
+                      </div>
+                      <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${pct}%` }}
+                          transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
+                          className={`h-full rounded-full ${cfg.color}`}
+                          style={{ opacity: 0.7 }}
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
+            </div>
+          )}
+        </motion.div>
+
+        {/* Language distribution */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <Globe size={16} className="text-blue-400" />
+            <h3 className="text-sm font-medium text-zinc-400">Idiomas utilizados</h3>
+          </div>
+          {Object.keys(stats.languageDistribution).length === 0 ? (
+            <p className="text-sm text-zinc-600">Nenhum dado ainda</p>
+          ) : (
+            <div className="space-y-3">
+              {(() => {
+                const langNames: Record<string, string> = {
+                  pt: 'Português', en: 'English', es: 'Español', fr: 'Français',
+                  de: 'Deutsch', it: 'Italiano', ja: '日本語', ko: '한국어',
+                  zh: '中文', ru: 'Русский', ar: 'العربية', hi: 'हिन्दी',
+                  nl: 'Nederlands', pl: 'Polski', tr: 'Türkçe', sv: 'Svenska',
+                  da: 'Dansk', no: 'Norsk', fi: 'Suomi', cs: 'Čeština',
+                  ro: 'Română', hu: 'Magyar', el: 'Ελληνικά', he: 'עברית',
+                  th: 'ไทย', vi: 'Tiếng Việt', id: 'Bahasa', uk: 'Українська',
+                }
+                const maxCount = Math.max(...Object.values(stats.languageDistribution))
+                return Object.entries(stats.languageDistribution)
+                  .sort((a, b) => b[1] - a[1])
+                  .slice(0, 5)
+                  .map(([lang, count]) => {
+                    const pct = (count / maxCount) * 100
+                    return (
+                      <div key={lang}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs text-zinc-300">{langNames[lang] || lang.toUpperCase()}</span>
+                          <span className="text-xs text-zinc-500">{count}</span>
+                        </div>
+                        <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${pct}%` }}
+                            transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
+                            className="h-full rounded-full bg-blue-500"
+                            style={{ opacity: 0.7 }}
+                          />
+                        </div>
+                      </div>
+                    )
+                  })
+              })()}
+            </div>
+          )}
+        </motion.div>
+      </div>
+
+      {/* Extra stats row */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {/* Words generated */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <FileText size={14} className="text-cyan-400" />
+            <span className="text-xs text-zinc-500">Palavras geradas</span>
+          </div>
+          <CountUp
+            value={stats.totalWords}
+            className="text-xl font-bold text-white"
+          />
+          <p className="text-[10px] text-zinc-600 mt-1">
+            ~{(stats.totalOutputChars / 1000).toFixed(1)}k caracteres
+          </p>
+        </motion.div>
+
+        {/* Avg audio duration */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Mic size={14} className="text-pink-400" />
+            <span className="text-xs text-zinc-500">Tempo médio</span>
+          </div>
+          <p className="text-xl font-bold text-white">
+            {stats.avgAudioSeconds > 0 ? `${Math.round(stats.avgAudioSeconds)}s` : '—'}
+          </p>
+          <p className="text-[10px] text-zinc-600 mt-1">por transcrição</p>
+        </motion.div>
+
+        {/* Peak hour */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.4 }}
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Zap size={14} className="text-amber-400" />
+            <span className="text-xs text-zinc-500">Horário de pico</span>
+          </div>
+          <p className="text-xl font-bold text-white">
+            {stats.peakHour >= 0 ? `${String(stats.peakHour).padStart(2, '0')}:00` : '—'}
+          </p>
+          <p className="text-[10px] text-zinc-600 mt-1">
+            {stats.peakHour >= 0
+              ? stats.peakHour < 12 ? 'manhã' : stats.peakHour < 18 ? 'tarde' : 'noite'
+              : 'sem dados'}
+          </p>
+        </motion.div>
+
+        {/* Daily record */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.4 }}
+          className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-5"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Trophy size={14} className="text-yellow-400" />
+            <span className="text-xs text-zinc-500">Recorde diário</span>
+          </div>
+          <CountUp
+            value={stats.dailyRecord}
+            className="text-xl font-bold text-white"
+          />
+          <p className="text-[10px] text-zinc-600 mt-1">transcrições em 1 dia</p>
+        </motion.div>
       </div>
 
       {/* Download section */}
