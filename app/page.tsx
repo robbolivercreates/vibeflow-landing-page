@@ -483,8 +483,8 @@ export default function Home() {
                                 animate="visible"
                                 className="text-xl md:text-2xl font-medium tracking-tight leading-snug mt-6 md:mt-8 max-w-3xl mx-auto"
                             >
-                                <span className="text-white">Vox é o agente de inteligência artificial que transforma sua voz em textos perfeitos.</span><br />
-                                <span className="text-gray-400">Funciona no Slack, Gmail e em qualquer outro site ou aplicativo.</span>
+                                <span className="text-white">Fale, e a inteligência artificial digita.</span><br />
+                                <span className="text-gray-400">Textos perfeitos em qualquer app.</span>
                             </motion.h2>
 
                             <motion.div
