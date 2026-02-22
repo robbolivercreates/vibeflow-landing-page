@@ -156,8 +156,8 @@ function LoginContent() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-vox-gold flex items-center justify-center">
-              <span className="text-black font-bold text-sm">V</span>
+            <div className="w-8 h-8 relative">
+              <img src="/logo.png" alt="VoxAIgo Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-white font-bold text-xl">VoxAIgo</span>
           </Link>
