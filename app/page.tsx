@@ -471,17 +471,20 @@ export default function Home() {
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                                 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]"
                             >
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">Não digite, fale.</span>
-
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">
+                                    Não digite.<br />
+                                    Fale mais rápido.
+                                </span>
                             </motion.h1>
 
                             <motion.h2
                                 variants={highlightFadeIn}
                                 initial="hidden"
                                 animate="visible"
-                                className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-snug text-white mt-6 md:mt-8 max-w-4xl mx-auto"
+                                className="text-xl md:text-2xl font-medium tracking-tight leading-snug mt-6 md:mt-8 max-w-3xl mx-auto"
                             >
-                                Vox é o agente de inteligência artificial que transforma a sua voz em<br className="hidden sm:block" /> textos perfeitos.
+                                <span className="text-white">Vox é o agente de inteligência artificial que transforma sua voz em textos perfeitos.</span><br />
+                                <span className="text-gray-400">Funciona no Slack, Gmail e em qualquer outro site ou aplicativo.</span>
                             </motion.h2>
 
                             <motion.div
@@ -495,10 +498,6 @@ export default function Home() {
                                 </span>
                             </motion.div>
                         </div>
-
-                        <motion.p variants={fadeIn} className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
-                            Funciona em qualquer aplicativo do seu computador: WhatsApp, e-mail, Slack, Discord e muito mais no Windows ou Mac. Pressione o atalho, fale e deixe o <span className="text-[#D4AF37] font-medium">Agente Vox</span> fazer o resto.
-                        </motion.p>
 
                         {/* Use case cards */}
                         <motion.div variants={fadeIn} className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8 max-w-3xl mx-auto">
