@@ -11,7 +11,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-vox-gold border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <LoginContent />
@@ -149,15 +149,15 @@ function LoginContent() {
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       {/* Background glow */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-purple-600/8 rounded-full blur-[150px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-vox-gold/10 rounded-full blur-[150px]" />
       </div>
 
       <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">V</span>
+            <div className="w-8 h-8 rounded-lg bg-vox-gold flex items-center justify-center">
+              <span className="text-black font-bold text-sm">V</span>
             </div>
             <span className="text-white font-bold text-xl">VoxAIgo</span>
           </Link>
@@ -194,21 +194,19 @@ function LoginContent() {
               <div className="flex bg-zinc-800/50 rounded-lg p-1 mb-5">
                 <button
                   onClick={() => setAuthMethod('password')}
-                  className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${
-                    authMethod === 'password'
-                      ? 'bg-purple-600 text-white shadow-sm'
+                  className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${authMethod === 'password'
+                      ? 'bg-vox-gold text-black shadow-sm'
                       : 'text-zinc-400 hover:text-zinc-300'
-                  }`}
+                    }`}
                 >
                   Password
                 </button>
                 <button
                   onClick={() => setAuthMethod('magiclink')}
-                  className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${
-                    authMethod === 'magiclink'
-                      ? 'bg-purple-600 text-white shadow-sm'
+                  className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${authMethod === 'magiclink'
+                      ? 'bg-vox-gold text-black shadow-sm'
                       : 'text-zinc-400 hover:text-zinc-300'
-                  }`}
+                    }`}
                 >
                   Magic Link
                 </button>
@@ -224,7 +222,7 @@ function LoginContent() {
                       onChange={e => setEmail(e.target.value)}
                       required
                       placeholder="you@example.com"
-                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
                   <div>
@@ -233,7 +231,7 @@ function LoginContent() {
                       <button
                         type="button"
                         onClick={() => switchView('reset')}
-                        className="text-purple-400 hover:text-purple-300 text-sm transition-colors"
+                        className="text-vox-gold hover:text-vox-gold-light text-sm transition-colors"
                       >
                         Forgot password?
                       </button>
@@ -245,7 +243,7 @@ function LoginContent() {
                       required
                       minLength={6}
                       placeholder="Enter your password"
-                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
 
@@ -254,7 +252,7 @@ function LoginContent() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                    className="w-full flex items-center justify-center gap-2 bg-vox-gold hover:bg-vox-gold-light disabled:opacity-50 text-black font-semibold py-3 px-4 rounded-xl transition-colors"
                   >
                     {loading ? 'Signing in...' : 'Sign In'}
                     {!loading && <ArrowRight className="w-4 h-4" />}
@@ -270,7 +268,7 @@ function LoginContent() {
                       onChange={e => setEmail(e.target.value)}
                       required
                       placeholder="you@example.com"
-                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
 
@@ -279,7 +277,7 @@ function LoginContent() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                    className="w-full flex items-center justify-center gap-2 bg-vox-gold hover:bg-vox-gold-light disabled:opacity-50 text-black font-semibold py-3 px-4 rounded-xl transition-colors"
                   >
                     {loading ? 'Sending...' : (
                       <>
@@ -294,7 +292,7 @@ function LoginContent() {
               {/* Switch to Sign Up */}
               <p className="text-center text-zinc-400 text-sm mt-5">
                 Don&apos;t have an account?{' '}
-                <button onClick={() => switchView('signup')} className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                <button onClick={() => switchView('signup')} className="text-vox-gold hover:text-vox-gold-light font-medium transition-colors">
                   Sign up
                 </button>
               </p>
@@ -335,7 +333,7 @@ function LoginContent() {
                       value={firstName}
                       onChange={e => setFirstName(e.target.value)}
                       placeholder="John"
-                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
                   <div>
@@ -345,7 +343,7 @@ function LoginContent() {
                       value={lastName}
                       onChange={e => setLastName(e.target.value)}
                       placeholder="Doe"
-                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                      className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
                 </div>
@@ -358,7 +356,7 @@ function LoginContent() {
                     onChange={e => setEmail(e.target.value)}
                     required
                     placeholder="you@example.com"
-                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                   />
                 </div>
 
@@ -371,7 +369,7 @@ function LoginContent() {
                     required
                     minLength={6}
                     placeholder="At least 6 characters"
-                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                   />
                 </div>
 
@@ -380,7 +378,7 @@ function LoginContent() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-vox-gold hover:bg-vox-gold-light disabled:opacity-50 text-black font-semibold py-3 px-4 rounded-xl transition-colors"
                 >
                   {loading ? 'Creating...' : 'Create Account'}
                   {!loading && <ArrowRight className="w-4 h-4" />}
@@ -390,7 +388,7 @@ function LoginContent() {
               {/* Switch to Sign In */}
               <p className="text-center text-zinc-400 text-sm mt-5">
                 Already have an account?{' '}
-                <button onClick={() => switchView('signin')} className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                <button onClick={() => switchView('signin')} className="text-vox-gold hover:text-vox-gold-light font-medium transition-colors">
                   Sign in
                 </button>
               </p>
@@ -414,7 +412,7 @@ function LoginContent() {
                     onChange={e => setEmail(e.target.value)}
                     required
                     placeholder="you@example.com"
-                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                   />
                 </div>
 
@@ -423,7 +421,7 @@ function LoginContent() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                  className="w-full bg-vox-gold hover:bg-vox-gold-light disabled:opacity-50 text-black font-semibold py-3 px-4 rounded-xl transition-colors"
                 >
                   {loading ? 'Sending...' : 'Send Reset Link'}
                 </button>
@@ -432,7 +430,7 @@ function LoginContent() {
               {/* Switch to Sign In */}
               <p className="text-center text-zinc-400 text-sm mt-5">
                 Remember your password?{' '}
-                <button onClick={() => switchView('signin')} className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                <button onClick={() => switchView('signin')} className="text-vox-gold hover:text-vox-gold-light font-medium transition-colors">
                   Sign in
                 </button>
               </p>
