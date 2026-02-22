@@ -538,25 +538,7 @@ export default function Home() {
                             <ComparisonRace />
                         </motion.div>
 
-                        <motion.div variants={fadeIn} className="flex items-center justify-center gap-6 flex-wrap opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <span className="text-base">🍎</span> Verificado pela Apple
-                            </div>
-                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <Mic className="w-4 h-4" /> Comando de voz "Hey Vox"
-                            </div>
-                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <Shield className="w-4 h-4" /> Totalmente anônimo
-                            </div>
-                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                                <Unlock className="w-4 h-4" /> Funciona em qualquer app
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Works Everywhere Section - Smooth CSS Marquee */}
+{/* Works Everywhere Section - Smooth CSS Marquee */}
             <section className="py-10 border-y border-white/5 bg-white/[0.02] overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative">
                     <p className="text-center text-sm font-medium text-gray-500 mb-8 uppercase tracking-widest">Funciona onde você trabalha</p>
@@ -658,7 +640,29 @@ export default function Home() {
             </section>
 
             
-{/* Video Section */}
+
+
+
+
+                        <motion.div variants={fadeIn} className="flex items-center justify-center gap-6 flex-wrap opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                                <span className="text-base">🍎</span> Verificado pela Apple
+                            </div>
+                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                                <Mic className="w-4 h-4" /> Comando de voz "Hey Vox"
+                            </div>
+                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                                <Shield className="w-4 h-4" /> Totalmente anônimo
+                            </div>
+                            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                                <Unlock className="w-4 h-4" /> Funciona em qualquer app
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Video Section */}
             <section className="py-12 px-6 bg-black relative z-20 -mt-10">
                 <div className="max-w-5xl mx-auto">
                     <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(168,85,247,0.2)] bg-[#0F0F0F] group">
