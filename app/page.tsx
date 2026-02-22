@@ -556,27 +556,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Video Section */}
-            <section className="py-12 px-6 bg-black relative z-20 -mt-10">
-                <div className="max-w-5xl mx-auto">
-                    <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(168,85,247,0.2)] bg-[#0F0F0F] group">
-                        {/* Placeholder for video content */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform duration-300 cursor-pointer border border-white/20">
-                                <Play className="w-8 h-8 fill-white text-white ml-1" />
-                            </div>
-                        </div>
-                        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37]"></div>
-
-                        {/* Fake UI Overlay to make it look like app is running */}
-                        <div className="absolute top-4 left-4 right-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white/70 border border-white/10">VoxAIgo Demo</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-
             {/* Works Everywhere Section - Smooth CSS Marquee */}
             <section className="py-10 border-y border-white/5 bg-white/[0.02] overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative">
@@ -677,6 +656,28 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            
+{/* Video Section */}
+            <section className="py-12 px-6 bg-black relative z-20 -mt-10">
+                <div className="max-w-5xl mx-auto">
+                    <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(168,85,247,0.2)] bg-[#0F0F0F] group">
+                        {/* Placeholder for video content */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform duration-300 cursor-pointer border border-white/20">
+                                <Play className="w-8 h-8 fill-white text-white ml-1" />
+                            </div>
+                        </div>
+                        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37]"></div>
+
+                        {/* Fake UI Overlay to make it look like app is running */}
+                        <div className="absolute top-4 left-4 right-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <div className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white/70 border border-white/10">VoxAIgo Demo</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
 
             {/* Transformation Section (Carousel) */}
             <section id="demo" className="py-20 px-6 bg-black relative">
