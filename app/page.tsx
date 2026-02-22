@@ -472,8 +472,8 @@ export default function Home() {
                                 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]"
                             >
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">
-                                    Não digite.<br />
-                                    Fale 5x mais rápido.
+                                    Não digite, fale.<br />
+                                    É 5x mais rápido.
                                 </span>
                             </motion.h1>
 
