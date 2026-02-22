@@ -472,16 +472,16 @@ export default function Home() {
                                 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05]"
                             >
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">Não digite, fale.</span>
-                                
+
                             </motion.h1>
 
                             <motion.h2
                                 variants={highlightFadeIn}
                                 initial="hidden"
                                 animate="visible"
-                                className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-snug text-white mt-6 md:mt-8 max-w-3xl mx-auto"
+                                className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-snug text-white mt-6 md:mt-8 max-w-4xl mx-auto"
                             >
-                                Vox é o agente de inteligência artificial que transforma a sua voz<br className="hidden md:block" /> em textos perfeitos.
+                                Vox é o agente de inteligência artificial que transforma a sua voz em textos perfeitos.
                             </motion.h2>
 
                             <motion.div
