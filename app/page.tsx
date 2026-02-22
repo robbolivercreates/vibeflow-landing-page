@@ -479,9 +479,10 @@ export default function Home() {
                                 variants={highlightFadeIn}
                                 initial="hidden"
                                 animate="visible"
-                                className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-snug text-white mt-6 md:mt-8 max-w-4xl mx-auto"
+                                className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-snug text-white mt-6 md:mt-8 max-w-2xl mx-auto"
                             >
-                                Vox é o agente de inteligência artificial que transforma a sua voz em textos perfeitos.
+                                Vox é o agente de inteligência artificial que transforma a sua voz em<br />
+                                textos perfeitos.
                             </motion.h2>
 
                             <motion.div
