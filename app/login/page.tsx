@@ -170,8 +170,8 @@ function LoginContent() {
           {view === 'signin' && (
             <>
               <div className="text-center mb-6">
-                <h1 className="text-2xl font-bold text-white">Welcome back</h1>
-                <p className="text-zinc-400 text-sm mt-1">Sign in to your account to continue</p>
+                <h1 className="text-2xl font-bold text-white">Bem-vindo de volta</h1>
+                <p className="text-zinc-400 text-sm mt-1">Entre na sua conta para continuar</p>
               </div>
 
               {/* Google */}
@@ -180,13 +180,13 @@ function LoginContent() {
                 className="w-full flex items-center justify-center gap-3 bg-zinc-800/80 hover:bg-zinc-700/80 border border-white/[0.08] text-white font-medium py-3 px-4 rounded-xl transition-colors"
               >
                 <GoogleIcon />
-                Sign in with Google
+                Entrar com Google
               </button>
 
               {/* Divider */}
               <div className="flex items-center gap-3 my-5">
                 <div className="flex-1 h-px bg-white/[0.08]" />
-                <span className="text-zinc-500 text-xs">or continue with email</span>
+                <span className="text-zinc-500 text-xs">ou continue com e-mail</span>
                 <div className="flex-1 h-px bg-white/[0.08]" />
               </div>
 
@@ -195,17 +195,17 @@ function LoginContent() {
                 <button
                   onClick={() => setAuthMethod('password')}
                   className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${authMethod === 'password'
-                      ? 'bg-vox-gold text-black shadow-sm'
-                      : 'text-zinc-400 hover:text-zinc-300'
+                    ? 'bg-vox-gold text-black shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-300'
                     }`}
                 >
-                  Password
+                  Senha
                 </button>
                 <button
                   onClick={() => setAuthMethod('magiclink')}
                   className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${authMethod === 'magiclink'
-                      ? 'bg-vox-gold text-black shadow-sm'
-                      : 'text-zinc-400 hover:text-zinc-300'
+                    ? 'bg-vox-gold text-black shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-300'
                     }`}
                 >
                   Magic Link
@@ -215,25 +215,25 @@ function LoginContent() {
               {authMethod === 'password' ? (
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div>
-                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">Email</label>
+                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">E-mail</label>
                     <input
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
-                      placeholder="you@example.com"
+                      placeholder="voce@exemplo.com"
                       className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="text-zinc-300 text-sm font-medium">Password</label>
+                      <label className="text-zinc-300 text-sm font-medium">Senha</label>
                       <button
                         type="button"
                         onClick={() => switchView('reset')}
                         className="text-vox-gold hover:text-vox-gold-light text-sm transition-colors"
                       >
-                        Forgot password?
+                        Esqueceu a senha?
                       </button>
                     </div>
                     <input
@@ -242,7 +242,7 @@ function LoginContent() {
                       onChange={e => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      placeholder="Enter your password"
+                      placeholder="Digite sua senha"
                       className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
@@ -254,20 +254,20 @@ function LoginContent() {
                     disabled={loading}
                     className="w-full flex items-center justify-center gap-2 bg-vox-gold hover:bg-vox-gold-light disabled:opacity-50 text-black font-semibold py-3 px-4 rounded-xl transition-colors"
                   >
-                    {loading ? 'Signing in...' : 'Sign In'}
+                    {loading ? 'Entrando...' : 'Entrar'}
                     {!loading && <ArrowRight className="w-4 h-4" />}
                   </button>
                 </form>
               ) : (
                 <form onSubmit={handleMagicLink} className="space-y-4">
                   <div>
-                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">Email</label>
+                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">E-mail</label>
                     <input
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
-                      placeholder="you@example.com"
+                      placeholder="voce@exemplo.com"
                       className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
@@ -279,10 +279,10 @@ function LoginContent() {
                     disabled={loading}
                     className="w-full flex items-center justify-center gap-2 bg-vox-gold hover:bg-vox-gold-light disabled:opacity-50 text-black font-semibold py-3 px-4 rounded-xl transition-colors"
                   >
-                    {loading ? 'Sending...' : (
+                    {loading ? 'Enviando...' : (
                       <>
                         <Mail className="w-4 h-4" />
-                        Send Magic Link
+                        Enviar Magic Link
                       </>
                     )}
                   </button>
@@ -291,9 +291,9 @@ function LoginContent() {
 
               {/* Switch to Sign Up */}
               <p className="text-center text-zinc-400 text-sm mt-5">
-                Don&apos;t have an account?{' '}
+                Não tem uma conta?{' '}
                 <button onClick={() => switchView('signup')} className="text-vox-gold hover:text-vox-gold-light font-medium transition-colors">
-                  Sign up
+                  Criar conta
                 </button>
               </p>
             </>
@@ -303,8 +303,8 @@ function LoginContent() {
           {view === 'signup' && (
             <>
               <div className="text-center mb-6">
-                <h1 className="text-2xl font-bold text-white">Create your account</h1>
-                <p className="text-zinc-400 text-sm mt-1">Start dictating 5x faster</p>
+                <h1 className="text-2xl font-bold text-white">Crie sua conta</h1>
+                <p className="text-zinc-400 text-sm mt-1">Comece a ditar 5x mais rápido</p>
               </div>
 
               {/* Google */}
@@ -313,13 +313,13 @@ function LoginContent() {
                 className="w-full flex items-center justify-center gap-3 bg-zinc-800/80 hover:bg-zinc-700/80 border border-white/[0.08] text-white font-medium py-3 px-4 rounded-xl transition-colors"
               >
                 <GoogleIcon />
-                Sign up with Google
+                Criar conta com Google
               </button>
 
               {/* Divider */}
               <div className="flex items-center gap-3 my-5">
                 <div className="flex-1 h-px bg-white/[0.08]" />
-                <span className="text-zinc-500 text-xs">or continue with email</span>
+                <span className="text-zinc-500 text-xs">ou continue com e-mail</span>
                 <div className="flex-1 h-px bg-white/[0.08]" />
               </div>
 
@@ -327,48 +327,48 @@ function LoginContent() {
                 {/* Name row */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">First name</label>
+                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">Nome</label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={e => setFirstName(e.target.value)}
-                      placeholder="John"
+                      placeholder="João"
                       className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">Last name</label>
+                    <label className="block text-zinc-300 text-sm font-medium mb-1.5">Sobrenome</label>
                     <input
                       type="text"
                       value={lastName}
                       onChange={e => setLastName(e.target.value)}
-                      placeholder="Doe"
+                      placeholder="Silva"
                       className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">Email</label>
+                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">E-mail</label>
                   <input
                     type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
-                    placeholder="you@example.com"
+                    placeholder="voce@exemplo.com"
                     className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">Password</label>
+                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">Senha</label>
                   <input
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    placeholder="At least 6 characters"
+                    placeholder="Mínimo 6 caracteres"
                     className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                   />
                 </div>
@@ -380,16 +380,16 @@ function LoginContent() {
                   disabled={loading}
                   className="w-full flex items-center justify-center gap-2 bg-vox-gold hover:bg-vox-gold-light disabled:opacity-50 text-black font-semibold py-3 px-4 rounded-xl transition-colors"
                 >
-                  {loading ? 'Creating...' : 'Create Account'}
+                  {loading ? 'Criando...' : 'Criar Conta'}
                   {!loading && <ArrowRight className="w-4 h-4" />}
                 </button>
               </form>
 
               {/* Switch to Sign In */}
               <p className="text-center text-zinc-400 text-sm mt-5">
-                Already have an account?{' '}
+                Já tem uma conta?{' '}
                 <button onClick={() => switchView('signin')} className="text-vox-gold hover:text-vox-gold-light font-medium transition-colors">
-                  Sign in
+                  Entrar
                 </button>
               </p>
             </>
@@ -399,19 +399,19 @@ function LoginContent() {
           {view === 'reset' && (
             <>
               <div className="text-center mb-6">
-                <h1 className="text-2xl font-bold text-white">Reset your password</h1>
-                <p className="text-zinc-400 text-sm mt-1">Enter your email and we&apos;ll send you a reset link</p>
+                <h1 className="text-2xl font-bold text-white">Redefinir sua senha</h1>
+                <p className="text-zinc-400 text-sm mt-1">Informe seu e-mail para receber um link de redefinição</p>
               </div>
 
               <form onSubmit={handleReset} className="space-y-4">
                 <div>
-                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">Email</label>
+                  <label className="block text-zinc-300 text-sm font-medium mb-1.5">E-mail</label>
                   <input
                     type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
-                    placeholder="you@example.com"
+                    placeholder="voce@exemplo.com"
                     className="w-full bg-zinc-900/80 border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-vox-gold/50 focus:ring-1 focus:ring-vox-gold/20 transition-all"
                   />
                 </div>
@@ -423,15 +423,15 @@ function LoginContent() {
                   disabled={loading}
                   className="w-full bg-vox-gold hover:bg-vox-gold-light disabled:opacity-50 text-black font-semibold py-3 px-4 rounded-xl transition-colors"
                 >
-                  {loading ? 'Sending...' : 'Send Reset Link'}
+                  {loading ? 'Enviando...' : 'Enviar Link de Redefinição'}
                 </button>
               </form>
 
               {/* Switch to Sign In */}
               <p className="text-center text-zinc-400 text-sm mt-5">
-                Remember your password?{' '}
+                Lembrou a senha?{' '}
                 <button onClick={() => switchView('signin')} className="text-vox-gold hover:text-vox-gold-light font-medium transition-colors">
-                  Sign in
+                  Entrar
                 </button>
               </p>
             </>
@@ -441,7 +441,7 @@ function LoginContent() {
         {/* Back to home */}
         <p className="text-center mt-6">
           <Link href="/" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">
-            ← Back to site
+            ← Voltar ao site
           </Link>
         </p>
       </div>
