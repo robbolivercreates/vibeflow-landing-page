@@ -473,7 +473,7 @@ export default function Home() {
                             >
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">
                                     Não digite.<br />
-                                    Fale mais rápido.
+                                    Fale 5x mais rápido.
                                 </span>
                             </motion.h1>
 
