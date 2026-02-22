@@ -461,7 +461,7 @@ export default function Home() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4AF37]"></span>
                             </span>
-                            A inteligência artificial de voz mais inteligente do mundo 🧠
+                            A forma mais inteligente de escrever 🧠
                         </motion.div>
 
                         <div className="relative mb-8 min-h-[160px] md:min-h-[200px] flex flex-col items-center justify-center">
