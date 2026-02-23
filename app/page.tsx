@@ -309,8 +309,7 @@ const ComparisonRace = () => {
                     {persuasivePhrases.map((_, i) => (
                         <div
                             key={i}
-                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === phraseIndex ? "bg-[#D4AF37] scale-125" : "bg-white/10"
-                                }`}
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === phraseIndex ? "bg-[#D4AF37] scale-125" : "bg-white/10"}`}
                         />
                     ))}
                 </div>
@@ -462,7 +461,7 @@ export default function Home() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4AF37]"></span>
                             </span>
-                            Economize até 40h por mês ⏳
+                            Comece grátis — sem cartão ✨
                         </motion.div>
 
                         <div className="relative mb-8 min-h-[160px] md:min-h-[200px] flex flex-col items-center justify-center">
@@ -516,7 +515,7 @@ export default function Home() {
                             </div>
                             <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
                                 <Globe className="w-6 h-6 text-blue-400" />
-                                <span className="text-sm font-semibold text-white">28 idiomas</span>
+                                <span className="text-sm font-semibold text-white">30 idiomas</span>
                                 <span className="text-xs text-gray-400 text-center">Fale em português, inglês, espanhol e mais</span>
                             </div>
                             <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
@@ -807,13 +806,12 @@ export default function Home() {
                             <div className="flex-1 space-y-4 mb-8">
                                 {[
                                     "Transcrições ilimitadas",
-                                    "Todos os modos (Texto, Código, Tradução)",
+                                    "15 modos com I.A. para cada situação",
                                     "Funciona com qualquer app (Windows & Mac)",
-                                    "Processamento ultrarrápido",
-                                    "Comandos avançados (Resumir, Corrigir, Formatar)",
-                                    "Zero consumo de tokens em suas IDEs",
-                                    "Suporte prioritário",
-                                    "Atualizações incluídas",
+                                    "Agente Vox com comandos de voz (\"Hey Vox, email\")",
+                                    "30 idiomas — fale em PT, receba em qualquer idioma",
+                                    "Aprendizado do seu estilo pessoal",
+                                    "Suporte prioritário + atualizações incluídas",
                                 ].map((item, i) => (
                                     <li key={i} className="flex items-start gap-3 text-gray-300 list-none">
                                         <CheckCircle2 className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
@@ -851,11 +849,15 @@ export default function Home() {
                             },
                             {
                                 q: "Posso ditar na minha própria língua?",
-                                a: "Sim suporte a 100+ línguas. E o melhor: você pode ditar em Português e pedir para ele escrever em Inglês instantaneamente."
+                                a: "Sim! Você fala em português e o VoxAIgo escreve em inglês, espanhol ou qualquer um dos 30 idiomas disponíveis. Sem precisar traduzir nada depois."
                             },
                             {
                                 q: "Meus dados são privados?",
                                 a: "Sim, 100%. O VoxAIgo processa sua fala de forma extremamente segura. A conexão é feita diretamente da sua máquina, sem armazenar seus áudios em nossos servidores. Seus dados são seus."
+                            },
+                            {
+                                q: "Funciona sem internet?",
+                                a: "O Plano Básico funciona 100% offline — sua voz é processada direto no seu Mac, sem sair da sua máquina. O Plano Pro usa a nuvem para os 15 modos de I.A., mas você escolhe quando usar."
                             }
                         ].map((faq, i) => (
                             <div key={i} className="border border-white/10 rounded-lg overflow-hidden bg-white/5">
