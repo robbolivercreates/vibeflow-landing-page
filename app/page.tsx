@@ -26,7 +26,17 @@ import {
     Table,
     PenTool,
     Briefcase,
-    Keyboard
+    Keyboard,
+    AlignLeft,
+    MessageCircle,
+    Wand2,
+    Building2,
+    Megaphone,
+    AtSign,
+    List,
+    Users,
+    Palette,
+    SlidersHorizontal
 } from 'lucide-react';
 import HeroMarquee from './components/HeroMarquee';
 
@@ -61,115 +71,225 @@ const highlightFadeIn = {
         opacity: 1,
         y: 0,
         filter: "blur(0px)",
-        transition: { duration: 0.8, ease: "easeOut", delay: 2.2 }
+        transition: { duration: 0.5, ease: "easeOut", delay: 0.3 }
     }
 };
 
-const Tabs = () => {
-    const [activeTab, setActiveTab] = useState(0);
-    const tabs = [
-        {
-            name: "Texto & E-mail",
-            icon: Mail,
-            input: "Oi, queria ver se a gente pode marcar aquela reunião pra amanhã às 10, tipo, pra falar sobre o projeto novo, sabe?",
-            output: "Olá, gostaria de confirmar se podemos agendar nossa reunião sobre o novo projeto para amanhã às 10h?",
-            color: "text-blue-400",
-            bg: "bg-blue-500"
-        },
-        {
-            name: "Código & Lógica",
-            icon: Code2,
-            input: "Quero uma função em python que leia um arquivo csv e me retorne, tipo, a média da coluna de idades.",
-            output: `import pandas as pd
+// Typewriter hook — types text character by character
+function useTypewriter(text: string, speed: number, startDelay = 0, enabled = true) {
+    const [displayed, setDisplayed] = useState('');
+    const [done, setDone] = useState(false);
 
-def calculate_average_age(file_path):
-    df = pd.read_csv(file_path)
-    return df['age'].mean()`,
-            color: "text-[#D4AF37]",
-            bg: "bg-[#D4AF37]"
-        },
-        {
-            name: "Tradução (EN)",
-            icon: Languages,
-            input: "Avisa o time que o deploy foi um sucesso e que já está tudo online, por favor.",
-            output: "Please let the team know that the deployment was successful and everything is online now.",
-            color: "text-orange-400",
-            bg: "bg-orange-500"
-        },
-        {
-            name: "Agente Vox",
-            icon: Mic,
-            input: "Agente, muda pro modo de código e prepara pra traduzir pra inglês.",
-            output: "✨ Modo alterado para: Código\n🌍 Idioma de saída: Inglês",
-            color: "text-amber-400",
-            bg: "bg-amber-500"
-        },
-        {
-            name: "Live Coding",
-            icon: Terminal,
-            input: "Cria um botão do tailwind que fica verde quando passa o mouse e tem uma sombra suave.",
-            output: `<button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded shadow-sm hover:shadow-md transition-all duration-200">\n  Clique Aqui\n</button>`,
-            color: "text-cyan-400",
-            bg: "bg-cyan-500"
-        },
-        {
-            name: "UX Design",
-            icon: PenTool,
-            input: "Eu quero um card com sombra suave, bordas arredondadas e que tenha um efeito de hover que levanta ele um pouquinho.",
-            output: `div {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
-  transition: transform 0.2s;
+    useEffect(() => {
+        if (!enabled) return;
+        setDisplayed('');
+        setDone(false);
+        let i = 0;
+        const timeout = setTimeout(() => {
+            const interval = setInterval(() => {
+                i++;
+                setDisplayed(text.slice(0, i));
+                if (i >= text.length) {
+                    clearInterval(interval);
+                    setDone(true);
+                }
+            }, speed);
+            return () => clearInterval(interval);
+        }, startDelay);
+        return () => clearTimeout(timeout);
+    }, [text, speed, startDelay, enabled]);
+
+    return { displayed, done };
 }
 
-div:hover {
-  transform: translateY(-4px);
-}`,
-            color: "text-pink-400",
-            bg: "bg-pink-500"
+
+const Tabs = () => {
+    const [activeTab, setActiveTab] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
+    const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
+    // Auto-scroll the active tab into view to keep it visible
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+            const container = scrollContainerRef.current;
+            const activeElement = container.children[activeTab] as HTMLElement;
+
+            if (activeElement) {
+                const containerWidth = container.offsetWidth;
+                const elementOffset = activeElement.offsetLeft;
+                const elementWidth = activeElement.offsetWidth;
+
+                container.scrollTo({
+                    left: elementOffset - (containerWidth / 2) + (elementWidth / 2),
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, [activeTab]);
+
+    const tabs = [
+        {
+            name: "Texto", icon: AlignLeft, color: "text-green-400", bg: "bg-green-500",
+            input: "então... tipo, o prazo era hoje né, mas a gente ainda não terminou, acho que precisamos de mais uns dois dias, sabe?",
+            output: "O prazo era hoje, mas ainda não finalizamos. Precisamos de mais dois dias."
+        },
+        {
+            name: "Chat", icon: MessageCircle, color: "text-teal-400", bg: "bg-teal-500",
+            input: "cara esquece o que eu falei antes sobre sábado, pode sábado sim, que horas vc quer",
+            output: "Esquece o que eu disse sobre sábado — pode sim! Que horas você quer?"
+        },
+        {
+            name: "Código", icon: Code2, color: "text-blue-400", bg: "bg-blue-500",
+            input: "cria um hook em react que faz debounce de um valor, o delay padrão pode ser trezentos milissegundos",
+            output: `function useDebounce<T>(value: T, delay = 300): T {
+  const [debounced, setDebounced] = useState(value)
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay)
+    return () => clearTimeout(timer)
+  }, [value, delay])
+  return debounced
+}`
+        },
+        {
+            name: "Vibe Coder", icon: Wand2, color: "text-cyan-400", bg: "bg-cyan-500",
+            input: "eu queria que, tipo, quando o usuário não tiver logado e tentar acessar aquela rota lá do dashboard, ele seja redirecionado pro login com uma mensagem dizendo que precisa fazer login antes",
+            output: "Redirecionar usuário não autenticado que acessa /dashboard para /login com mensagem 'Faça login para continuar'.\n\n(-62% tokens. Zero perda de contexto técnico.)"
+        },
+        {
+            name: "Email", icon: Mail, color: "text-orange-400", bg: "bg-orange-500",
+            input: "fala pro fornecedor que o pagamento vai sair semana que vem, que teve um problema interno mas tá resolvido, pede pra ele confirmar se ainda tá de acordo",
+            output: "Prezado, informamos que o pagamento será processado na próxima semana. Tivemos um contratempo interno que já foi solucionado. Por gentileza, confirme se o prazo ainda é conveniente. Atenciosamente,"
+        },
+        {
+            name: "Formal", icon: Building2, color: "text-slate-400", bg: "bg-slate-600",
+            input: "olha, a gente vai ter que adiar a reunião de amanhã, deu um problema aqui, tenta remarcar pra quinta ou sexta",
+            output: "Prezados, em virtude de um imprevisto interno, precisamos reagendar a reunião prevista para amanhã. Sugerimos quinta ou sexta-feira como novas datas. Aguardamos confirmação. Atenciosamente,"
+        },
+        {
+            name: "Social", icon: Megaphone, color: "text-pink-400", bg: "bg-pink-500",
+            input: "trabalhei dois anos num produto que ninguém usou, e aprendi mais nesse fracasso do que em qualquer sucesso que tive",
+            output: "Passei 2 anos construindo um produto que ninguém usou. 💀 E aprendi mais com esse fracasso do que com qualquer sucesso anterior. Às vezes o mercado é o melhor professor — mesmo quando a aula dói. 🧵"
+        },
+        {
+            name: "X", icon: AtSign, color: "text-sky-400", bg: "bg-sky-500",
+            input: "as pessoas acham que ser produtivo é fazer muita coisa, mas na verdade é fazer as coisas certas e ignorar o resto",
+            output: "Produtividade não é fazer mais. É ter clareza suficiente para ignorar o que não importa. A maioria está ocupada. Poucos estão focados."
+        },
+        {
+            name: "Resumo", icon: FileText, color: "text-indigo-400", bg: "bg-indigo-500",
+            input: "então ficou combinado que o pedro termina a integração com pagamento até quarta, a ana cuida do design do checkout, e a gente apresenta pro cliente na sexta às três",
+            output: "Resumo da Reunião\n• Pedro → Integração de pagamento (até quarta)\n• Ana → Design do checkout\n• Apresentação ao cliente: sexta, 15h"
+        },
+        {
+            name: "Tópicos", icon: List, color: "text-teal-400", bg: "bg-teal-500",
+            input: "preciso verificar os logs do servidor, atualizar a dependência do axios, falar com o time de QA sobre os testes e subir o PR antes do fim do dia",
+            output: "• Verificar logs do servidor\n• Atualizar dependência (axios)\n• Alinhar com QA sobre testes\n• Subir PR até fim do dia"
+        },
+        {
+            name: "Reunião", icon: Users, color: "text-slate-400", bg: "bg-slate-500",
+            input: "certo, então ficou decidido que vamos migrar pra nuvem no Q3, o responsável vai ser o time do rafael, e a gente precisa de um plano de rollback antes de começar",
+            output: "📋 Decisões\n• Migração para nuvem: Q3\n• Responsável: Time do Rafael\n• Pré-requisito: Plano de rollback aprovado antes do início"
+        },
+        {
+            name: "UX Design", icon: PenTool, color: "text-purple-400", bg: "bg-purple-500",
+            input: "o formulário de cadastro tá confuso, os campos tão muito juntos, a pessoa não sabe onde clicar, coloca mais espaço e deixa o botão de cadastrar mais óbvio",
+            output: "Formulário de Cadastro — Melhorias\n• Aumentar espaçamento entre campos (mín. 16px)\n• Hierarquia visual: destaque o CTA principal\n• Botão 'Cadastrar': aumentar contraste e tamanho\n• Objetivo: reduzir fricção e abandono"
+        },
+        {
+            name: "Tradução", icon: Languages, color: "text-rose-400", bg: "bg-rose-500",
+            input: "fala que a proposta comercial tem validade de quinze dias e que qualquer dúvida é só responder esse email",
+            output: "This commercial proposal is valid for 15 days. If you have any questions, feel free to reply to this email."
+        },
+        {
+            name: "Criativo", icon: Palette, color: "text-orange-400", bg: "bg-orange-500",
+            input: "escreve o começo de uma história de um programador que descobre que o bug que ele não consegue achar não existe no código, existe nele mesmo",
+            output: "Eram 3h da manhã quando Lucas percebeu que havia revisado o mesmo trecho de código quarenta e sete vezes. O bug não estava ali. Talvez nunca estivesse. Ele fechou o laptop devagar, e pela primeira vez em anos, ficou com o silêncio."
+        },
+        {
+            name: "Meu Modo", icon: SlidersHorizontal, color: "text-gray-400", bg: "bg-gray-500",
+            input: "a gente tá com taxa de conversão baixa na página de preço",
+            output: "Diagnóstico — Pricing Page\nCausa provável: proposta de valor não clara antes do preço. Teste: adicionar 3 bullets de benefício acima do CTA. Métrica: acompanhar conversão por 14 dias."
         }
     ];
 
+    // Auto-play functionality
+    useEffect(() => {
+        if (isHovered) return;
+
+        const interval = setInterval(() => {
+            setActiveTab((prev) => (prev + 1) % tabs.length);
+        }, 3500); // Change tab every 3.5 seconds
+
+        return () => clearInterval(interval);
+    }, [isHovered, tabs.length]);
+
     const getGradient = (index: number) => {
-        switch (index) {
-            case 0: return "from-blue-400 to-cyan-400";    // Texto & E-mail
-            case 1: return "from-[#D4AF37] to-[#E8D48B]"; // Código & Lógica
-            case 2: return "from-orange-400 to-amber-400";  // Tradução
-            case 3: return "from-amber-400 to-yellow-400";  // Agente Vox
-            case 4: return "from-cyan-400 to-blue-400";     // Live Coding
-            case 5: return "from-pink-400 to-rose-400";     // UX Design
-            default: return "from-gray-400 to-gray-600";
-        }
+        const colors = [
+            "from-green-400 to-emerald-400",  // 0 Texto
+            "from-teal-400 to-emerald-400",   // 1 Chat
+            "from-blue-400 to-indigo-500",    // 2 Código
+            "from-cyan-400 to-blue-500",      // 3 Vibe Coder
+            "from-orange-400 to-amber-500",   // 4 Email
+            "from-slate-500 to-gray-600",     // 5 Formal
+            "from-pink-400 to-rose-500",      // 6 Social
+            "from-sky-400 to-blue-400",       // 7 X
+            "from-indigo-400 to-purple-500",  // 8 Resumo
+            "from-teal-400 to-cyan-500",      // 9 Tópicos
+            "from-slate-400 to-slate-500",    // 10 Reunião
+            "from-purple-400 to-fuchsia-500", // 11 UX Design
+            "from-rose-400 to-pink-500",      // 12 Tradução
+            "from-orange-400 to-red-400",     // 13 Criativo
+            "from-gray-400 to-gray-500"       // 14 Meu Modo
+        ];
+        return colors[index] || "from-gray-400 to-gray-600";
     };
 
     return (
-        <div className="w-full">
-            <div className="flex justify-center gap-4 mb-8 flex-wrap">
-                {tabs.map((tab, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setActiveTab(index)}
-                        className={`px-6 py-3 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${activeTab === index
-                            ? "bg-white text-black shadow-lg scale-105"
-                            : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
-                            }`}
-                    >
-                        <tab.icon className={`w-4 h-4 ${activeTab === index ? "text-black" : ""}`} />
-                        {tab.name}
-                    </button>
-                ))}
+        <div
+            className="w-full max-w-5xl mx-auto"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {/* The Invisible Scroll Marquee Container */}
+            <div className="relative mb-8 w-full">
+                {/* Left Fade */}
+                <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+
+                {/* Scrollable Area */}
+                <div
+                    ref={scrollContainerRef}
+                    className="flex overflow-x-auto gap-3 py-4 px-16 md:px-24 scrollbar-hide snap-x"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                    {tabs.map((tab, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setActiveTab(index)}
+                            className={`whitespace-nowrap flex-none snap-center px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2 border ${activeTab === index
+                                ? `bg-white/10 ${tab.color} border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] scale-105`
+                                : "bg-black/50 text-gray-400 border-white/5 hover:bg-white/5 hover:text-white"
+                                }`}
+                        >
+                            <tab.icon className={`w-4 h-4 ${activeTab === index ? tab.color : ""}`} />
+                            {tab.name}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Right Fade */}
+                <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
             </div>
 
-            <div className="relative bg-[#0F0F0F] rounded-2xl border border-white/10 overflow-hidden shadow-2xl transition-all duration-500 min-h-[400px]">
-                <div className={`absolute top-0 w-full h-1 bg-gradient-to-r ${getGradient(activeTab)}`}></div>
+            <div className="relative max-w-3xl mx-auto bg-[#0F0F0F] rounded-2xl border border-white/10 overflow-hidden shadow-2xl transition-all duration-500 min-h-[400px]">
+                <div className={`absolute top-0 w-full h-1 bg-gradient-to-r ${getGradient(activeTab)} transition-all duration-500`}></div>
                 <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/10 h-full">
                     {/* Input - Audio/Raw */}
-                    <div className="p-8 space-y-6 h-full flex flex-col justify-center">
+                    <div className="p-6 md:p-10 space-y-6 h-full flex flex-col justify-center">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
                             <span className="text-sm font-medium text-red-400 uppercase tracking-wider">O que você fala</span>
                         </div>
-                        <div className="font-mono text-gray-500 text-lg leading-relaxed italic">
+                        <div className="font-mono text-gray-400 text-base md:text-lg leading-relaxed italic transition-all duration-300">
                             "{tabs[activeTab].input}"
                         </div>
                         <div className="h-12 bg-white/5 rounded-lg flex items-center justify-center gap-1 opacity-50 mt-auto">
@@ -184,12 +304,12 @@ div:hover {
                     </div>
 
                     {/* Output - Processed */}
-                    <div className="p-8 space-y-6 bg-white/[0.02] h-full flex flex-col justify-center">
+                    <div className="p-6 md:p-10 space-y-6 bg-white/[0.02] h-full flex flex-col justify-center">
                         <div className="flex items-center gap-3 mb-4">
                             <div className={`w-3 h-3 rounded-full ${tabs[activeTab].bg} shadow-[0_0_10px_rgba(255,255,255,0.5)]`}></div>
                             <span className={`text-sm font-medium ${tabs[activeTab].color} uppercase tracking-wider`}>O que o VoxAIgo digita</span>
                         </div>
-                        <div className={`font-mono ${tabs[activeTab].color} text-lg leading-relaxed bg-black/50 p-6 rounded-xl border border-white/5 shadow-inner whitespace-pre-wrap`}>
+                        <div className={`font-mono ${tabs[activeTab].color} text-sm leading-relaxed bg-black/50 p-6 rounded-xl border border-white/5 shadow-inner whitespace-pre-wrap`}>
                             {tabs[activeTab].output}
                         </div>
                     </div>
@@ -413,6 +533,10 @@ export default function Home() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [billingPeriod, setBillingPeriod] = useState<"annual" | "monthly">("annual");
 
+    // Typewriter: "Não digite." slow, then "Apenas fale." 5x faster
+    const { displayed: typed1, done: done1 } = useTypewriter("Não digite.", 70, 400);
+    const { displayed: typed2, done: done2 } = useTypewriter("Apenas fale.", 14, 0, done1);
+
     const toggleFaq = (index: number) => {
         setOpenFaq(openFaq === index ? null : index);
     };
@@ -465,36 +589,39 @@ export default function Home() {
                         </motion.div>
 
                         <div className="relative mb-8 min-h-[160px] md:min-h-[200px] flex flex-col items-center justify-center">
-                            <motion.h1
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] flex flex-col items-center justify-center gap-2"
-                            >
+                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] flex flex-col items-center justify-center gap-2">
                                 <div className="flex flex-wrap items-center justify-center gap-x-4 md:gap-x-6">
                                     <span className="relative inline-block text-white/50">
-                                        Não digite.
+                                        {typed1}
+                                        {!done1 && <span className="animate-pulse ml-0.5 text-white/40">|</span>}
                                     </span>
-                                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200">
-                                        Apenas fale.
+                                    <span
+                                        className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200 transition-opacity duration-150"
+                                        style={{ opacity: done1 ? 1 : 0 }}
+                                    >
+                                        {typed2}
+                                        {done1 && typed2.length < "Apenas fale.".length && (
+                                            <span className="animate-pulse ml-0.5 text-amber-300">|</span>
+                                        )}
                                     </span>
                                 </div>
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200 mt-2">
+                                <span
+                                    className="bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-amber-200 mt-2 transition-opacity duration-150"
+                                    style={{ opacity: done1 ? 1 : 0 }}
+                                >
                                     É 5x mais rápido.
                                 </span>
-                            </motion.h1>
+                            </h1>
 
-                            <motion.h2
-                                variants={highlightFadeIn}
-                                initial="hidden"
-                                animate="visible"
-                                className="text-xl md:text-2xl font-medium tracking-tight leading-snug mt-6 md:mt-8 max-w-3xl mx-auto"
+                            <div
+                                className="text-xl md:text-2xl font-medium tracking-tight leading-snug mt-6 md:mt-8 max-w-3xl mx-auto transition-opacity duration-500"
+                                style={{ opacity: done2 ? 1 : 0 }}
                             >
                                 <span className="text-white">Fale, e a inteligência artificial digita.</span><br />
                                 <span className="text-gray-400">
                                     Textos perfeitos <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37] font-semibold">em qualquer app.</span>
                                 </span>
-                            </motion.h2>
+                            </div>
 
                             <HeroMarquee />
 
