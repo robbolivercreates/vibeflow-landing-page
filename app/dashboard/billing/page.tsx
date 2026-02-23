@@ -15,15 +15,16 @@ const EDUZZ_MENSAL = 'https://chk.eduzz.com/39ZQ2OYE9E'
 const EDUZZ_ANUAL = 'https://chk.eduzz.com/Z0B57NQ3WA'
 
 const freeFeatures = [
-  '100 transcrições/mês',
-  'Modo Texto + Código',
+  '75 transcrições/mês',
+  'Modo Texto apenas',
   'Português e Inglês',
+  'Sem I.A.',
 ]
 
 const proFeatures = [
   'Transcrições ilimitadas',
-  'Todos os 5 modos (Texto, Código, Email, UX, Comando)',
-  '15+ idiomas',
+  'Todos os 15 modos com I.A. (Vibe Coder, Email, Reunião...)',
+  '30 idiomas',
   'Aprendizado de estilo',
   'Snippets personalizados',
   'Conversation Reply',
@@ -125,12 +126,12 @@ export default function BillingPage() {
           )}
           <div>
             <p className="text-white font-semibold">
-              {isPro ? 'VoxAIgo Pro' : 'VoxAIgo Free'}
+              {isPro ? 'VoxAIgo Pro' : 'VoxAIgo Grátis'}
             </p>
             <p className="text-xs text-zinc-500">
               {isPro
                 ? sub?.plan === 'pro_annual' ? 'Plano anual' : 'Plano mensal'
-                : '100 transcrições/mês'}
+                : '75 transcrições/mês'}
             </p>
           </div>
           <span className={`ml-auto px-3 py-1 rounded-full text-xs font-medium ${
@@ -138,7 +139,7 @@ export default function BillingPage() {
               ? 'bg-emerald-500/15 text-emerald-400'
               : 'bg-zinc-800 text-zinc-400'
           }`}>
-            {isPro && sub?.status === 'active' ? 'Ativo' : 'Free'}
+            {isPro && sub?.status === 'active' ? 'Ativo' : 'Grátis'}
           </span>
         </div>
       </div>
@@ -165,7 +166,7 @@ export default function BillingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Free plan */}
             <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-1">Free</h3>
+              <h3 className="text-lg font-semibold text-white mb-1">Grátis</h3>
               <p className="text-3xl font-bold text-white">R$0<span className="text-sm text-zinc-500 font-normal">/mês</span></p>
               <ul className="mt-5 space-y-3">
                 {freeFeatures.map(f => (
@@ -187,11 +188,11 @@ export default function BillingPage() {
               </span>
               <h3 className="text-lg font-semibold text-white mb-1">Pro</h3>
               <p className="text-3xl font-bold text-white">
-                R${billingCycle === 'monthly' ? '19,90' : '14,90'}
+                R${billingCycle === 'monthly' ? '29,90' : '22,40'}
                 <span className="text-sm text-zinc-500 font-normal">/mês</span>
               </p>
               {billingCycle === 'annual' && (
-                <p className="text-xs text-zinc-500">R$178,80 cobrado anualmente</p>
+                <p className="text-xs text-zinc-500">R$268,80 cobrado anualmente</p>
               )}
               <ul className="mt-5 space-y-3">
                 {proFeatures.map(f => (

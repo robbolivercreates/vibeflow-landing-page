@@ -31,7 +31,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<UsageStats>({
     totalTranscriptions: 0,
     monthlyUsage: 0,
-    monthlyLimit: 100,
+    monthlyLimit: 75,
     dailyUsage: [],
     modeDistribution: {},
     languageDistribution: {},
@@ -167,7 +167,7 @@ export default function DashboardPage() {
     setStats({
       totalTranscriptions: totalCount || 0,
       monthlyUsage: monthlyCount || 0,
-      monthlyLimit: (sub?.plan === 'pro_monthly' || sub?.plan === 'pro_annual') ? Infinity : 100,
+      monthlyLimit: (sub?.plan === 'pro_monthly' || sub?.plan === 'pro_annual') ? Infinity : 75,
       dailyUsage,
       modeDistribution,
       languageDistribution,
@@ -398,32 +398,45 @@ export default function DashboardPage() {
 
         {/* Plan badge */}
         {!isPro ? (
-          <Link
-            href="/dashboard/billing"
-            className="bg-gradient-to-br from-purple-600/10 to-purple-500/5 border border-purple-500/20 rounded-2xl p-6 flex flex-col justify-between group hover:border-purple-500/40 transition-colors"
-          >
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Crown size={18} className="text-purple-400" />
-                <span className="text-sm font-medium text-purple-400">Seu plano</span>
-              </div>
-              <p className="text-3xl font-bold text-white mb-1">Free</p>
-              <p className="text-xs text-zinc-400">{stats.monthlyUsage} de 100 transcrições usadas</p>
-              <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden mt-2">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min((stats.monthlyUsage / 100) * 100, 100)}%` }}
-                  transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
-                  className="h-full rounded-full"
-                  style={{ background: 'linear-gradient(to right, #8b5cf6, #6366f1)' }}
-                />
-              </div>
-            </div>
-            <div className="flex items-center gap-2 mt-4 text-purple-400 group-hover:text-purple-300">
-              <span className="text-sm font-medium">Fazer upgrade para Pro</span>
-              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </div>
-          </Link>
+          (() => {
+            const limitReached = stats.monthlyUsage >= 75
+            return (
+              <Link
+                href="/dashboard/billing"
+                className={`rounded-2xl p-6 flex flex-col justify-between group transition-colors ${
+                  limitReached
+                    ? 'bg-gradient-to-br from-red-600/10 to-red-500/5 border border-red-500/30 hover:border-red-500/50'
+                    : 'bg-gradient-to-br from-purple-600/10 to-purple-500/5 border border-purple-500/20 hover:border-purple-500/40'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Crown size={18} className={limitReached ? 'text-red-400' : 'text-purple-400'} />
+                    <span className={`text-sm font-medium ${limitReached ? 'text-red-400' : 'text-purple-400'}`}>Seu plano</span>
+                  </div>
+                  <p className="text-3xl font-bold text-white mb-1">Grátis</p>
+                  {limitReached ? (
+                    <p className="text-xs text-red-400 font-medium">Limite atingido — sem I.A. este mês</p>
+                  ) : (
+                    <p className="text-xs text-zinc-400">{stats.monthlyUsage} de 75 transcrições usadas</p>
+                  )}
+                  <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden mt-2">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${Math.min((stats.monthlyUsage / 75) * 100, 100)}%` }}
+                      transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+                      className="h-full rounded-full"
+                      style={{ background: limitReached ? 'linear-gradient(to right, #ef4444, #dc2626)' : 'linear-gradient(to right, #8b5cf6, #6366f1)' }}
+                    />
+                  </div>
+                </div>
+                <div className={`flex items-center gap-2 mt-4 group-hover:opacity-80 ${limitReached ? 'text-red-400' : 'text-purple-400 group-hover:text-purple-300'}`}>
+                  <span className="text-sm font-medium">{limitReached ? 'Fazer upgrade — desbloquear I.A.' : 'Fazer upgrade para Pro'}</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            )
+          })()
         ) : (
           <div className="bg-gradient-to-br from-purple-600/10 to-purple-500/5 border border-purple-500/20 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-3">
@@ -953,15 +966,21 @@ export default function DashboardPage() {
               transition={{ delay: 0.3, duration: 0.8, ease: 'easeOut' }}
               className="h-full rounded-full"
               style={{
-                background: stats.monthlyUsage > 80
-                  ? 'linear-gradient(to right, #ef4444, #f97316)'
+                background: stats.monthlyUsage >= 75
+                  ? 'linear-gradient(to right, #ef4444, #dc2626)'
+                  : stats.monthlyUsage >= 60
+                  ? 'linear-gradient(to right, #f97316, #fb923c)'
                   : 'linear-gradient(to right, #8b5cf6, #6366f1)',
               }}
             />
           </div>
-          {stats.monthlyUsage >= 80 && (
+          {stats.monthlyUsage >= 75 ? (
+            <p className="text-xs text-red-400 mt-2">
+              Limite atingido. <Link href="/dashboard/billing" className="underline">Faça upgrade</Link> para I.A. ilimitada.
+            </p>
+          ) : stats.monthlyUsage >= 60 && (
             <p className="text-xs text-orange-400 mt-2">
-              Você está chegando no limite. <Link href="/dashboard/billing" className="underline">Faça upgrade</Link> para ilimitado.
+              Quase no limite. <Link href="/dashboard/billing" className="underline">Faça upgrade</Link> para ilimitado.
             </p>
           )}
         </div>

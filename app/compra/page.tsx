@@ -135,8 +135,8 @@ export default function DownloadPage() {
                     <Zap size={20} className="text-zinc-400" />
                   </div>
                   <div>
-                    <p className="font-semibold text-white">Plano Free</p>
-                    <p className="text-sm text-zinc-400">{user.email} — 100 transcrições/mês</p>
+                    <p className="font-semibold text-white">Plano Grátis</p>
+                    <p className="text-sm text-zinc-400">{user.email} — 75 transcrições/mês</p>
                   </div>
                 </>
               )}

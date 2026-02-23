@@ -758,11 +758,11 @@ export default function Home() {
 
                         <div className="flex-1 space-y-4 mb-8">
                             {[
-                                "100 transcrições por mês",
-                                "Todos os modos (Texto, Código, Tradução)",
-                                "Funciona com qualquer app (Windows & Mac)",
+                                "75 transcrições por mês",
+                                "Modo Texto apenas (sem I.A.)",
+                                "Português e Inglês",
                                 "Seus dados nunca são armazenados",
-                                "Comandos de IA básicos",
+                                "Sem Agente Vox",
                             ].map((item, i) => (
                                 <li key={i} className="flex items-start gap-3 text-gray-300 list-none">
                                     <CheckCircle2 className="w-5 h-5 text-gray-500 shrink-0 mt-0.5" />
@@ -790,15 +790,15 @@ export default function Home() {
                             <p className="text-gray-500 text-sm mb-6">Para quem vive de produtividade</p>
                             <div className="flex items-baseline gap-2 mb-2">
                                 <span className="text-5xl font-bold text-white">
-                                    R${billingPeriod === "annual" ? "14,90" : "19,90"}
+                                    R${billingPeriod === "annual" ? "22,40" : "29,90"}
                                 </span>
                                 {billingPeriod === "annual" && (
-                                    <span className="text-lg text-gray-500 line-through">R$19,90</span>
+                                    <span className="text-lg text-gray-500 line-through">R$29,90</span>
                                 )}
                                 <span className="text-gray-400 text-sm">/ mês</span>
                             </div>
                             {billingPeriod === "annual" && (
-                                <p className="text-green-400 text-xs font-medium mb-6">Cobrado R$178,80/ano — economize R$60</p>
+                                <p className="text-green-400 text-xs font-medium mb-6">Cobrado R$268,80/ano — economize R$90</p>
                             )}
                             {billingPeriod === "monthly" && (
                                 <p className="text-gray-500 text-xs mb-6">Cobrado mensalmente</p>
