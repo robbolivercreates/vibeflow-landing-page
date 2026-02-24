@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Star } from 'lucide-react';
 
 const testimonials = [
@@ -79,15 +79,9 @@ const css = `
 .wall-col-down {
   animation: wall-scroll-down 60s linear infinite;
 }
-.wall-paused .wall-col-up,
-.wall-paused .wall-col-down {
-  animation-play-state: paused;
-}
 `;
 
 export default function WallOfLove() {
-  const [isHovered, setIsHovered] = useState(false);
-
   const col1 = [...testimonials.slice(0, 4)];
   const col2 = [...testimonials.slice(4, 8)];
   const col3 = [...testimonials.slice(8, 12)];
@@ -96,9 +90,7 @@ export default function WallOfLove() {
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <div
-        className={`relative overflow-hidden w-full h-[600px] select-none ${isHovered ? 'wall-paused' : ''}`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className="relative overflow-hidden w-full h-[600px] select-none"
         style={{
           maskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
           WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)'
