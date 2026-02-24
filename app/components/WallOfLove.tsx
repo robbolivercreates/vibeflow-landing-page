@@ -64,6 +64,27 @@ const testimonials = [
   }
 ];
 
+const css = `
+@keyframes wall-scroll-up {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-33.333%); }
+}
+@keyframes wall-scroll-down {
+  0% { transform: translateY(-33.333%); }
+  100% { transform: translateY(0); }
+}
+.wall-col-up {
+  animation: wall-scroll-up 60s linear infinite;
+}
+.wall-col-down {
+  animation: wall-scroll-down 60s linear infinite;
+}
+.wall-paused .wall-col-up,
+.wall-paused .wall-col-down {
+  animation-play-state: paused;
+}
+`;
+
 export default function WallOfLove() {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -72,40 +93,43 @@ export default function WallOfLove() {
   const col3 = [...testimonials.slice(8, 12)];
 
   return (
-    <div
-      className="relative overflow-hidden w-full h-[600px] select-none"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        maskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)'
-      }}
-    >
-      <div className="flex gap-6 justify-center max-w-7xl mx-auto px-6 h-full absolute inset-0">
+    <>
+      <style dangerouslySetInnerHTML={{ __html: css }} />
+      <div
+        className={`relative overflow-hidden w-full h-[600px] select-none ${isHovered ? 'wall-paused' : ''}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          maskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)'
+        }}
+      >
+        <div className="flex gap-6 justify-center max-w-7xl mx-auto px-6 h-full absolute inset-0">
 
-        {/* Column 1 - Scrolling UP */}
-        <div className={`flex flex-col gap-6 w-full max-w-[350px] ${isHovered ? '' : 'animate-scroll-up-slow'}`}>
-          {[...col1, ...col1, ...col1].map((t, i) => (
-            <Card key={`c1-${i}`} {...t} />
-          ))}
+          {/* Column 1 - Scrolling UP */}
+          <div className="wall-col-up flex flex-col gap-6 w-full max-w-[350px]">
+            {[...col1, ...col1, ...col1].map((t, i) => (
+              <Card key={`c1-${i}`} {...t} />
+            ))}
+          </div>
+
+          {/* Column 2 - Scrolling DOWN */}
+          <div className="wall-col-down hidden md:flex flex-col gap-6 w-full max-w-[350px]">
+            {[...col2, ...col2, ...col2].map((t, i) => (
+              <Card key={`c2-${i}`} {...t} />
+            ))}
+          </div>
+
+          {/* Column 3 - Scrolling UP */}
+          <div className="wall-col-up hidden lg:flex flex-col gap-6 w-full max-w-[350px]" style={{ animationDelay: '-15s' }}>
+            {[...col3, ...col3, ...col3].map((t, i) => (
+              <Card key={`c3-${i}`} {...t} />
+            ))}
+          </div>
+
         </div>
-
-        {/* Column 2 - Scrolling DOWN */}
-        <div className={`hidden md:flex flex-col gap-6 w-full max-w-[350px] ${isHovered ? '' : 'animate-scroll-down-slow'} -translate-y-1/2`}>
-          {[...col2, ...col2, ...col2].map((t, i) => (
-            <Card key={`c2-${i}`} {...t} />
-          ))}
-        </div>
-
-        {/* Column 3 - Scrolling UP */}
-        <div className={`hidden lg:flex flex-col gap-6 w-full max-w-[350px] ${isHovered ? '' : 'animate-scroll-up-slow'} translate-y-24`}>
-          {[...col3, ...col3, ...col3].map((t, i) => (
-            <Card key={`c3-${i}`} {...t} />
-          ))}
-        </div>
-
       </div>
-    </div>
+    </>
   );
 }
 
