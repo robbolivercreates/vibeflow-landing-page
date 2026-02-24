@@ -1,82 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { MessageSquare, Star } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star } from 'lucide-react';
 
 const testimonials = [
   {
-    quote: "Achei que ia ser frescura, mas cara... eu ditei o escopo inteiro de um projeto no Notion passeando com o cachorro de manhã. Voltei pra casa e tava lá certinho, formatado.",
-    author: "Felipe Almeida",
+    quote: "Além de rápido, ele corrige meus erros de português automaticamente. Eu falo do meu jeito e o texto sai impecável. Parece que eu contratei um editor pessoal.",
+    author: "Felipe A.",
     role: "UX/UI Designer",
-    twitter: "@falmeida_ux",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d"
   },
   {
-    quote: "No começo você estranha falar sozinho com o computador, mas no dia seguinte você já não quer digitar um email longo nunca mais na vida.",
-    author: "Mariana Costa",
+    quote: "Aquele relatório semanal que me tomava 1 hora? Agora eu falo tudo em 8 minutos e o VoxAIgo formata certinho, com tópicos e tudo. Sexta-feira virou outro dia.",
+    author: "Mariana C.",
     role: "Product Manager",
-    twitter: "@maricosta_pm",
-    avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d"
   },
   {
-    quote: "O Modo Código é absurdo. Eu expliquei a lógica de um componente React complexo enquanto bebia café e o VoxAIgo cuspiu tudo na IDE.",
-    author: "Thiago Silva",
+    quote: "Eu gastava 500 requests do Cursor por dia. Com o VibeCoder, meus prompts ficam 62% menores e eu rendo o dobro com a mesma franquia. Pagou o Pro no primeiro dia.",
+    author: "Thiago S.",
     role: "Engenheiro Front-end",
-    twitter: "@thiagodev",
-    avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d"
   },
   {
-    quote: "Economizei fácil umas 5 horas na semana passada só parando de lutar com o teclado pra responder e-mail de cliente chato.",
-    author: "Lucas Mendes",
+    quote: "Eu escrevo errado, troco letra, como acento... e o VoxAIgo entende tudo e já entrega o texto certinho. É a ferramenta mais útil que eu tenho no Mac, disparado.",
+    author: "Lucas M.",
     role: "Freelancer",
-    twitter: "@lucasmendes_freela",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d"
   },
   {
-    quote: "A tradução instantânea salvou minha vida nas calls com a gringa. Falo em português e o texto sai em inglês britânico perfeito no Slack.",
-    author: "Camila Rocha",
+    quote: "Antes eu demorava 5 minutos pra montar uma mensagem pro cliente. Agora falo e em 10 segundos tá lá, sem erro, formatado e profissional. Os clientes até elogiam.",
+    author: "Camila R.",
     role: "Sales Executive",
-    twitter: "@camilasales",
-    avatar: "https://i.pravatar.cc/150?u=33"
   },
   {
-    quote: "Finalmente um app que entende o português do dia a dia, com gíria e sotaque. Não precisa falar igual um robô.",
-    author: "Bruno Carvalho",
+    quote: "Eu digitava devagar e errava muito. Com o VoxAIgo eu falo na velocidade que penso e o texto sai pronto, corrigido e bonito. Mudou completamente meu dia a dia.",
+    author: "Bruno C.",
     role: "Creator",
-    twitter: "@brunocarvalho",
-    avatar: "https://i.pravatar.cc/150?u=12"
   },
   {
-    quote: "Eu mando áudio no WhatsApp pra mim mesmo pra não esquecer as coisas. Agora eu aperto um botão e o texto já sai formatado no meu To-Do. Muito melhor.",
-    author: "Amanda Oliveira",
+    quote: "Não é só rapidez — ele deixa tudo prontinho. Pontuação, parágrafo, formatação. Eu falo bagunçado e o resultado parece que eu passei meia hora revisando.",
+    author: "Amanda O.",
     role: "Head of Marketing",
-    twitter: "@manda_mkt",
-    avatar: "https://i.pravatar.cc/150?u=5"
   },
   {
-    quote: "Eu achava que digitar era rápido até ver a velocidade que minha voz vira texto nessa parada. Mágico.",
-    author: "Rafael Souza",
+    quote: "Minha tendinite tava ficando séria de tanto digitar. Desde que comecei a ditar, a dor sumiu e minha produtividade triplicou. Melhor investimento do ano.",
+    author: "Rafael S.",
     role: "Desenvolvedor Backend",
-    twitter: "@rafabackend",
-    avatar: "https://i.pravatar.cc/150?u=42"
   },
   {
-    quote: "Minha tendinite agradece demais. Sério, menos cliques, menos teclado, mais produtividade.",
-    author: "Letícia Ribeiro",
+    quote: "Testei o trial de 7 dias e no segundo dia já assinei. De todas as ferramentas que uso, essa é a que mais faz diferença no meu dia. Sem exagero.",
+    author: "Letícia R.",
     role: "Redatora Pleno",
-    twitter: "@lele_copy",
-    avatar: "https://i.pravatar.cc/150?u=21"
+  },
+  {
+    quote: "Respondo 50 emails por dia. Antes eu levava a manhã inteira, agora em 1 hora tá tudo feito. E o melhor: sem aquele erro de digitação que dá vergonha.",
+    author: "Pedro H.",
+    role: "Analista de QA",
+  },
+  {
+    quote: "É a primeira ferramenta que eu abro quando ligo o Mac. Uso pra tudo: email, Slack, Notion, código. Não consigo mais imaginar trabalhar sem.",
+    author: "Rodrigo L.",
+    role: "Advogado",
+  },
+  {
+    quote: "Falo em português e ele traduz pra inglês na hora, direto no Slack. E não é tradução robótica — sai natural, como se eu soubesse inglês fluente.",
+    author: "Juliana F.",
+    role: "Consultora de Gestão",
   }
 ];
 
 export default function WallOfLove() {
   const [isHovered, setIsHovered] = useState(false);
 
-  // Split into 3 columns
-  const col1 = [...testimonials.slice(0, 3)];
-  const col2 = [...testimonials.slice(3, 6)];
-  const col3 = [...testimonials.slice(6, 9)];
+  const col1 = [...testimonials.slice(0, 4)];
+  const col2 = [...testimonials.slice(4, 8)];
+  const col3 = [...testimonials.slice(8, 12)];
 
   return (
-    <div 
+    <div
       className="relative overflow-hidden w-full h-[600px] select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -86,35 +82,25 @@ export default function WallOfLove() {
       }}
     >
       <div className="flex gap-6 justify-center max-w-7xl mx-auto px-6 h-full absolute inset-0">
-        
+
         {/* Column 1 - Scrolling UP */}
-        <div className={`flex flex-col gap-6 w-full max-w-[350px] transition-transform duration-1000 ease-linear ${isHovered ? 'animate-none' : 'animate-scroll-up-slow'}`}>
-          {/* We repeat the content twice to create an infinite loop effect */}
+        <div className={`flex flex-col gap-6 w-full max-w-[350px] ${isHovered ? '' : 'animate-scroll-up-slow'}`}>
           {[...col1, ...col1, ...col1].map((t, i) => (
-            <div key={`c1-${i}`} className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-6 transition-all duration-300 hover:border-[#D4AF37]/30 hover:bg-white/5 shadow-lg group flex-shrink-0">
-               <TestimonialHeader {...t} />
-               <p className="text-gray-300 text-sm leading-relaxed group-hover:text-white transition-colors">"{t.quote}"</p>
-            </div>
+            <Card key={`c1-${i}`} {...t} />
           ))}
         </div>
 
         {/* Column 2 - Scrolling DOWN */}
-        <div className={`hidden md:flex flex-col gap-6 w-full max-w-[350px] transition-transform duration-1000 ease-linear ${isHovered ? 'animate-none' : 'animate-scroll-down-slow'} -translate-y-1/2`}>
+        <div className={`hidden md:flex flex-col gap-6 w-full max-w-[350px] ${isHovered ? '' : 'animate-scroll-down-slow'} -translate-y-1/2`}>
           {[...col2, ...col2, ...col2].map((t, i) => (
-             <div key={`c2-${i}`} className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-6 transition-all duration-300 hover:border-[#D4AF37]/30 hover:bg-white/5 shadow-lg group flex-shrink-0">
-               <TestimonialHeader {...t} />
-               <p className="text-gray-300 text-sm leading-relaxed group-hover:text-white transition-colors">"{t.quote}"</p>
-            </div>
+            <Card key={`c2-${i}`} {...t} />
           ))}
         </div>
 
         {/* Column 3 - Scrolling UP */}
-        <div className={`hidden lg:flex flex-col gap-6 w-full max-w-[350px] transition-transform duration-1000 ease-linear ${isHovered ? 'animate-none' : 'animate-scroll-up-slow'} translate-y-24`}>
+        <div className={`hidden lg:flex flex-col gap-6 w-full max-w-[350px] ${isHovered ? '' : 'animate-scroll-up-slow'} translate-y-24`}>
           {[...col3, ...col3, ...col3].map((t, i) => (
-             <div key={`c3-${i}`} className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-6 transition-all duration-300 hover:border-[#D4AF37]/30 hover:bg-white/5 shadow-lg group flex-shrink-0">
-               <TestimonialHeader {...t} />
-               <p className="text-gray-300 text-sm leading-relaxed group-hover:text-white transition-colors">"{t.quote}"</p>
-            </div>
+            <Card key={`c3-${i}`} {...t} />
           ))}
         </div>
 
@@ -123,25 +109,26 @@ export default function WallOfLove() {
   );
 }
 
-function TestimonialHeader({ author, role, twitter, avatar }: { author: string, role: string, twitter: string, avatar: string }) {
+function Card({ quote, author, role }: { quote: string, author: string, role: string }) {
   return (
-    <div className="flex items-start gap-4 mb-4">
-      <img src={avatar} alt={author} className="w-10 h-10 rounded-full border border-white/10" />
-      <div className="flex-1 min-w-0">
-        <p className="font-bold text-white text-sm truncate">{author}</p>
-        <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 text-xs text-gray-400">
-          <span className="truncate">{twitter}</span>
-          <span className="hidden md:block w-1 h-1 bg-gray-700 rounded-full"></span>
-          <span className="truncate">{role}</span>
+    <div className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-6 transition-all duration-300 hover:border-[#D4AF37]/30 hover:bg-white/5 shadow-lg group flex-shrink-0">
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <span className="font-semibold text-white text-sm">{author}</span>
+          <span className="text-gray-600 mx-1.5">·</span>
+          <span className="text-xs text-gray-500">{role}</span>
+        </div>
+        <div className="flex text-[#D4AF37] gap-0.5">
+          <Star className="w-3 h-3 fill-current" />
+          <Star className="w-3 h-3 fill-current" />
+          <Star className="w-3 h-3 fill-current" />
+          <Star className="w-3 h-3 fill-current" />
+          <Star className="w-3 h-3 fill-current" />
         </div>
       </div>
-      <div className="flex text-[#D4AF37] gap-0.5 mt-1">
-         <Star className="w-3 h-3 fill-current" />
-         <Star className="w-3 h-3 fill-current" />
-         <Star className="w-3 h-3 fill-current" />
-         <Star className="w-3 h-3 fill-current" />
-         <Star className="w-3 h-3 fill-current" />
-      </div>
+      <p className="text-gray-300 text-sm leading-relaxed group-hover:text-white transition-colors">
+        "{quote}"
+      </p>
     </div>
   );
 }

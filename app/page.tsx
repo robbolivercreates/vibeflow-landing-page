@@ -710,51 +710,7 @@ export default function Home() {
 
             {/* Transformation Section (Carousel) */}
             < section id="demo" className="py-20 px-6 bg-black relative" >
-                {/* Speed Comparison Hook */}
-                <div className="max-w-4xl mx-auto mb-20">
-                    <div className="bg-[#0A0A0A] border border-white/5 rounded-3xl p-8 md:p-12 relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-                        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">A matemática do tempo livre</h2>
 
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
-                            {/* Typing Speed */}
-                            <div className="flex-1 flex flex-col items-center text-center space-y-4">
-                                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10 mb-2">
-                                    <Keyboard className="w-8 h-8 text-gray-500" />
-                                </div>
-                                <div className="text-5xl font-bold text-gray-400">40 <span className="text-xl font-medium text-gray-600">PPM</span></div>
-                                <p className="text-gray-500 font-medium">Velocidade média de digitação</p>
-                            </div>
-
-                            {/* VS */}
-                            <div className="hidden md:flex flex-col items-center justify-center">
-                                <ArrowRight className="w-8 h-8 text-white/20" />
-                            </div>
-                            <div className="md:hidden flex items-center justify-center w-full">
-                                <div className="h-px bg-white/10 w-full"></div>
-                                <ArrowRight className="w-6 h-6 text-white/20 mx-4 rotate-90" />
-                                <div className="h-px bg-white/10 w-full"></div>
-                            </div>
-
-                            {/* Speaking Speed */}
-                            <div className="flex-1 flex flex-col items-center text-center space-y-4 relative">
-                                <div className="absolute -inset-10 bg-[#D4AF37]/10 blur-3xl rounded-full scale-0 group-hover:scale-100 transition-transform duration-1000"></div>
-                                <div className="w-16 h-16 rounded-full bg-[#D4AF37]/20 flex items-center justify-center border border-[#D4AF37]/30 mb-2 relative z-10 shadow-[0_0_30px_rgba(212,175,55,0.2)]">
-                                    <Mic className="w-8 h-8 text-[#D4AF37]" />
-                                </div>
-                                <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D48B] relative z-10">150 <span className="text-2xl font-bold text-[#D4AF37]/80">PPM</span></div>
-                                <p className="text-[#E8D48B] font-bold relative z-10">Velocidade da sua voz</p>
-                            </div>
-                        </div>
-
-                        <div className="mt-12 text-center">
-                            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-[#E8D48B] font-semibold text-lg">
-                                <Zap className="w-5 h-5 fill-current" />
-                                VoxAIgo é quase 4x mais rápido
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div className="absolute inset-0 bg-gradient-to-b from-[#D4AF37]/5 to-transparent pointer-events-none"></div>
                 <div className="max-w-5xl mx-auto">
