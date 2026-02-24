@@ -59,7 +59,7 @@ const Strip = () => (
                 className="hero-ticker-item inline-flex items-center gap-3 mx-6 shrink-0"
             >
                 <img
-                    src={`https://cdn.simpleicons.org/${app.slug}`}
+                    src={app.slug === 'slack' ? '/slack.svg' : `https://cdn.simpleicons.org/${app.slug}`}
                     alt={app.name}
                     width={26}
                     height={26}
