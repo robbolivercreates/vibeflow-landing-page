@@ -32,11 +32,21 @@ const config: Config = {
             },
             animation: {
                 "music-bar": "music-bar 1s ease-in-out infinite alternate",
+                "scroll-up-slow": "scroll-up 40s linear infinite",
+                "scroll-down-slow": "scroll-down 40s linear infinite",
             },
             keyframes: {
                 "music-bar": {
                     "0%": { height: "10%" },
                     "100%": { height: "100%" },
+                },
+                "scroll-up": {
+                    "0%": { transform: "translateY(0)" },
+                    "100%": { transform: "translateY(-50%)" },
+                },
+                "scroll-down": {
+                    "0%": { transform: "translateY(-50%)" },
+                    "100%": { transform: "translateY(0)" },
                 },
             },
         },
