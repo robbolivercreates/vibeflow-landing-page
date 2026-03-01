@@ -632,16 +632,16 @@ export default function Home() {
                                 className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 transition-opacity duration-500"
                                 style={{ opacity: done2 ? 1 : 0 }}
                             >
-                                <a href="https://voxaigo.com/download/mac" className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors shadow-lg">
+                                <a href="https://voxaigo.com/download/mac" className="flex items-center justify-center gap-2 bg-white text-black w-52 py-3.5 rounded-xl font-semibold hover:bg-gray-100 transition-colors shadow-lg">
                                     <Apple className="w-5 h-5 fill-current" />
-                                    <span>Baixar para Mac</span>
+                                    <span>Mac</span>
                                 </a>
 
-                                <a href="https://voxaigo.com/download/windows" className="flex items-center gap-2 bg-[#0A0A0A] text-white px-6 py-3 rounded-xl font-semibold border border-white/10 hover:bg-white/5 transition-colors shadow-lg relative overflow-hidden group">
+                                <a href="https://voxaigo.com/download/windows" className="flex items-center justify-center gap-2 bg-[#0A0A0A] text-white w-52 py-3.5 rounded-xl font-semibold border border-white/10 hover:bg-white/5 transition-colors shadow-lg relative overflow-hidden group">
                                     <svg width="18" height="18" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
                                         <path fill="currentColor" d="M0 12.402l35.687-4.86.016 34.423-35.703.206zm35.67 33.53l.015 33.917L0 75.38v-41.57zm4.326-39.012L87.314 0v41.26H39.996zm47.318 39.88l-.014 41.18-47.304-6.66V46.8z" />
                                     </svg>
-                                    <span>Baixar para Windows</span>
+                                    <span>Windows</span>
                                     <span className="ml-1 px-1.5 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-[#D4AF37]/15 text-[#D4AF37] rounded-md border border-[#D4AF37]/20">Beta</span>
                                 </a>
                             </div>
