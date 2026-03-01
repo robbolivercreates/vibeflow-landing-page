@@ -84,7 +84,7 @@ const Strip = () => (
                         <InlineIcon />
                     ) : (
                         <img
-                            src={`https://cdn.simpleicons.org/${app.slug}/white`}
+                            src={`https://cdn.simpleicons.org/${app.slug}`}
                             alt={app.name}
                             width={26}
                             height={26}
