@@ -558,7 +558,7 @@ export default function Home() {
                     </div>
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
                         <a href="#features" className="hover:text-white transition-colors">Recursos</a>
-                        <a href="#demo" className="hover:text-white transition-colors">Demo</a>
+                        <a href="#video" className="hover:text-white transition-colors">Demo</a>
                         <a href="#pricing" className="hover:text-white transition-colors">Preços</a>
                         <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
                     </div>
@@ -680,7 +680,7 @@ export default function Home() {
                                 Começar Grátis
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </a>
-                            <a href="#demo" className="w-full sm:w-auto px-8 py-4 bg-white/5 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md border border-white/10 flex items-center justify-center gap-2">
+                            <a href="#video" className="w-full sm:w-auto px-8 py-4 bg-white/5 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md border border-white/10 flex items-center justify-center gap-2">
                                 <Play className="w-5 h-5 fill-current" />
                                 Ver como funciona
                             </a>
@@ -709,20 +709,16 @@ export default function Home() {
             </section >
 
             {/* Video Section */}
-            < section className="py-12 px-6 bg-black relative z-20 -mt-10" >
+            < section id="video" className="py-12 px-6 bg-black relative z-20 -mt-10" >
                 <div className="max-w-5xl mx-auto">
-                    <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(168,85,247,0.2)] bg-[#0F0F0F] group">
-                        {/* Placeholder for video content */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform duration-300 cursor-pointer border border-white/20">
-                                <Play className="w-8 h-8 fill-white text-white ml-1" />
-                            </div>
-                        </div>
-                        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37]"></div>
-
-                        {/* Fake UI Overlay to make it look like app is running */}
-                        <div className="absolute top-4 left-4 right-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white/70 border border-white/10">VoxAIgo Demo</div>
+                    <div className="relative aspect-video w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(212,175,55,0.2)] bg-[#0F0F0F]">
+                        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                            <iframe
+                                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+                                src="https://www.tella.tv/video/vid_cmmbw89a4001204l575oo28pp/embed?b=0&title=0&a=1&loop=0&autoPlay=true&t=0&muted=1&wt=0&o=1"
+                                allowFullScreen
+                                allowTransparency
+                            />
                         </div>
                     </div>
                 </div>
