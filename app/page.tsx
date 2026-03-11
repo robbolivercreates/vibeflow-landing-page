@@ -682,7 +682,10 @@ export default function Home() {
                                 style={{ opacity: done2 ? 1 : 0 }}
                             >
                                 <span className="text-white block mb-1">Fale naturalmente.</span>
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37] font-semibold block">Aparece instantaneamente.</span>
+                                <div>
+                                    <span className="text-white">Aparece instantaneamente, </span>
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37] font-semibold">funciona em qualquer app.</span>
+                                </div>
                             </div>
 
                             <HeroMarquee />
