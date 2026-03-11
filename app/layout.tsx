@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     title: "VoxAIgo - Sua voz é a ferramenta de produtividade definitiva",
     description: "Transforme fala natural em código, emails e textos perfeitos instantaneamente.",
+    icons: {
+        icon: "/logo.png",
+    },
 };
 
 export default function RootLayout({

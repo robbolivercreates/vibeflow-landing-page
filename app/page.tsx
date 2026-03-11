@@ -36,12 +36,15 @@ import {
     List,
     Users,
     Palette,
+    Sparkles,
     SlidersHorizontal,
     Timer,
     Apple
 } from 'lucide-react';
 import HeroMarquee from './components/HeroMarquee';
 import WallOfLove from './components/WallOfLove';
+import WaitlistOverlay from './components/WaitlistOverlay';
+import VoxHUDMockup from './components/VoxHUDMockup';
 
 // Animation variants
 const fadeIn = {
@@ -88,8 +91,9 @@ function useTypewriter(text: string, speed: number, startDelay = 0, enabled = tr
         setDisplayed('');
         setDone(false);
         let i = 0;
+        let interval: NodeJS.Timeout;
         const timeout = setTimeout(() => {
-            const interval = setInterval(() => {
+            interval = setInterval(() => {
                 i++;
                 setDisplayed(text.slice(0, i));
                 if (i >= text.length) {
@@ -97,9 +101,11 @@ function useTypewriter(text: string, speed: number, startDelay = 0, enabled = tr
                     setDone(true);
                 }
             }, speed);
-            return () => clearInterval(interval);
         }, startDelay);
-        return () => clearTimeout(timeout);
+        return () => {
+            clearTimeout(timeout);
+            if (interval) clearInterval(interval);
+        };
     }, [text, speed, startDelay, enabled]);
 
     return { displayed, done };
@@ -132,17 +138,17 @@ const Tabs = () => {
 
     const tabs = [
         {
-            name: "Texto", icon: AlignLeft, color: "text-green-400", bg: "bg-green-500",
+            name: "Texto", icon: AlignLeft, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "então... tipo, o prazo era hoje né, mas a gente ainda não terminou, acho que precisamos de mais uns dois dias, sabe?",
             output: "O prazo era hoje, mas ainda não finalizamos. Precisamos de mais dois dias."
         },
         {
-            name: "Chat", icon: MessageCircle, color: "text-teal-400", bg: "bg-teal-500",
+            name: "Chat", icon: MessageCircle, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "cara esquece o que eu falei antes sobre sábado, pode sábado sim, que horas vc quer",
             output: "Esquece o que eu disse sobre sábado — pode sim! Que horas você quer?"
         },
         {
-            name: "Código", icon: Code2, color: "text-blue-400", bg: "bg-blue-500",
+            name: "Código", icon: Code2, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "cria um hook em react que faz debounce de um valor, o delay padrão pode ser trezentos milissegundos",
             output: `function useDebounce<T>(value: T, delay = 300): T {
   const [debounced, setDebounced] = useState(value)
@@ -154,64 +160,64 @@ const Tabs = () => {
 }`
         },
         {
-            name: "Vibe Coder", icon: Wand2, color: "text-cyan-400", bg: "bg-cyan-500",
+            name: "Vibe Coder", icon: Wand2, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "eu queria que, tipo, quando o usuário não tiver logado e tentar acessar aquela rota lá do dashboard, ele seja redirecionado pro login com uma mensagem dizendo que precisa fazer login antes",
             output: "Redirecionar usuário não autenticado que acessa /dashboard para /login com mensagem 'Faça login para continuar'.\n\n(-62% tokens. Zero perda de contexto técnico.)"
         },
         {
-            name: "Email", icon: Mail, color: "text-orange-400", bg: "bg-orange-500",
+            name: "Email", icon: Mail, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "fala pro fornecedor que o pagamento vai sair semana que vem, que teve um problema interno mas tá resolvido, pede pra ele confirmar se ainda tá de acordo",
             output: "Prezado, informamos que o pagamento será processado na próxima semana. Tivemos um contratempo interno que já foi solucionado. Por gentileza, confirme se o prazo ainda é conveniente. Atenciosamente,"
         },
         {
-            name: "Formal", icon: Building2, color: "text-slate-400", bg: "bg-slate-600",
+            name: "Formal", icon: Building2, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "olha, a gente vai ter que adiar a reunião de amanhã, deu um problema aqui, tenta remarcar pra quinta ou sexta",
             output: "Prezados, em virtude de um imprevisto interno, precisamos reagendar a reunião prevista para amanhã. Sugerimos quinta ou sexta-feira como novas datas. Aguardamos confirmação. Atenciosamente,"
         },
         {
-            name: "Social", icon: Megaphone, color: "text-pink-400", bg: "bg-pink-500",
+            name: "Social", icon: Megaphone, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "trabalhei dois anos num produto que ninguém usou, e aprendi mais nesse fracasso do que em qualquer sucesso que tive",
             output: "Passei 2 anos construindo um produto que ninguém usou. 💀 E aprendi mais com esse fracasso do que com qualquer sucesso anterior. Às vezes o mercado é o melhor professor — mesmo quando a aula dói. 🧵"
         },
         {
-            name: "X", icon: AtSign, color: "text-sky-400", bg: "bg-sky-500",
+            name: "X", icon: AtSign, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "as pessoas acham que ser produtivo é fazer muita coisa, mas na verdade é fazer as coisas certas e ignorar o resto",
             output: "Produtividade não é fazer mais. É ter clareza suficiente para ignorar o que não importa. A maioria está ocupada. Poucos estão focados."
         },
         {
-            name: "Resumo", icon: FileText, color: "text-indigo-400", bg: "bg-indigo-500",
+            name: "Resumo", icon: FileText, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "então ficou combinado que o pedro termina a integração com pagamento até quarta, a ana cuida do design do checkout, e a gente apresenta pro cliente na sexta às três",
             output: "Resumo da Reunião\n• Pedro → Integração de pagamento (até quarta)\n• Ana → Design do checkout\n• Apresentação ao cliente: sexta, 15h"
         },
         {
-            name: "Tópicos", icon: List, color: "text-teal-400", bg: "bg-teal-500",
+            name: "Tópicos", icon: List, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "preciso verificar os logs do servidor, atualizar a dependência do axios, falar com o time de QA sobre os testes e subir o PR antes do fim do dia",
             output: "• Verificar logs do servidor\n• Atualizar dependência (axios)\n• Alinhar com QA sobre testes\n• Subir PR até fim do dia"
         },
         {
-            name: "Reunião", icon: Users, color: "text-slate-400", bg: "bg-slate-500",
+            name: "Reunião", icon: Users, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "certo, então ficou decidido que vamos migrar pra nuvem no Q3, o responsável vai ser o time do rafael, e a gente precisa de um plano de rollback antes de começar",
             output: "📋 Decisões\n• Migração para nuvem: Q3\n• Responsável: Time do Rafael\n• Pré-requisito: Plano de rollback aprovado antes do início"
         },
         {
-            name: "UX Design", icon: PenTool, color: "text-purple-400", bg: "bg-purple-500",
+            name: "UX Design", icon: PenTool, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "o formulário de cadastro tá confuso, os campos tão muito juntos, a pessoa não sabe onde clicar, coloca mais espaço e deixa o botão de cadastrar mais óbvio",
             output: "Formulário de Cadastro — Melhorias\n• Aumentar espaçamento entre campos (mín. 16px)\n• Hierarquia visual: destaque o CTA principal\n• Botão 'Cadastrar': aumentar contraste e tamanho\n• Objetivo: reduzir fricção e abandono"
         },
         {
-            name: "Tradução", icon: Languages, color: "text-rose-400", bg: "bg-rose-500",
+            name: "Tradução", icon: Languages, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "fala que a proposta comercial tem validade de quinze dias e que qualquer dúvida é só responder esse email",
             output: "This commercial proposal is valid for 15 days. If you have any questions, feel free to reply to this email."
         },
         {
-            name: "Criativo", icon: Palette, color: "text-orange-400", bg: "bg-orange-500",
+            name: "Criativo", icon: Palette, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
             input: "escreve o começo de uma história de um programador que descobre que o bug que ele não consegue achar não existe no código, existe nele mesmo",
             output: "Eram 3h da manhã quando Lucas percebeu que havia revisado o mesmo trecho de código quarenta e sete vezes. O bug não estava ali. Talvez nunca estivesse. Ele fechou o laptop devagar, e pela primeira vez em anos, ficou com o silêncio."
         },
         {
-            name: "Meu Modo", icon: SlidersHorizontal, color: "text-gray-400", bg: "bg-gray-500",
-            input: "a gente tá com taxa de conversão baixa na página de preço",
-            output: "Diagnóstico — Pricing Page\nCausa provável: proposta de valor não clara antes do preço. Teste: adicionar 3 bullets de benefício acima do CTA. Métrica: acompanhar conversão por 14 dias."
+            name: "Meu Modo", icon: Sparkles, color: "text-[#D4AF37]", bg: "bg-[#D4AF37]/20",
+            input: "transforma isso aqui no meu estilo clássico bem direto ao ponto, curto, com bullet points sobre as prioridades técnicas",
+            output: "🎯 Prioridades Técnicas:\n• Refatorar auth service\n• Implementar cache no Redis\n• Cobrir \`/checkout\` com testes (min 80%)\nPrazo inflexível: Sexta-feira."
         }
     ];
 
@@ -226,25 +232,26 @@ const Tabs = () => {
         return () => clearInterval(interval);
     }, [isHovered, tabs.length]);
 
+    // Array de gradientes para os diferentes modos
+    const bg_gradients = [
+        "from-[#D4AF37] to-[#E8D48B]",        // 0 Texto
+        "from-[#E8D48B] to-[#D4AF37]",        // 1 Chat
+        "from-[#D4AF37]/80 to-[#D4AF37]",     // 2 Código
+        "from-amber-400 to-[#D4AF37]",        // 3 Vibe Coder
+        "from-[#D4AF37] to-amber-500",        // 4 Email
+        "from-[#D4AF37]/90 to-[#E8D48B]",     // 5 Formal
+        "from-[#E8D48B]/90 to-[#D4AF37]",     // 6 Social
+        "from-[#D4AF37] to-amber-400",        // 7 X
+        "from-amber-500 to-[#D4AF37]",        // 8 Resumo
+        "from-[#D4AF37] to-[#D4AF37]/80",     // 9 Tópicos
+        "from-[#E8D48B] to-amber-500",        // 10 Reunião
+        "from-[#D4AF37] to-[#E8D48B]/80",     // 11 UX Design
+        "from-amber-400 to-[#D4AF37]/90",     // 12 Tradução
+        "from-[#D4AF37] to-[#D4AF37]",        // 13 Criativo
+        "from-[#E8D48B] to-[#E8D48B]",        // 14 Meu Modo
+    ];
     const getGradient = (index: number) => {
-        const colors = [
-            "from-green-400 to-emerald-400",  // 0 Texto
-            "from-teal-400 to-emerald-400",   // 1 Chat
-            "from-blue-400 to-indigo-500",    // 2 Código
-            "from-cyan-400 to-blue-500",      // 3 Vibe Coder
-            "from-orange-400 to-amber-500",   // 4 Email
-            "from-slate-500 to-gray-600",     // 5 Formal
-            "from-pink-400 to-rose-500",      // 6 Social
-            "from-sky-400 to-blue-400",       // 7 X
-            "from-indigo-400 to-purple-500",  // 8 Resumo
-            "from-teal-400 to-cyan-500",      // 9 Tópicos
-            "from-slate-400 to-slate-500",    // 10 Reunião
-            "from-purple-400 to-fuchsia-500", // 11 UX Design
-            "from-rose-400 to-pink-500",      // 12 Tradução
-            "from-orange-400 to-red-400",     // 13 Criativo
-            "from-gray-400 to-gray-500"       // 14 Meu Modo
-        ];
-        return colors[index] || "from-gray-400 to-gray-600";
+        return bg_gradients[index] || "from-gray-400 to-gray-600";
     };
 
     return (
@@ -289,8 +296,8 @@ const Tabs = () => {
                     {/* Input - Audio/Raw */}
                     <div className="p-6 md:p-10 space-y-6 h-full flex flex-col justify-center">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                            <span className="text-sm font-medium text-red-400 uppercase tracking-wider">O que você fala</span>
+                            <div className="w-3 h-3 rounded-full bg-[#D4AF37] animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.6)]"></div>
+                            <span className="text-sm font-medium text-[#D4AF37] uppercase tracking-wider">O que você fala</span>
                         </div>
                         <div className="font-mono text-gray-400 text-base md:text-lg leading-relaxed italic transition-all duration-300">
                             "{tabs[activeTab].input}"
@@ -299,7 +306,7 @@ const Tabs = () => {
                             {[...Array(20)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="w-1 bg-red-500 rounded-full animate-audio-bar"
+                                    className="w-1 bg-[#D4AF37] rounded-full animate-audio-bar shadow-[0_0_4px_rgba(212,175,55,0.4)]"
                                     style={{ animationDelay: `${i * 0.05}s` }}
                                 ></div>
                             ))}
@@ -331,7 +338,11 @@ const persuasivePhrases = [
     "Troque de idioma e dê comandos apenas com a voz."
 ];
 
-const ComparisonRace = () => {
+interface ComparisonRaceProps {
+    onPhaseChange?: (phase: 'idle' | 'listening' | 'processing') => void;
+}
+
+const ComparisonRace = ({ onPhaseChange }: ComparisonRaceProps = {}) => {
     const [phraseIndex, setPhraseIndex] = useState(0);
     const [typingText, setTypingText] = useState("");
     const [voiceText, setVoiceText] = useState("");
@@ -360,6 +371,7 @@ const ComparisonRace = () => {
         setTypingTime(0);
         setVoiceTime(0);
         setRacePhase("racing");
+        onPhaseChange?.('idle');
 
         const startTime = Date.now();
 
@@ -378,8 +390,10 @@ const ComparisonRace = () => {
 
         // Voice Animation (Fast — smooth burst)
         const voiceDelay = 400;
+        onPhaseChange?.('listening');
         const voiceStartTimeout = setTimeout(() => {
             if (cancelled) return;
+            onPhaseChange?.('processing');
             let voiceCharIndex = 0;
             const voiceStartTime = Date.now();
             voiceInterval = setInterval(() => {
@@ -392,6 +406,7 @@ const ComparisonRace = () => {
                     setVoiceText(targetText);
                     clearInterval(voiceInterval);
                     // VoxAIgo finished → show result phase
+                    onPhaseChange?.('idle');
                     if (!cancelled) setRacePhase("result");
                 }
             }, voiceSpeedPerChar);
@@ -423,9 +438,9 @@ const ComparisonRace = () => {
             className="relative bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 w-full max-w-2xl hover:border-[#D4AF37]/30 transition-all duration-500 group shadow-2xl cursor-default"
         >
             {/* Header */}
-            < div className="flex items-center justify-between mb-6" >
+            <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                    <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse shadow-[0_0_5px_rgba(212,175,55,0.6)]"></div>
                     <span className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">Live Race</span>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -436,7 +451,7 @@ const ComparisonRace = () => {
                         />
                     ))}
                 </div>
-            </div >
+            </div>
 
             <div className="space-y-6">
                 {/* Manual Typing Lane */}
@@ -468,25 +483,27 @@ const ComparisonRace = () => {
                             animate={{ width: `${(typingText.length / targetText.length) * 100}%` }}
                             transition={{ duration: 0.05 }}
                         />
-                        <motion.span
-                            className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
-                            style={{ transform: 'translateX(-50%) translateY(-50%) scaleX(-1)' }}
+                        <motion.div
+                            className="absolute top-1/2 drop-shadow-lg z-10 w-8 h-8 flex items-center justify-center bg-gray-800 rounded-full border border-gray-600 shadow-md"
+                            style={{ transform: 'translateX(-50%) translateY(-50%)' }}
                             initial={{ left: "0%" }}
                             animate={{ left: `${(typingText.length / targetText.length) * 100}%` }}
                             transition={{ duration: 0.05 }}
                         >
-                            🐢
-                        </motion.span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-4 h-4 text-gray-400 fill-current animate-[spin_4s_linear_infinite]">
+                                <path d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64V75c0 42.4 16.9 83.1 46.9 113.1L146.7 256l-67.9 67.9C48.9 353.9 32 394.6 32 437v11c-17.7 0-32 14.3-32 32s14.3 32 32 32H352c17.7 0 32-14.3 32-32s-14.3-32-32-32V437c0-42.4-16.9-83.1-46.9-113.1L237.3 256l67.9-67.9c30-30 46.9-70.7 46.9-113.1V64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM96 75V64H288V75c0 25.5-10.1 49.9-28.1 67.9L192 210.7l-67.9-67.9C106.1 124.9 96 100.4 96 75z" />
+                            </svg>
+                        </motion.div>
                     </div>
                 </div>
 
                 {/* VoxAIgo Lane */}
                 <div className="space-y-2">
                     <div className="flex justify-between items-end">
-                        <span className="text-xs font-bold text-green-400 uppercase flex items-center gap-2">
+                        <span className="text-xs font-bold text-[#D4AF37] uppercase flex items-center gap-2">
                             <Mic className="w-3 h-3" /> VoxAIgo (Voz)
                         </span>
-                        <span className="font-mono text-sm text-green-400">
+                        <span className="font-mono text-sm text-[#D4AF37]">
                             {voiceText.length >= targetText.length
                                 ? voiceFinishTime.toFixed(1) + "s ✓"
                                 : voiceTime > 0
@@ -494,16 +511,16 @@ const ComparisonRace = () => {
                                     : "0.0s"}
                         </span>
                     </div>
-                    <div className="h-12 bg-green-500/5 rounded-xl border border-green-500/20 flex items-center px-4 relative overflow-hidden">
+                    <div className="h-12 bg-[#D4AF37]/5 rounded-xl border border-[#D4AF37]/20 flex items-center px-4 relative overflow-hidden">
                         {racePhase === "racing" && (
-                            <div className="absolute inset-0 bg-green-500/5 animate-pulse"></div>
+                            <div className="absolute inset-0 bg-[#D4AF37]/5 animate-pulse"></div>
                         )}
-                        <span className="text-green-100 font-medium text-sm z-10 truncate">{voiceText}</span>
+                        <span className="text-amber-100 font-medium text-sm z-10 truncate">{voiceText}</span>
                         {voiceText.length >= targetText.length && (
                             <motion.span
                                 initial={{ opacity: 0, scale: 0.5 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="ml-auto flex-shrink-0 text-xs font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20"
+                                className="ml-auto flex-shrink-0 text-xs font-bold text-[#D4AF37] bg-[#D4AF37]/10 px-2 py-0.5 rounded-full border border-[#D4AF37]/20"
                             >
                                 {Math.round(typingFinishTime / voiceFinishTime)}x mais rápido
                             </motion.span>
@@ -511,30 +528,75 @@ const ComparisonRace = () => {
                     </div>
                     <div className="w-full bg-white/5 h-4 rounded-full relative mt-2 mb-1">
                         <motion.div
-                            className="h-full bg-green-500 rounded-full"
+                            className="h-full bg-gradient-to-r from-[#D4AF37] to-[#E8D48B] rounded-full"
                             initial={{ width: "0%" }}
                             animate={{ width: `${(voiceText.length / targetText.length) * 100}%` }}
                             transition={{ duration: 0.05 }}
                         />
-                        <motion.span
-                            className="absolute top-1/2 text-3xl leading-none drop-shadow-lg z-10"
+                        <motion.div
+                            className="absolute top-1/2 drop-shadow-lg z-10 w-8 h-8 flex items-center justify-center bg-[#1A1A1A] rounded-full border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.4)]"
                             style={{ transform: 'translateX(-50%) translateY(-50%)' }}
                             initial={{ left: "0%" }}
                             animate={{ left: `${(voiceText.length / targetText.length) * 100}%` }}
                             transition={{ duration: 0.05 }}
                         >
-                            🚀
-                        </motion.span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className="w-4 h-4 text-[#D4AF37] fill-current">
+                                <path d="M296 160H180.6l42.6-129.8C227.2 15 215.7 0 200 0H56C44 0 33.8 8.9 32.2 20.8l-32 240C-.9 273.7 9 288 24 288h118.7L96.6 482.5c-3.6 15.2 8 29.5 23.3 29.5 8.4 0 16.4-4.4 20.8-12l176-304c9.3-15.9-2.2-36-20.7-36z" />
+                            </svg>
+                        </motion.div>
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
+    );
+};
+
+const SyncedHeroSection = ({ onJoinWaitlist }: { onJoinWaitlist: () => void }) => {
+    const [hudPhase, setHudPhase] = useState<'idle' | 'listening' | 'processing'>('listening');
+
+    return (
+        <div className="flex flex-col items-center w-full">
+            <motion.div variants={fadeIn} className="flex justify-center w-full z-0 relative mb-6">
+                <ComparisonRace onPhaseChange={setHudPhase} />
+            </motion.div>
+
+            <motion.div variants={fadeIn} className="mt-2 z-10 relative">
+                <VoxHUDMockup forcedState={hudPhase} />
+            </motion.div>
+
+            {/* Use case cards */}
+            <motion.div variants={fadeIn} className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-12 max-w-3xl mx-auto w-full">
+                <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <Zap className="w-6 h-6 text-[#D4AF37]" />
+                    <span className="text-sm font-semibold text-white">Produtividade</span>
+                    <span className="text-xs text-gray-400 text-center">Falar é 5x mais rápido que digitar</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <Clock className="w-6 h-6 text-[#D4AF37]" />
+                    <span className="text-sm font-semibold text-white">Economize tempo</span>
+                    <span className="text-xs text-gray-400 text-center">E-mails, mensagens e textos em segundos</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <Globe className="w-6 h-6 text-[#D4AF37]" />
+                    <span className="text-sm font-semibold text-white">30 idiomas</span>
+                    <span className="text-xs text-gray-400 text-center">Fale em português, inglês, espanhol e mais</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <Code2 className="w-6 h-6 text-[#D4AF37]" />
+                    <span className="text-sm font-semibold text-white">Coding por voz</span>
+                    <span className="text-xs text-gray-400 text-center">Dite código, funções e comandos no VS Code</span>
+                </div>
+            </motion.div>
+
+
+        </div>
     );
 };
 
 export default function Home() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [billingPeriod, setBillingPeriod] = useState<"annual" | "monthly">("annual");
+    const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
 
     // Typewriter: "Não digite." slow, then "Apenas fale." 5x faster
     const { displayed: typed1, done: done1 } = useTypewriter("Não digite.", 70, 400);
@@ -559,13 +621,12 @@ export default function Home() {
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
                         <a href="#features" className="hover:text-white transition-colors">Recursos</a>
                         <a href="#video" className="hover:text-white transition-colors">Demo</a>
-                        <a href="#pricing" className="hover:text-white transition-colors">Preços</a>
+                        {/* <a href="#pricing" className="hover:text-white transition-colors">Preços</a> */}
                         <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
                     </div>
                     <div className="flex items-center gap-4">
-                        <a href="/login" className="text-sm font-medium text-gray-300 hover:text-white transition-colors hidden sm:block">Entrar</a>
-                        <a href="/login" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:bg-gray-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
-                            Começar Agora
+                        <a href="#video" className="inline-block bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:bg-gray-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+                            Garantir Acesso Antecipado
                         </a>
                     </div>
                 </div>
@@ -620,75 +681,15 @@ export default function Home() {
                                 className="text-xl md:text-2xl font-medium tracking-tight leading-snug mt-6 md:mt-8 max-w-3xl mx-auto transition-opacity duration-500"
                                 style={{ opacity: done2 ? 1 : 0 }}
                             >
-                                <span className="text-white">Fale, e a inteligência artificial digita.</span><br />
-                                <span className="text-gray-400">
-                                    Textos perfeitos <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37] font-semibold">em qualquer app.</span>
-                                </span>
+                                <span className="text-white block mb-1">Fale naturalmente.</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37] font-semibold block">Aparece instantaneamente.</span>
                             </div>
 
-                            <HeroMarquee />
-
-                            <div
-                                className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 transition-opacity duration-500"
-                                style={{ opacity: done2 ? 1 : 0 }}
-                            >
-                                <a href="https://voxaigo.com/download/mac" className="flex items-center justify-center gap-2 bg-white text-black w-52 py-3.5 rounded-xl font-semibold hover:bg-gray-100 transition-colors shadow-lg">
-                                    <svg viewBox="0 0 384 512" width="18" height="18" fill="currentColor" className="flex-shrink-0">
-                                        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
-                                    </svg>
-                                    <span>Mac</span>
-                                </a>
-
-                                <a href="https://voxaigo.com/download/windows" className="flex items-center justify-center gap-2 bg-[#0A0A0A] text-white w-52 py-3.5 rounded-xl font-semibold border border-white/10 hover:bg-white/5 transition-colors shadow-lg relative overflow-hidden group">
-                                    <svg width="18" height="18" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
-                                        <path fill="currentColor" d="M0 12.402l35.687-4.86.016 34.423-35.703.206zm35.67 33.53l.015 33.917L0 75.38v-41.57zm4.326-39.012L87.314 0v41.26H39.996zm47.318 39.88l-.014 41.18-47.304-6.66V46.8z" />
-                                    </svg>
-                                    <span>Windows</span>
-                                    <span className="ml-1 px-1.5 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-[#D4AF37]/15 text-[#D4AF37] rounded-md border border-[#D4AF37]/20">Beta</span>
-                                </a>
+                            {/* Synced Hero Section (HUD + Race + Use Cases + FOMO CTA) */}
+                            <div className="relative pt-8 sm:pt-10 z-10 font-sans mt-8 sm:mt-10">
+                                <SyncedHeroSection onJoinWaitlist={() => setIsWaitlistOpen(true)} />
                             </div>
-
-                            {/* Badge 'Cinco vezes mais rápido' removida por redundância */}
                         </div>
-
-                        {/* Use case cards */}
-                        <motion.div variants={fadeIn} className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8 max-w-3xl mx-auto">
-                            <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
-                                <Zap className="w-6 h-6 text-amber-400" />
-                                <span className="text-sm font-semibold text-white">Produtividade</span>
-                                <span className="text-xs text-gray-400 text-center">Falar é 5x mais rápido que digitar</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
-                                <Clock className="w-6 h-6 text-green-400" />
-                                <span className="text-sm font-semibold text-white">Economize tempo</span>
-                                <span className="text-xs text-gray-400 text-center">E-mails, mensagens e textos em segundos</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
-                                <Globe className="w-6 h-6 text-blue-400" />
-                                <span className="text-sm font-semibold text-white">30 idiomas</span>
-                                <span className="text-xs text-gray-400 text-center">Fale em português, inglês, espanhol e mais</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
-                                <Code2 className="w-6 h-6 text-[#D4AF37]" />
-                                <span className="text-sm font-semibold text-white">Coding por voz</span>
-                                <span className="text-xs text-gray-400 text-center">Dite código, funções e comandos no VS Code</span>
-                            </div>
-                        </motion.div>
-
-                        <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-                            <a href="/compra" className="w-full sm:w-auto px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-100 transition-all flex items-center justify-center gap-2 group shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.5)]">
-                                Começar Grátis
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </a>
-                            <a href="#video" className="w-full sm:w-auto px-8 py-4 bg-white/5 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md border border-white/10 flex items-center justify-center gap-2">
-                                <Play className="w-5 h-5 fill-current" />
-                                Ver como funciona
-                            </a>
-                        </motion.div>
-
-                        <motion.div variants={fadeIn} className="pt-12 pb-8 flex justify-center w-full">
-                            <ComparisonRace />
-                        </motion.div>
 
                         <motion.div variants={fadeIn} className="flex items-center justify-center gap-6 flex-wrap opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                             <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
@@ -706,33 +707,56 @@ export default function Home() {
                         </motion.div>
                     </motion.div>
                 </div>
-            </section >
+            </section>
 
-            {/* Video Section */}
-            < section id="video" className="py-12 px-6 bg-black relative z-20 -mt-10" >
+            < section id="video" className="py-24 px-6 bg-black relative z-20 md:-mt-10" >
+                <div className="max-w-5xl lg:max-w-6xl mx-auto text-center mb-10">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-4 md:whitespace-nowrap">
+                        Veja como o VoxAIgo pode fazer você <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D48B]">ganhar tempo.</span>
+                    </h2>
+                    <p className="text-gray-400 text-lg">
+                        Dê o play e veja a mágica acontecer na prática.
+                    </p>
+                </div>
                 <div className="max-w-5xl mx-auto">
                     <div className="relative aspect-video w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(212,175,55,0.2)] bg-[#0F0F0F]">
                         <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
                             <iframe
                                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
-                                src="https://www.tella.tv/video/vid_cmmbw89a4001204l575oo28pp/embed?b=0&title=0&a=1&loop=0&autoPlay=true&t=0&muted=1&wt=0&o=1"
+                                src="https://www.tella.tv/video/vid_cmmm0pioh01sj04lbg4el0v0i/embed?b=0&title=0&a=1&loop=0&autoPlay=true&t=0&muted=1&wt=0&o=1"
                                 allowFullScreen
                                 allowTransparency
                             />
                         </div>
                     </div>
                 </div>
+
+                {/* Primary CTA moved under Video */}
+                <div className="max-w-5xl mx-auto text-center mt-12 mb-8">
+                    <button
+                        onClick={() => setIsWaitlistOpen(true)}
+                        className="group relative inline-flex items-center gap-2 px-8 py-4 md:px-10 md:py-5 rounded-full bg-white text-black border border-transparent hover:bg-black hover:text-white hover:border-[#D4AF37] hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] transition-all duration-300 transform hover:-translate-y-1"
+                    >
+                        <span className="text-base md:text-lg font-bold transition-colors">
+                            Garantir Acesso Antecipado <span className="font-light">→</span>
+                        </span>
+                    </button>
+                    <p className="mt-4 text-xs text-gray-500 font-medium tracking-wide">Acesso antecipado 100% gratuito garantido para os primeiros.</p>
+                </div>
             </section >
 
 
             {/* Transformation Section (Carousel) */}
-            < section id="demo" className="py-20 px-6 bg-black relative" >
+            < section id="demo" className="py-24 px-6 bg-black relative" >
 
 
                 <div className="absolute inset-0 bg-gradient-to-b from-[#D4AF37]/5 to-transparent pointer-events-none"></div>
                 <div className="max-w-5xl mx-auto">
                     <div className="text-center mb-12 space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-bold">Fale naturalmente. <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Aparece instantaneamente.</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-bold">
+                            <span className="block mb-2 text-white">Fale naturalmente.</span>
+                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D48B]">Aparece instantaneamente.</span>
+                        </h2>
                         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
                             O VoxAIgo entende o contexto e se adapta ao que você precisa.
                         </p>
@@ -747,7 +771,7 @@ export default function Home() {
             < section id="features" className="py-24 px-6 bg-black" >
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16 space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-bold">Mais tempo livre. <span className="text-[#D4AF37]">Menos stress.</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-bold">Mais tempo livre. <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D48B]">Menos stress.</span></h2>
                         <p className="text-gray-400 max-w-2xl mx-auto text-lg">
                             Pare de lutar com o teclado. O VoxAIgo se adapta ao seu estilo e faz o trabalho pesado para você.
                         </p>
@@ -759,8 +783,8 @@ export default function Home() {
                         <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/30 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] relative overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div className="relative z-10">
-                                <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(34,197,94,0.2)]">
-                                    <Mail className="text-green-400" />
+                                <div className="w-12 h-12 bg-[#D4AF37]/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+                                    <Mail className="text-[#D4AF37]" />
                                 </div>
                                 <h3 className="text-xl font-bold mb-3 text-white">E-mails perfeitos, rápido</h3>
                                 <p className="text-gray-400 leading-relaxed">
@@ -771,11 +795,11 @@ export default function Home() {
 
                         {/* Universal Card */}
                         {/* Agente Vox Card */}
-                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/50 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div className="relative z-10">
-                                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                                    <Mic className="text-blue-400" />
+                                <div className="w-12 h-12 bg-[#D4AF37]/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+                                    <Mic className="text-[#D4AF37]" />
                                 </div>
                                 <h3 className="text-xl font-bold mb-3 text-white">O Poder do Agente Vox</h3>
                                 <p className="text-gray-400 leading-relaxed">
@@ -786,29 +810,29 @@ export default function Home() {
 
                         {/* Voice Commands / Code Card */}
                         {/* Voice Commands / Code Card */}
-                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:shadow-[0_0_30px_rgba(245,158,11,0.15)] relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="group bg-[#0A0A0A] border border-white/10 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/50 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div className="relative z-10">
-                                <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                                    <Zap className="text-amber-400" />
+                                <div className="w-12 h-12 bg-[#D4AF37]/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+                                    <Zap className="text-[#D4AF37]" />
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 text-white">Comandos e Correções</h3>
+                                <h3 className="text-xl font-bold mb-3 text-white">Seus Próprios Templates</h3>
                                 <p className="text-gray-400 leading-relaxed">
-                                    Selecione um texto e diga "Deixe mais amigável" ou "Resuma isso". O VoxAIgo edita tudo instantaneamente, direto no app que você está usando.
+                                    Adicione seus próprios templates. Apenas jogue as informações em voz alta, e o VoxAIgo organiza tudo perfeitamente para você no formato configurado.
                                 </p>
                             </div>
                         </div>
 
                         {/* Translation Card */}
                         {/* Live Coding Context (Spans 2 columns) */}
-                        <div className="group bg-[#0A0A0A] border border-cyan-500/20 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 md:col-span-2 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-blue-900/10 opacity-50"></div>
+                        <div className="group bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-3xl p-8 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 md:col-span-2 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#D4AF37]/10 to-transparent opacity-50"></div>
                             <div className="relative z-10">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.3)] border border-cyan-500/30">
-                                        <Terminal className="text-cyan-400" />
+                                    <div className="w-12 h-12 bg-[#D4AF37]/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(212,175,55,0.3)] border border-[#D4AF37]/30">
+                                        <Terminal className="text-[#D4AF37]" />
                                     </div>
-                                    <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">Modo Dev</span>
+                                    <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest bg-[#D4AF37]/10 px-3 py-1 rounded-full border border-[#D4AF37]/20">Modo Dev</span>
                                 </div>
                                 <h3 className="text-2xl font-bold mb-3 text-white">Live Coding Sem Gastar Tokens</h3>
                                 <p className="text-gray-300 leading-relaxed max-w-lg text-lg">
@@ -826,127 +850,64 @@ export default function Home() {
                     </div>
                 </div>
             </section >
+
+            {/* FOMO Button under Carousel */}
+            < section className="pb-32 pt-8 bg-black" >
+                <motion.div variants={fadeIn} className="text-center w-full">
+                    <button
+                        onClick={() => setIsWaitlistOpen(true)}
+                        className="group relative inline-flex items-center gap-2 px-8 py-4 md:px-10 md:py-5 rounded-full bg-white text-black border border-transparent hover:bg-black hover:text-white hover:border-[#D4AF37] hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] transition-all duration-300 transform hover:-translate-y-1"
+                    >
+                        <span className="text-base md:text-lg font-bold transition-colors">
+                            Garantir Acesso Antecipado <span className="font-light">→</span>
+                        </span>
+                    </button>
+                    <p className="mt-4 text-xs text-gray-500 font-medium tracking-wide">Acesso antecipado 100% gratuito garantido para os primeiros.</p>
+                </motion.div>
+            </section >
+
             {/* Wall of Love Testimonials */}
             < section className="py-24 bg-[#050505] border-y border-white/5 overflow-hidden" >
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="text-center mb-16 space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-bold">Amado por quem mudou a forma de trabalhar</h2>
-                        <p className="text-gray-400 text-lg max-w-2xl mx-auto">Junte-se a milhares de profissionais que pararam de digitar e começaram a produzir na velocidade do pensamento.</p>
+                        <h2 className="text-3xl md:text-5xl font-bold">O que dizem os primeiros <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D48B]">Beta Testers</span></h2>
+                        <p className="text-gray-400 text-lg max-w-2xl mx-auto">Um seleto grupo de profissionais de 3 países está testando o VoxAIgo. Veja o que eles estão achando de produzir na velocidade do pensamento.</p>
                     </div>
                 </div>
                 <WallOfLove />
             </section >
 
-            {/* Pricing - Two Tiers */}
-            < section id="pricing" className="py-24 px-6 bg-black relative overflow-hidden" >
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#D4AF37]/8 rounded-full blur-[120px] -z-10"></div>
-                <div className="max-w-4xl mx-auto text-center mb-10">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-4">Comece grátis. Evolua quando quiser.</h2>
-                    <p className="text-gray-400 text-lg max-w-2xl mx-auto">Sem compromisso. Sem cartão de crédito. Comece a economizar tempo agora.</p>
-                </div>
+            {/* Scarcity CTA (Waitlist Focus) */}
+            < section className="py-24 px-6 bg-black relative overflow-hidden border-b border-white/5" >
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#D4AF37]/5 rounded-full blur-[120px] -z-10" />
+                <div className="max-w-6xl mx-auto text-center">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-[#D4AF37]/30 text-xs font-bold text-[#E8D48B] mb-8 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D4AF37]"></span>
+                        </span>
+                        Vagas Limitadas para o Beta Fechado
+                    </div>
 
-                {/* Billing Toggle */}
-                <div className="flex items-center justify-center gap-2 mb-12">
-                    <div className="bg-white/5 border border-white/10 rounded-full p-1 flex items-center">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-tight whitespace-nowrap">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D48B]">Seja um dos primeiros</span> <span className="text-white">a parar de digitar.</span>
+                    </h2>
+
+                    <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+                        Estamos liberando acessos graduais ao longo das próximas semanas. Entre na lista de espera VIP e garanta a sua ferramenta 5x mais rápida antes do lançamento público.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <button
-                            onClick={() => setBillingPeriod("monthly")}
-                            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${billingPeriod === "monthly" ? "bg-white text-black" : "text-gray-400 hover:text-white"}`}
+                            onClick={() => setIsWaitlistOpen(true)}
+                            className="bg-white text-black px-10 py-5 rounded-full text-lg font-bold hover:bg-gray-200 transition-all transform hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] flex items-center gap-3 w-full sm:w-auto justify-center"
                         >
-                            Mensal
-                        </button>
-                        <button
-                            onClick={() => setBillingPeriod("annual")}
-                            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${billingPeriod === "annual" ? "bg-white text-black" : "text-gray-400 hover:text-white"}`}
-                        >
-                            Anual
-                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full transition-all duration-300 ${billingPeriod === "annual" ? "bg-green-500 text-white" : "bg-green-500/20 text-green-400"}`}>
-                                -25%
-                            </span>
+                            Garantir Acesso Antecipado
+                            <ArrowRight className="w-5 h-5" />
                         </button>
                     </div>
-                </div>
 
-                <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                    {/* Free Plan */}
-                    <div className="relative bg-[#0F0F0F] rounded-2xl p-8 border border-white/10 flex flex-col hover:border-white/20 transition-all duration-300">
-                        <h3 className="text-2xl font-bold text-white mb-2">Grátis</h3>
-                        <p className="text-gray-500 text-sm mb-6">Perfeito para experimentar o Agente Vox</p>
-                        <div className="flex items-baseline gap-2 mb-8">
-                            <span className="text-5xl font-bold text-white">R$0</span>
-                            <span className="text-gray-400 text-sm">/ para sempre</span>
-                        </div>
-
-                        <div className="flex-1 space-y-4 mb-8">
-                            {[
-                                "75 transcrições por mês",
-                                "Modo Texto apenas (sem I.A.)",
-                                "Português e Inglês",
-                                "Seus dados nunca são armazenados",
-                                "Sem Agente Vox",
-                            ].map((item, i) => (
-                                <li key={i} className="flex items-start gap-3 text-gray-300 list-none">
-                                    <CheckCircle2 className="w-5 h-5 text-gray-500 shrink-0 mt-0.5" />
-                                    {item}
-                                </li>
-                            ))}
-                        </div>
-
-                        <a href="/login" className="block w-full py-4 bg-white/5 text-white border border-white/10 rounded-xl font-bold text-lg hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98] transition-all text-center">
-                            Começar Grátis
-                        </a>
-                    </div>
-
-                    {/* Pro Plan */}
-                    <div className="relative group">
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-[#D4AF37] to-[#E8D48B] rounded-2xl opacity-75 blur group-hover:opacity-100 transition duration-1000"></div>
-                        <div className="relative bg-[#0F0F0F] rounded-2xl p-8 border border-white/10 h-full flex flex-col">
-                            <div className="absolute top-0 right-0 p-4">
-                                <div className="bg-[#D4AF37]/20 text-[#E8D48B] text-xs font-bold px-3 py-1 rounded-full border border-[#D4AF37]/20">
-                                    RECOMENDADO
-                                </div>
-                            </div>
-
-                            <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
-                            <p className="text-gray-500 text-sm mb-6">Para quem vive de produtividade</p>
-                            <div className="flex items-baseline gap-2 mb-2">
-                                <span className="text-5xl font-bold text-white">
-                                    R${billingPeriod === "annual" ? "22,40" : "29,90"}
-                                </span>
-                                {billingPeriod === "annual" && (
-                                    <span className="text-lg text-gray-500 line-through">R$29,90</span>
-                                )}
-                                <span className="text-gray-400 text-sm">/ mês</span>
-                            </div>
-                            {billingPeriod === "annual" && (
-                                <p className="text-green-400 text-xs font-medium mb-6">Cobrado R$268,80/ano — economize R$90</p>
-                            )}
-                            {billingPeriod === "monthly" && (
-                                <p className="text-gray-500 text-xs mb-6">Cobrado mensalmente</p>
-                            )}
-
-                            <div className="flex-1 space-y-4 mb-8">
-                                {[
-                                    "Transcrições ilimitadas",
-                                    "15 modos com I.A. para cada situação",
-                                    "Funciona com qualquer app (Windows & Mac)",
-                                    "Agente Vox com comandos de voz (\"Hey Vox, email\")",
-                                    "30 idiomas — fale em PT, receba em qualquer idioma",
-                                    "Aprendizado do seu estilo pessoal",
-                                    "Suporte prioritário + atualizações incluídas",
-                                ].map((item, i) => (
-                                    <li key={i} className="flex items-start gap-3 text-gray-300 list-none">
-                                        <CheckCircle2 className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
-                                        {item}
-                                    </li>
-                                ))}
-                            </div>
-
-                            <a href="/login" className="block w-full py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-white/10 text-center">
-                                Começar Agora
-                            </a>
-                            <p className="text-xs text-center text-gray-500 mt-4">Cancele quando quiser. Sem multas.</p>
-                        </div>
-                    </div>
+                    <p className="mt-4 text-xs text-gray-500 font-medium tracking-wide">Acesso antecipado 100% gratuito garantido para os primeiros.</p>
                 </div>
             </section >
 
@@ -973,12 +934,16 @@ export default function Home() {
                                 a: "Sim! Você fala em português e o VoxAIgo escreve em inglês, espanhol ou qualquer um dos 30 idiomas disponíveis. Sem precisar traduzir nada depois."
                             },
                             {
-                                q: "Meus dados são privados?",
-                                a: "Sim, 100%. O VoxAIgo processa sua fala de forma extremamente segura. A conexão é feita diretamente da sua máquina, sem armazenar seus áudios em nossos servidores. Seus dados são seus."
+                                q: "O que é um agente inteligente?",
+                                a: "É um assistente de inteligência artificial que trabalha para você. Diferente de ferramentas comuns que apenas respondem texto, o VoxAIgo capta o que você fala e interage onde você precisar, de forma automatizada e com contexto."
+                            },
+                            {
+                                q: "Os meus dados são privados?",
+                                a: "Sim. Todo o áudio é processado diretamente no seu computador, não saindo dali. Nenhuma informação deixa o seu computador para processamento, o que garante total segurança dos seus dados."
                             },
                             {
                                 q: "Funciona sem internet?",
-                                a: "O Plano Básico funciona 100% offline — sua voz é processada direto no seu Mac, sem sair da sua máquina. O Plano Pro usa a nuvem para os 15 modos de I.A., mas você escolhe quando usar."
+                                a: "Sim. O VoxAIgo também funciona offline quando necessário."
                             }
                         ].map((faq, i) => (
                             <div key={i} className="border border-white/10 rounded-lg overflow-hidden bg-white/5">
@@ -1012,11 +977,11 @@ export default function Home() {
                     <div className="flex gap-6">
                         <a href="#" className="hover:text-white transition-colors">Termos</a>
                         <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-                        <a href="#" className="hover:text-white transition-colors">Twitter</a>
                     </div>
                     <p>© 2026 VibeFlow. Desenvolvido para agilizar o seu dia a dia.</p>
                 </div>
             </footer >
+            <WaitlistOverlay isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
         </div >
     );
 }
