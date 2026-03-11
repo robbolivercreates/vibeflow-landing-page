@@ -685,6 +685,8 @@ export default function Home() {
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#E8D48B] to-[#D4AF37] font-semibold block">Aparece instantaneamente.</span>
                             </div>
 
+                            <HeroMarquee />
+
                             {/* Synced Hero Section (HUD + Race + Use Cases + FOMO CTA) */}
                             <div className="relative pt-8 sm:pt-10 z-10 font-sans mt-8 sm:mt-10">
                                 <SyncedHeroSection onJoinWaitlist={() => setIsWaitlistOpen(true)} />
@@ -750,12 +752,11 @@ export default function Home() {
             < section id="demo" className="py-24 px-6 bg-black relative" >
 
 
-                <div className="absolute inset-0 bg-gradient-to-b from-[#D4AF37]/5 to-transparent pointer-events-none"></div>
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-5xl mx-auto relative z-10">
                     <div className="text-center mb-12 space-y-4">
                         <h2 className="text-3xl md:text-5xl font-bold">
                             <span className="block mb-2 text-white">Fale naturalmente.</span>
-                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D48B]">Aparece instantaneamente.</span>
+                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#E8D48B]">Aparece instantaneamente, funciona em qualquer app.</span>
                         </h2>
                         <p className="text-gray-400 text-lg max-w-2xl mx-auto">
                             O VoxAIgo entende o contexto e se adapta ao que você precisa.
